@@ -4,10 +4,15 @@
   "short_name": "Verifeye",
   "icons": [
     {
-      "src": "/icons/android-chrome-192x192.png",
-      "sizes": "192x192",
+      "src": "/icons/maskable.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
       "src": "/icons/android-chrome-384x384.png",
@@ -21,8 +26,8 @@
       "purpose": "any"
     }
   ],
-  "theme_color": "#000000",
-  "background_color": "#000000",
+  "theme_color": "#271016",
+  "background_color": "#271016",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
