@@ -1,11 +1,15 @@
-import React from 'react';
+import Image from "next/image";
 
-const Loading: React.FC = () => {
+export default function Loading() {
     return (
         <div className="flex justify-center items-center h-screen bg-black" >
-            <img src="/images/verifeye.png" alt="Verifeye Logo" />
+            <Image
+                src="images/verifeye.png"
+                alt="Vercel Logo"
+                width={512}
+                height={512}
+                priority
+            />
         </div>
     );
 };
-
-export default Loading;
