@@ -6,8 +6,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   manifest: "/manifest.json",
-  title: "TikTok - Make Your Day",
-  description: "TikTok - trends start here. On a device or on the web, viewers can watch and discover millions of personalized short videos. Download the app to get started.",
+  title: "Verifeye",
+  description: "Welcome to Verifeye! Where content meets verifiability.",
   applicationName: "Verifeye",
   generator: "Next.js",
   keywords: ["TikTok", "Reels", "Shorts", "Credibility", "Verifeye", "Verify", "Philippines"],
