@@ -19,9 +19,36 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#FFFFFF",
-  "background_color": "#FFFFFF",
+  "theme_color": "#000000",
+  "background_color": "#000000",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait"
+  "orientation": "portrait",
+  "screenshots": [
+    {
+      "src": "/images/screenshots/1.webp",
+      "sizes": "1080x1920",
+      "type": "image/webp"
+    },
+    {
+      "src": "/images/screenshots/2.webp",
+      "sizes": "1080x1920",
+      "type": "image/webp"
+    },
+    {
+      "src": "/images/screenshots/3.webp",
+      "sizes": "1080x1920",
+      "type": "image/webp"
+    },
+    {
+      "src": "/images/screenshots/4.webp",
+      "sizes": "1080x1920",
+      "type": "image/webp"
+    },
+    {
+      "src": "/images/screenshots/5.webp",
+      "sizes": "1080x1920",
+      "type": "image/webp"
+    }
+  ]
 }
