@@ -28,27 +28,37 @@
     {
       "src": "/images/screenshots/1.webp",
       "sizes": "1080x1920",
-      "type": "image/webp"
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Be the first to discover."
     },
     {
       "src": "/images/screenshots/2.webp",
       "sizes": "1080x1920",
-      "type": "image/webp"
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Transform your look with the Cartoon Me Effect."
     },
     {
       "src": "/images/screenshots/3.webp",
       "sizes": "1080x1920",
-      "type": "image/webp"
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Manage screen time with your family."
     },
     {
       "src": "/images/screenshots/4.webp",
       "sizes": "1080x1920",
-      "type": "image/webp"
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Share videos with your favourite person."
     },
     {
       "src": "/images/screenshots/5.webp",
       "sizes": "1080x1920",
-      "type": "image/webp"
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Join #CarTok today."
     }
   ]
 }
