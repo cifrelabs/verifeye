@@ -1,16 +1,18 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import BottomNav from "@/app/components/BottomNav";
+import TopNav from "./components/TopNav";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   manifest: "/manifest.json",
-  title: "Verifeye",
-  description: "Welcome to Verifeye! Where content meets verifiability. We aim to provide a platform where users can verify the content they consume.",
-  applicationName: "Verifeye",
+  title: "VerifEye",
+  description: "Welcome to VerifEye! Where content meets verifiability. We aim to provide a platform where users can verify the content they consume.",
+  applicationName: "VerifEye",
   generator: "Next.js",
-  keywords: ["TikTok", "Reels", "Shorts", "Credibility", "Verifeye", "Verify", "Philippines"],
+  keywords: ["TikTok", "Reels", "Shorts", "Credibility", "VerifEye", "Verify", "Philippines"],
   openGraph: {
     images: {
       url: "https://i.imgur.com/lSEwsnI.png",
@@ -19,7 +21,7 @@ export const metadata: Metadata = {
       height: 630,
     },
     type: "website",
-    siteName: "Verifeye",
+    siteName: "VerifEye",
     url: "https://comet.dlsu.edu.ph/verifeye/",
   },
   twitter: {
@@ -45,7 +47,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <BottomNav />
+        <TopNav />
+        {children}
+      </body>
     </html>
   );
 }
