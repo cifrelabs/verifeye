@@ -6,8 +6,8 @@ export default function Loading() {
             <Image
                 src="images/verifeye.png"
                 alt="Vercel Logo"
-                width={512}
-                height={512}
+                width={200}
+                height={200}
                 priority
             />
         </div>

@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import { display } from "@/fonts/TikTok Display";
 import { text } from "@/fonts/TikTok Text";
 import "./globals.css";
+import BottomNav from "@/app/components/BottomNav";
+import TopNav from "./components/TopNav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,7 +14,7 @@ export const metadata: Metadata = {
   description: "Welcome to VerifEye! Where content meets verifiability. We aim to provide a platform where users can verify the content they consume.",
   applicationName: "VerifEye",
   generator: "Next.js",
-  keywords: ["TikTok", "Reels", "Shorts", "Credibility", "VerifEye", "Verify", "COMET", "DLSU", "Philippines"],
+  keywords: ["TikTok", "Reels", "Shorts", "Credibility", "VerifEye", "Verify", "Philippines"],
   openGraph: {
     images: {
       url: "https://i.imgur.com/lSEwsnI.png",
@@ -50,7 +52,11 @@ export default function RootLayout({
 			className={`${display.variable} ${text.variable}`}
 		>
       <head />
-      <body>{children}</body>
+      <body className={inter.className}>
+        <BottomNav />
+        <TopNav />
+        {children}
+      </body>
     </html>
   );
 }
