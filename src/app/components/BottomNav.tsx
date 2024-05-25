@@ -24,11 +24,6 @@ const BottomNav = () => {
           </li>
         ))}
       </ul>
-      <div className="flex justify-center items-end bottom-3 m-2">
-        <div className="flex items-center justify-center">
-            <Image src="/svgs/rect.svg" alt="Rect" width={120} height={50} />
-        </div>
-      </div>
     </nav>
   );
 };
