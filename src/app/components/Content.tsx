@@ -16,7 +16,8 @@ interface ContentProps {
 
 const Content: React.FC<ContentProps> = ({ 
     displayName, 
-    captions, 
+    captions,
+    soundUsed, 
     likes, 
     comments, 
     favorites, 
@@ -73,7 +74,7 @@ const Content: React.FC<ContentProps> = ({
                     <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
                     </svg>
-                    Sound Used
+                    {soundUsed} - {displayName}
                 </p>
             </div>
             <ActionBar 
