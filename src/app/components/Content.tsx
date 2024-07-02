@@ -25,6 +25,7 @@ const Content: React.FC<ContentProps> = ({
 }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
+    // Handle video playback when it comes into view
     useEffect(() => {
         const videoElement = videoRef.current;
         if (!videoElement) return;
@@ -55,8 +56,8 @@ const Content: React.FC<ContentProps> = ({
     }, []);
 
     return (
-        <div className="h-screen flex flex-col items-center justify-center">
-            <video ref={videoRef} src={media} className="w-full h-full object-cover" loop />
+        <div className="h-screen flex items-center justify-center">
+            <video ref={videoRef} src={media} className="w-full h-full object-cover" autoPlay loop muted playsInline />
         </div>
     );
 };

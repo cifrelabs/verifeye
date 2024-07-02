@@ -17,11 +17,10 @@ interface FeedProps {
 
 const Feed: React.FC<FeedProps> = ({ contents }) => {
     return (
-        <div className="h-screen overflow-hidden">
-            <div className="snap-y snap-align-start">
-                {contents.map(content => (
+        <div className="h-screen overflow-y-auto scrollbar-hide snap-y snap-mandatory">
+            {contents.map(content => (
+                <div key={content.id} className="snap-start h-full">
                     <Content
-                        key={content.id}
                         username={content.username}
                         displayName={content.displayName}
                         captions={content.captions}
@@ -31,8 +30,8 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
                         shares={content.shares}
                         media={content.media}
                     />
-                ))}
-            </div>
+                </div>
+            ))}
         </div>
     );
 }
