@@ -35,7 +35,7 @@ const BottomNav = () => {
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 bg-black">
+      <nav className="fixed bottom-0 left-0 right-0 bg-black z-10">
         <ul className="flex justify-around items-center h-14">
           {navItems.map((item) => (
             <li key={item.href}>
