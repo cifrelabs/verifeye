@@ -4,8 +4,8 @@ import Content from './Content';
 interface FeedProps {
     contents: Array<{
         id: string;
-        username: string;
-        displayName: string;
+        sound_used?: string;
+        display_name: string;
         captions: string;
         likes: number;
         comments: number;
@@ -21,8 +21,8 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
             {contents.map(content => (
                 <div key={content.id} className="snap-start h-full">
                     <Content
-                        username={content.username}
-                        displayName={content.displayName}
+                        soundUsed={content.sound_used}
+                        displayName={content.display_name}
                         captions={content.captions}
                         likes={content.likes}
                         comments={content.comments}

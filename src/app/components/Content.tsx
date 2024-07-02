@@ -1,9 +1,10 @@
 "use client"
 
 import React, { useRef, useEffect } from 'react';
+import ActionBar from './ActionBar';
 
 interface ContentProps {
-    username: string;
+    soundUsed?: string;
     displayName: string;
     captions: string;
     likes: number;
@@ -14,7 +15,6 @@ interface ContentProps {
 }
 
 const Content: React.FC<ContentProps> = ({ 
-    username, 
     displayName, 
     captions, 
     likes, 
@@ -25,39 +25,63 @@ const Content: React.FC<ContentProps> = ({
 }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    // Handle video playback when it comes into view
     useEffect(() => {
-        const videoElement = videoRef.current;
-        if (!videoElement) return;
-
-        const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Play the video when it comes into view
-                    videoElement.play().catch(error => {
-                        console.log("Error playing video:", error);
-                    });
-                } else {
-                    // Pause the video when it goes out of view
-                    videoElement.pause();
-                }
-            });
+        const options = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
         };
 
-        const observer = new IntersectionObserver(handleIntersection, {
-            threshold: 0.5 // Adjust as needed, 0.5 means at least 50% of the video must be visible
-        });
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    videoRef.current?.play();
+                } else {
+                    videoRef.current?.pause();
+                    if (videoRef.current) {
+                        videoRef.current.currentTime = 0;
+                    }
+                }
+            });
+        }, options);
 
-        observer.observe(videoElement);
+        if (videoRef.current) {
+            observer.observe(videoRef.current);
+        }
 
         return () => {
-            observer.unobserve(videoElement);
+            if (videoRef.current) {
+                observer.unobserve(videoRef.current);
+            }
         };
     }, []);
 
     return (
-        <div className="h-screen flex items-center justify-center">
-            <video ref={videoRef} src={media} className="w-full h-full object-cover" autoPlay loop muted playsInline />
+        <div className="h-screen flex items-center justify-center relative">
+            <video 
+                ref={videoRef}
+                src={media} 
+                className="w-full h-full object-cover" 
+                loop 
+                playsInline 
+                muted
+            />
+            <div className="absolute bottom-12 pb-3 left-4 text-white">
+                <h2 className="text-lg font-bold">{displayName}</h2>
+                <p className="text-sm mt-1">{captions}</p>
+                <p className="text-xs mt-2 flex items-center">
+                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                    </svg>
+                    Sound Used
+                </p>
+            </div>
+            <ActionBar 
+                likes={likes}
+                comments={comments}
+                favorites={favorites}
+                shares={shares}
+            />
         </div>
     );
 };
