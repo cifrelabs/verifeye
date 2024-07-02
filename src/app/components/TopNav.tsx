@@ -8,7 +8,7 @@ import Image from 'next/image';
 const TopNav = () => {
   const showToast = (message: string) => {
     toast.error(message, {
-      position: 'bottom-center',
+      position: 'top-center',
       autoClose: 3000,
       hideProgressBar: false,
       closeOnClick: true,
