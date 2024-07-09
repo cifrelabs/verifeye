@@ -1,10 +1,10 @@
 import Image from 'next/image';
 
 interface ShareModalProps {
-    setModal(bool: boolean): any
+    setModalOpen(bool: boolean): any
 }
 
-export const ShareModal: React.FC<ShareModalProps> = ({ setModal }) => {
+export const ShareModal: React.FC<ShareModalProps> = ({ setModalOpen }) => {
     let iconSize = 18;
     let maxSize = 9999;
 
@@ -15,7 +15,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ setModal }) => {
                     <h1 className="text-black text-xs font-semibold text-center">Share to</h1>
                 </div>
                 <div className="flex col-span-1 justify-end items-center">
-                    <button onClick={() => {setModal(false)}}>
+                    <button onClick={() => {setModalOpen(false)}}>
                         <Image
                             src="/svgs/x.svg"
                             alt="close"
