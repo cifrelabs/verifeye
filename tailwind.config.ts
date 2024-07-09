@@ -18,7 +18,15 @@ const config: Config = {
         primary: 'var(--font-display)',
         secondary: 'var(--font-text)',
       },
-    },
+      fontSize: {
+        'xxs': ['0.6rem', '0.75rem'],
+      },
+      colors: {
+        'repost': '#FFCC00',
+        'link': '#2D75FD',
+        'invite': '#9849FC'
+      }
+    }
   },
   plugins: [
     plugin(({ addUtilities }) => {

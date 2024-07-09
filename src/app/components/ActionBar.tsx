@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
+import { ShareModal } from "./ShareModal";
 
 interface ActionBarProps {
     pfp?: string;
@@ -30,12 +31,14 @@ interface ActionButtonProps {
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({ icon, count, size = 32 }) => {
+    const [shareModalOpen, setShareModalOpen] = useState(false);
+
     return (
         <div className="flex flex-col items-center">
-            <button className="flex items-center justify-center filter drop-shadow-lg">
-                <Image 
-                    src={icon} 
-                    alt="Action" 
+            <button className="flex items-center justify-center filter drop-shadow-lg" onClick={() => setShareModalOpen(true)}>
+                <Image
+                    src={icon}
+                    alt="Action"
                     width={size}
                     height={size}
                     style={{ width: 'auto', height: `${size}px` }}
@@ -43,6 +46,11 @@ const ActionButton: React.FC<ActionButtonProps> = ({ icon, count, size = 32 }) =
             </button>
             {count !== undefined && (
                 <span className="text-white text-xs mt-1 filter drop-shadow">{formatCount(count)}</span>
+            )}
+            {shareModalOpen && (
+                <ShareModal
+                    setModal={setShareModalOpen}
+                />
             )}
         </div>
     );
