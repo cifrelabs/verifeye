@@ -22,6 +22,9 @@ const config: Config = {
         'xxs': ['0.6rem', '0.75rem'],
       },
       colors: {
+        'tiktok': {
+          'red': '#FE2C55'
+        },
         'repost': '#FFCC00',
         'link': '#2D75FD',
         'invite': '#9849FC'
