@@ -1,75 +1,142 @@
-import React from 'react';
+"use client"
+
+import React, { useState } from 'react';
 import ViewsOverTime from './ViewsOverTime';
 
 const Details: React.FC = () => {
+    const h2Css = "font-bold text-xl text-black mb-4"
+    let tempDate = "July 10, 2024"
+    let tempHashtag = "#fypシ"
     return (
-        <div>
-            <div className="w-full flex flex-row items-center justify-center px-4 py-2 bg-white">
-                <div className='flex-1 flex justify-start'>
-                    <button className="bg-white text-black font-bold py-2 px-4">
-                        <img src="/icons/back.png" alt="Back" className='w-5'/>
+        <div className='fixed z-10 bg-white w-screen'>
+            {/* HEADER */}
+            <div className="py-7 grid grid-cols-7">
+                <div className='flex content-center col-start-1 col-end-2'>
+                    <button className="bg-white text-black font-bold px-4">
+                        <img src="/icons/back.png" alt="Back" height={15} width={15}/>
                     </button>
                 </div>
-                <div className='flex-1 flex justify-center'>
-                    <p className="text-black font-semibold text-sm w-fit">Verifiability Details</p>
+                <div className='flex place-content-center col-start-2 col-end-7'>
+                    <p className="text-black font-semibold text-sm leading-none">Verifiability Details</p>
                 </div>
-                <div className='flex-1'></div>
             </div>
-            <div className="h-screen flex flex-col items-center scrollbar-hide bg-white overflow-scroll px-12 pb-12">
-                <p className="font-bold text-2xl text-black mt-10 text-center">Review Account</p>
-                <p className="font-bold text-2xl text-black mt-4 text-center">Details</p>
-                <p className="font-normal text-base text-black text-center mt-8">
-                    To help keep our community informed, we provide detailed information about accounts on TikTok.
-                </p>
-                <p className="font-semibold text-base text-black text-center">
-                    Read to gain deeper insight on the account through publicly available analytics.
-                </p>
-                <div className="flex flex-col items-start w-full">
-                    <p className="font-bold text-xl text-black mt-12 text-start">A Possible Lookalike</p>
-                    <p className="font-normal text-base text-black mt-4">
-                        A different TikTok account with a similar name yet higher interaction count exists
+
+            {/* BODY */}
+            <div className="flex flex-col h-screen items-center scrollbar-hide overflow-scroll px-10 pb-12">
+                <div className='gap-10 mb-10'>
+                    <h2 className="font-bold text-3xl text-black text-center text-pretty mb-3">Review account details</h2>
+                    <p className="text-sm text-black text-center text-pretty">
+                        To help keep our community informed, we provide detailed information about accounts on TikTok.&nbsp;
+                        <span className='font-bold'>
+                            Read to gain deeper insight on the account through publicly available analytics.
+                        </span>
                     </p>
                 </div>
-                <div className="flex flex-col items-start w-full">
-                    <p className="font-bold text-xl text-black mt-12">What we found on the Internet</p>
-                    <p className="font-normal text-base text-black mt-4">
-                        We found 2 possible matching accounts from Twitter and Facebook
-                    </p>
-                    <p className="font-normal text-base text-black mt-4">
-                        We also found a Wikipedia article mentioning the user
-                    </p>
-                </div>
-                <div className="flex flex-col items-start w-full">
-                    <p className="font-bold text-xl text-black mt-12">Account Analysis</p>
-                    <div className="flex flex-col items-start w-full mt-8">
-                        <p className="font-semibold text-base text-black">Timeline</p>
-                        <p className="font-normal text-base text-black mt-4">
-                            User posted their first video on DATE
-                        </p>
-                        <p className="font-bold text-sm text-black mt-2">See More</p>
+
+                <div className="flex flex-col gap-10">
+                    {/* A likely lookalike */}
+                    <div className="flex flex-col">
+                        <h2 className={`${h2Css}`}>A likely lookalike</h2>
+                        <Lookalike/>
                     </div>
-                    <div className="flex flex-col items-start w-full mt-8">
-                        <p className="font-semibold text-base text-black">Hashtags used</p>
-                        <p className="font-normal text-base text-black mt-4">
-                            The user's most used hashtag is HASHTAG
-                        </p>
-                        <p className="font-bold text-sm text-black mt-2">See More</p>
+
+                    {/* Social media and articles */}
+                    <div className="flex flex-col">
+                        <h2 className={`${h2Css}`}>What we found on the Internet</h2>
+                        <SocialMedia/>
                     </div>
-                    <div className="flex flex-col items-start w-full mt-8">
-                        <p className="font-semibold text-base text-black">Viewership and account activity</p>
-                        <p className="font-normal text-base text-black mt-4">
-                            This account averages 0 viewers per video
-                        </p>
-                        <p className="font-bold text-sm text-black mt-2">See More</p>
-                        <div className='mt-2'>
-                            <ViewsOverTime></ViewsOverTime>
+
+                    {/* Account Analysis */}
+                    <div className="flex flex-col pb-96">
+                        <h2 className={`${h2Css}`}>Account Analysis</h2>
+                        <div className="flex flex-col flex-grow gap-10">
+                            <Accordion
+                                header={"Timeline"}
+                                body={`User posted their first video on ${tempDate}...`}
+                                // replace this with the appropriate component
+                                component={<ViewsOverTime/>}
+                            />
+                            <Accordion
+                                header={"Hashtags used"}
+                                body={`The user's most used hashtag is ${tempHashtag}...`}
+                                // replace this with the appropriate component
+                                component={<ViewsOverTime/>}
+                            />
+                            <Accordion
+                                header={"Viewership and account activity"}
+                                body={"This account averages 174.1K viewers per video..."}
+                                // if want to change sizing, pass props here
+                                component={<ViewsOverTime/>}
+                            />
                         </div>
-                        
                     </div>
                 </div>
             </div>
         </div>
     );
+}
+
+interface LookalikeProps {
+    // user1: object;
+    // user2: object;
+}
+
+// const Lookalike: React.FC<LookalikeProps> = ({user1, user2}) => {
+const Lookalike: React.FC<LookalikeProps> = ({}) => {
+    return(
+        <div>
+            <p className="text-sm text-black">
+                A different TikTok account with a similar name yet higher interaction count exists
+            </p>
+        </div>
+    )
+}
+
+// place props here as necessary
+interface SocialMediaProps {
+
+}
+
+const SocialMedia: React.FC<SocialMediaProps> = ({}) => {
+    return(
+        <div className="flex flex-col gap-4">
+            <div>
+                <p className="text-sm text-black">
+                    We found 2 possible matching accounts from Twitter and Facebook
+                </p>
+            </div>
+            <div>
+                <p className="text-sm text-black">
+                    We also found a Wikipedia article mentioning the user
+                </p>
+            </div>
+        </div>
+    )
+}
+
+interface AccordionProps {
+    header: string;
+    body: string;
+    component: object;
+}
+
+const Accordion: React.FC<AccordionProps> = ({header, body, component}) => {
+    const [expand, setExpand] = useState(false);
+
+    return(
+        <div className='flex flex-col'>
+            <h3 className='text-black font-semibold'>{header}</h3>
+            {!expand ? 
+                <div onClick={() => setExpand(true)}>
+                    <p className='text-black text-sm'>{body} <span className='text-black font-semibold'>See more</span></p>
+                </div>
+                :
+                <div onClick={() => setExpand(false)}>
+                    <>{component}</>
+                </div>
+            }
+        </div>
+    )
 }
 
 export default Details;

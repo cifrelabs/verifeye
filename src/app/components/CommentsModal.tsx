@@ -44,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ text, setModalOpen }) => {
     return(
         <div className="h-fit py-2 grid grid-cols-8">
             <div className="col-start-2 col-end-8">
-            <h1 className="text-black text-xs font-semibold text-center">{text}</h1>
+                <h1 className="text-black text-xs font-semibold text-center">{text}</h1>
             </div>
             <div className="flex col-span-1 justify-end items-center">
                 <button onClick={() => {setModalOpen(false)}}>
