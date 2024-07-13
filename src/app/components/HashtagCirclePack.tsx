@@ -160,7 +160,7 @@ const HashtagCirclePack: React.FC = () => {
 
   return (
     <div className='flex flex-col justify-center items-center'>
-      <span className="info text-black" id="info">
+      <span className="info text-black" id="infohashtag">
         The user's most used hashtag is {topHashtag}
       </span>
       <div style={{ width: '100%', height: '100%' }}>
