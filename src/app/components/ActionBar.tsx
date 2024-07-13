@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { VerifeyeModal } from "./VerifeyeModal";
 import { CommentsModal } from "./CommentsModal";
 import { ShareModal } from "./ShareModal";
+import Details from './Details';
 
 interface ActionBarProps {
     pfp?: string;
@@ -11,15 +12,16 @@ interface ActionBarProps {
     favorites: number;
     shares: number;
     audio?: string;
+    setHasInvestigated?(bool: boolean): any;
 }
 
-const ActionBar: React.FC<ActionBarProps> = ({ pfp, likes, comments, favorites, shares }) => {
+const ActionBar: React.FC<ActionBarProps> = ({ pfp, likes, comments, favorites, shares, setHasInvestigated }) => {
     const [isVerified, setIsVerified] = useState(false);
     
     return (
         <div className="absolute right-1.5 bottom-20 flex flex-col space-y-5">
             <ActionButton icon="/svgs/avatar.svg" pfp={pfp} size={50} type='profile' />
-            <ActionButton icon="/svgs/like.svg" altIcon="/svgs/like-red.svg" count={likes} type='like' size={28} isVerified={isVerified} setIsVerified={setIsVerified} />
+            <ActionButton icon="/svgs/like.svg" altIcon="/svgs/like-red.svg" count={likes} type='like' size={28} isVerified={isVerified} setIsVerified={setIsVerified} setHasInvestigated={setHasInvestigated} />
             <ActionButton icon="/svgs/comment.svg" count={comments} type='comments' size={28} isVerified={isVerified} setIsVerified={setIsVerified} />
             <ActionButton icon="/svgs/favorite.svg" altIcon="/svgs/favorite-yellow.svg" count={favorites} type='favorite' size={28} isVerified={isVerified} setIsVerified={setIsVerified} />
             <ActionButton icon="/svgs/share.svg" count={shares} type='share' size={28} isVerified={isVerified} setIsVerified={setIsVerified} />
@@ -37,11 +39,13 @@ interface ActionButtonProps {
     size?: number;
     isVerified?: any;
     setIsVerified?(bool: boolean): any;
+    setHasInvestigated?(bool: boolean): any;
 }
 
-const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, count, size = 32, isVerified, setIsVerified }) => {
+const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, count, size = 32, isVerified, setIsVerified, setHasInvestigated }) => {
     const [verifeyeModalOpen, setVerifeyeModalOpen] = useState(false);
     const [actionState, setActionState] = useState(false);
+    const [openDetails, setOpenDetails] = useState(false);
 
     const manageState = () => {
         if(!isVerified)
@@ -69,7 +73,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, c
 
     return (
         <div className="flex flex-col items-center">
-            <button className="flex items-center justify-center filter drop-shadow-lg" type='button' onClick={() => manageState()}>
+            <button className="flex items-center justify-center filter drop-shadow-lg" type='button' onClick={manageState}>
                 {!pfp ? <Image
                     src={!actionState ? icon : (altIcon ? altIcon : icon)}
                     alt="Action"
@@ -89,7 +93,9 @@ const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, c
                 <VerifeyeModal
                     modalText={modalText[type as keyof ModalText]}
                     setVerifeyeModalOpen={setVerifeyeModalOpen}
+                    setOpenDetails={setOpenDetails}
                     setActionState={setActionState}
+                    setHasInvestigated={setHasInvestigated ? setHasInvestigated : undefined}
                 >
                 </VerifeyeModal>
             )}
@@ -106,6 +112,9 @@ const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, c
                     setShareModalOpen={setActionState}
                 />
             )}
+            {openDetails &&
+                <Details setOpenDetails={setOpenDetails}/>
+            }
         </div>
     );
 };

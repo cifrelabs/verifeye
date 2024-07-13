@@ -14,6 +14,7 @@ interface ContentProps {
     shares: number;
     media: string;
     pfp: string;
+    setHasInvestigated?(bool: boolean): any;
 }
 
 const Content: React.FC<ContentProps> = ({ 
@@ -25,7 +26,8 @@ const Content: React.FC<ContentProps> = ({
     favorites, 
     shares, 
     media,
-    pfp
+    pfp,
+    setHasInvestigated
 }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -136,6 +138,7 @@ const Content: React.FC<ContentProps> = ({
                 comments={comments}
                 favorites={favorites}
                 shares={shares}
+                setHasInvestigated={setHasInvestigated ? setHasInvestigated : undefined}
             />
         </div>
     );

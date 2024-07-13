@@ -1,23 +1,18 @@
-import React, { useState } from 'react';
 import Image from 'next/image';
-import Details from './Details';
 
 interface VerifeyeModalProps {
     modalText: string[];
     setVerifeyeModalOpen(bool: boolean): any;
+    setOpenDetails(bool: boolean): any;
     setActionState(bool: boolean): any;
+    setHasInvestigated?(bool: boolean): any;
 }
 
-export const VerifeyeModal: React.FC<VerifeyeModalProps> = ({ modalText, setVerifeyeModalOpen, setActionState }) => {
-    const [openDetails, setOpenDetails] = useState(false);
-    const toggleDetails = () => {
+export const VerifeyeModal: React.FC<VerifeyeModalProps> = ({ modalText, setVerifeyeModalOpen, setOpenDetails, setActionState, setHasInvestigated }) => {
+    const closeVerifeyeModal = () => {
+        setHasInvestigated ? setHasInvestigated(true) : undefined;
+        setVerifeyeModalOpen(false);
         setOpenDetails(true);
-    }
-
-    if (openDetails){
-        return <Details 
-        openDetails={openDetails}
-        />
     }
 
     return(
@@ -30,7 +25,7 @@ export const VerifeyeModal: React.FC<VerifeyeModalProps> = ({ modalText, setVeri
                 <p className='text-xs'>We detected that this post is about Philippine politics. Review the account before interacting to keep our community authentic.</p>
             </div>
             <div className='flex flex-col w-full items-center gap-1'>
-                <button className='w-60 bg-tiktok-red rounded-lg' onClick={toggleDetails}>
+                <button className='w-60 bg-tiktok-red rounded-lg' onClick={closeVerifeyeModal}>
                     <p className="font-medium text-sm tracking-wide py-2">Check details</p>
                 </button>
 

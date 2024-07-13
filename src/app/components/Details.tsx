@@ -4,25 +4,21 @@ import React, { useState } from 'react';
 import ViewsOverTime from './ViewsOverTime';
     
 interface DetailsProps {
-    openDetails: boolean;
+    setOpenDetails: any;
 }
 
-const Details: React.FC<DetailsProps> = ({ openDetails }) => {
+const Details: React.FC<DetailsProps> = ({ setOpenDetails }) => {
     const h2Css = "font-bold text-xl text-black mb-4"
     let tempDate = "July 10, 2024"
     let tempHashtag = "#fypシ"
-    
-    if (!openDetails){
-        return null;
-    }
 
     return (
-        <div className='fixed inset-x-0 top-0 z-10 bg-white w-screen'>
+        <div className='fixed -translate-x-1/2 left-1/2 top-0 z-20 bg-white w-screen min-h-min'>
             {/* HEADER */}
             <div className="py-7 grid grid-cols-7">
                 <div className='flex content-center col-start-1 col-end-2'>
                     <button className="bg-white text-black font-bold px-4">
-                        <img src="/icons/back.png" alt="Back" height={15} width={15}/>
+                        <img src="/icons/back.png" alt="Back" height={15} width={15} onClick={() => {setOpenDetails(false)}}/>
                     </button>
                 </div>
                 <div className='flex place-content-center col-start-2 col-end-7'>

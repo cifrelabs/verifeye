@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Content from './Content';
 import Highlight from './Highlight';
 import { AutoplayProvider } from '../contexts/AutoplayContext';
@@ -24,6 +24,7 @@ interface FeedProps {
 }
 
 const Feed: React.FC<FeedProps> = ({ contents }) => {
+    const [hasInvestigated, setHasInvestigated] = useState(false)
     return (
         <AutoplayProvider>
             <div className="h-screen overflow-y-auto scrollbar-hide snap-y snap-mandatory">
@@ -39,9 +40,10 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
                             shares={content.shares}
                             media={content.media}
                             pfp={content.pfp}
+                            setHasInvestigated={content.political ? setHasInvestigated : undefined}
                         />
                     </div>,
-                    content.political && (
+                    !hasInvestigated && content.political && (
                         <div key={`highlight-${content.id}`} className="snap-start h-full">
                             <Highlight
                                 username={content.username}
