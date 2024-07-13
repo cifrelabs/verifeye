@@ -2,16 +2,16 @@
 
 import React, { useState } from 'react';
 import ViewsOverTime from './ViewsOverTime';
-
-const Details: React.FC = () => {
-    const h2Css = "font-bold text-xl text-black mb-4"
-    let tempDate = "July 10, 2024"
-    let tempHashtag = "#fypシ"
+    
 interface DetailsProps {
     openDetails: boolean;
 }
 
 const Details: React.FC<DetailsProps> = ({ openDetails }) => {
+    const h2Css = "font-bold text-xl text-black mb-4"
+    let tempDate = "July 10, 2024"
+    let tempHashtag = "#fypシ"
+    
     if (!openDetails){
         return null;
     }
