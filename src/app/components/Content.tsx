@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import ActionBar from './ActionBar';
 
 interface ContentProps {
@@ -27,6 +27,7 @@ const Content: React.FC<ContentProps> = ({
     pfp
 }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
+    const [isMuted, setIsMuted] = useState(true);
 
     useEffect(() => {
         const options = {
@@ -59,15 +60,25 @@ const Content: React.FC<ContentProps> = ({
         };
     }, []);
 
+    const handleTap = () => {
+        if (videoRef.current) {
+            videoRef.current.muted = !isMuted;
+            setIsMuted(!isMuted);
+        }
+    };
+
     return (
-        <div className="h-screen flex items-center justify-center relative">
+        <div 
+            className="h-screen flex items-center justify-center relative"
+            onClick={handleTap}
+        >
             <video 
                 ref={videoRef}
                 src={media} 
                 className="w-full h-full object-cover" 
                 loop 
                 playsInline 
-                muted
+                muted={isMuted}
             />
             <div className="absolute bottom-12 pb-3 left-4 text-white">
                 <h2 className="text-lg font-bold">{displayName}</h2>
