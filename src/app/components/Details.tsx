@@ -1,4 +1,5 @@
 import React from 'react';
+import ViewsOverTime from './ViewsOverTime';
 
 const Details: React.FC = () => {
     return (
@@ -60,6 +61,7 @@ const Details: React.FC = () => {
                             This account averages 0 viewers per video
                         </p>
                         <p className="font-bold text-sm text-black mt-2">See More</p>
+                        <ViewsOverTime></ViewsOverTime>
                     </div>
                 </div>
             </div>
