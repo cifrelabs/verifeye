@@ -54,7 +54,7 @@ const Content: React.FC<HighlightProps> = async ({
                     className="w-24 h-24 rounded-full mb-4"
                 />
                 <h2 className="text-xl font-bold mb-1">{displayName}</h2>
-                <p className="text-sm text-gray-600">@{username}</p>
+                <p className="text-sm text-gray-600 mb-6">@{username}</p>
                 <p className="text-lg pl-10 pr-10">
                     No possible matching accounts nor mentions were found
                 </p>
