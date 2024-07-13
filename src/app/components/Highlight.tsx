@@ -79,18 +79,6 @@ const Content: React.FC<HighlightProps> = async ({
                         <p className="text-kinda-sm tracking-wide">Skip to next video</p>
                     </button>
                 </div>
-        <div className="h-screen flex items-center justify-center relative">
-            <div className="flex flex-col items-center text-center z-10">
-                <img 
-                    src={pfp} 
-                    alt={`${displayName}'s profile picture`}
-                    className="w-24 h-24 rounded-full mb-4"
-                />
-                <h2 className="text-xl font-bold mb-1">{displayName}</h2>
-                <p className="text-sm text-gray-600 mb-6">@{username}</p>
-                <p className="text-lg pl-10 pr-10">
-                    No possible matching accounts nor mentions were found
-                </p>
             </div>
         </div>
     );
