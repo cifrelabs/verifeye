@@ -52,8 +52,8 @@ const ViewsOverTime: React.FC = () => {
         const svg = d3.select('#plot')
             .html('') // Clear any previous SVG
             .append('svg')
-            .attr('width', 450)
-            .attr('height', 400); // Be careful of clipping the months
+            .attr('width', 350)
+            .attr('height', 300); // Be careful of clipping the months
     
         const margin = { top: 20, right: 30, bottom: 50, left: 60 };
         const width = +svg.attr('width') - margin.left - margin.right;
@@ -134,7 +134,7 @@ const ViewsOverTime: React.FC = () => {
         const totalViewers = data.reduce((sum, post) => sum + (post.playCount || 0), 0);
         const average = Math.trunc(totalViewers / data.length);
         
-        const infoDiv = document.getElementById('info');
+        const infoDiv = document.getElementById('infoviewsovertime');
         if (infoDiv) {
             const maxMonth = dates[maxIndex] ?? undefined;
             const minMonth = dates[minIndex] ?? undefined;
@@ -190,7 +190,7 @@ const ViewsOverTime: React.FC = () => {
 
     return (
         <div className='flex flex-col justify-center items-center'>
-            <div className="info text-black" id="info"></div>
+            <div className="info text-black" id="infoviewsovertime"></div>
             <div className='flex flex-row justify-center items-center mb-3'>
                 <span className='text-blue-500 mr-3'>● Viewer count per month</span>
                 <span className='text-red-700'>● Videos posted per month</span>
