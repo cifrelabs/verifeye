@@ -17,7 +17,7 @@ const Details: React.FC<DetailsProps> = ({ openDetails }) => {
     }
 
     return (
-        <div className='fixed z-10 bg-white w-screen'>
+        <div className='fixed inset-x-0 top-0 z-10 bg-white w-screen'>
             {/* HEADER */}
             <div className="py-7 grid grid-cols-7">
                 <div className='flex content-center col-start-1 col-end-2'>
