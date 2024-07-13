@@ -33,7 +33,6 @@ const ViewsOverTime: React.FC = () => {
                         return d.playCount > 0 && d.playCount < 100000000 && d.createTime > 0;
                     }).sort((a, b) => a.createTime - b.createTime);
 
-                    console.log('Filtered Data:', filteredData); // Debug log
                     setAllData(filteredData);
                     plotData(filteredData);
                 } else {
@@ -45,88 +44,105 @@ const ViewsOverTime: React.FC = () => {
         }
 
         fetchData();
-    }, []);
+    }, []); 
 
     const plotData = (data: Post[]) => {
         const { dates, views, counts } = processData(data);
-
+    
         const svg = d3.select('#plot')
             .html('') // Clear any previous SVG
             .append('svg')
-            .attr('width', 400)
-            .attr('height', 250);
-
-        const margin = { top: 20, right: 30, bottom: 30, left: 60 };
+            .attr('width', 450)
+            .attr('height', 400); // Be careful of clipping the months
+    
+        const margin = { top: 20, right: 30, bottom: 50, left: 60 };
         const width = +svg.attr('width') - margin.left - margin.right;
         const height = +svg.attr('height') - margin.top - margin.bottom;
         const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-
+    
         const x = d3.scaleTime().range([0, width]);
         const y = d3.scaleLinear().range([height, 0]);
         const y2 = d3.scaleLinear().range([height, 0]);
-
+    
         x.domain(d3.extent(dates) as [Date, Date]);
         y.domain([0, d3.max(views) || 0]);
         y2.domain([0, d3.max(counts) || 0]);
-
+    
         const line = d3.line<[Date, number]>()
             .defined(d => d[0] !== undefined && d[1] !== undefined)
             .x(d => x(d[0]))
             .y(d => y(d[1]));
-
+    
         const line2 = d3.line<[Date, number]>()
             .defined(d => d[0] !== undefined && d[1] !== undefined)
             .x(d => x(d[0]))
             .y(d => y2(d[1]));
-
+    
         g.append('g')
             .attr('class', 'axis axis--x')
             .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x));
-
+            .call(d3.axisBottom(x).tickFormat(d3.timeFormat('%b %Y') as unknown as (domainValue: Date | NumberValue, index: number) => string))
+            .selectAll('text')
+            .attr('transform', 'rotate(-45)')
+            .style('text-anchor', 'end')
+            .attr('stroke', 'black')
+            .attr('fill', 'black');
+    
+        g.selectAll('.axis--x path')
+            .attr('stroke', 'black'); 
+    
         g.append('g')
             .attr('class', 'axis axis--y')
-            .call(d3.axisLeft(y).tickFormat(d3.format(".2s")));
-
+            .call(d3.axisLeft(y).tickFormat(d3.format(".2s")))
+            .selectAll('path, line, text')
+            .attr('stroke', 'black')
+            //.attr('fill', 'black');
+    
+        g.selectAll('.axis--y path')
+            .attr('stroke', 'black'); 
+    
         g.append('g')
             .attr('class', 'axis axis--y2')
             .attr('transform', `translate(${width},0)`)
-            .call(d3.axisRight(y2));
+            .call(d3.axisRight(y2))
+            .selectAll('path, line, text')
+            .attr('stroke', 'black')
+            //.attr('fill', 'black');
+    
+        g.selectAll('.axis--y2 path')
+            .attr('stroke', 'black'); 
 
         g.append('path')
             .datum(dates.map((d, i) => [d, views[i]] as [Date, number]))
             .attr('class', 'line')
-            .attr('stroke', 'lightblue')
+            .attr('stroke', 'blue') 
             .attr('fill', 'none')
             .attr('d', line);
-
+    
         g.append('path')
             .datum(dates.map((d, i) => [d, counts[i]] as [Date, number]))
             .attr('class', 'line')
-            .attr('stroke', 'red')
+            .attr('stroke', 'red') 
             .attr('fill', 'none') 
             .attr('d', line2);
-
+    
         const maxViews = d3.max(views) ?? 0;
         const minViews = d3.min(views) ?? 0;
         const maxIndex = views.indexOf(maxViews);
         const minIndex = views.indexOf(minViews);
-
+    
         const totalViewers = data.reduce((sum, post) => sum + (post.playCount || 0), 0);
         const average = Math.trunc(totalViewers / data.length);
         
-
         const infoDiv = document.getElementById('info');
         if (infoDiv) {
             const maxMonth = dates[maxIndex] ?? undefined;
             const minMonth = dates[minIndex] ?? undefined;
             const decreasePercent = ((maxViews - minViews) / maxViews) * 100;
-            console.log("Average: ", average);
-            infoDiv.innerHTML = `
-                <span>This account averages ${abbreviateNumber(average)} viewers per video.</span>
-                <span>They peaked at ${abbreviateNumber(maxViews)} views on ${formatMonthYear(maxMonth)} but reached an all-time low on ${formatMonthYear(minMonth)} with ${abbreviateNumber(minViews)} viewers.</span>
-                <span>Viewer count has decreased by ${decreasePercent.toFixed(2)}% since last peak.</span>
-            `;
+            infoDiv.innerHTML = 
+                `<span style="color: black;">This account averages ${abbreviateNumber(average)} viewers per video.</span>
+                <span style="color: black;">They peaked at ${abbreviateNumber(maxViews)} views on ${formatMonthYear(maxMonth)} but reached an all-time low on ${formatMonthYear(minMonth)} with ${abbreviateNumber(minViews)} viewers.</span>
+                <span style="color: black;">Viewer count has decreased by ${decreasePercent.toFixed(2)}% since last peak.</span>`;
         }
     };
 
@@ -174,12 +190,11 @@ const ViewsOverTime: React.FC = () => {
 
     return (
         <div className='flex flex-col justify-center items-center'>
+            <div className="info text-black" id="info"></div>
             <div className='flex flex-row justify-center items-center mb-3'>
                 <span className='text-blue-500 mr-3'>● Viewer count per month</span>
                 <span className='text-red-700'>● Videos posted per month</span>
             </div>
-            <h1>Views Over Time</h1>
-            <div className="info text-black" id="info"></div>
             <div id="plot"></div>
         </div>
     );
