@@ -4,7 +4,7 @@ import Details from '../components/Details';
 
 const previewDetails: React.FC = () => {
     return (
-        <Details></Details>
+        <Details openDetails={true}></Details>
     );
 };
 

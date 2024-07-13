@@ -1,9 +1,17 @@
 import React from 'react';
 import ViewsOverTime from './ViewsOverTime';
 
-const Details: React.FC = () => {
+interface DetailsProps {
+    openDetails: boolean;
+}
+
+const Details: React.FC<DetailsProps> = ({ openDetails }) => {
+    if (!openDetails){
+        return null;
+    }
+
     return (
-        <div>
+        <div className="w-screen h-screen top-0">
             <div className="w-full flex flex-row items-center justify-center px-4 py-2 bg-white">
                 <div className='flex-1 flex justify-start'>
                     <button className="bg-white text-black font-bold py-2 px-4">

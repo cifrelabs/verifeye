@@ -2,6 +2,7 @@
 
 import { getHighlight } from '@/utils/supabase';
 import React, { useState } from 'react';
+import Details from './Details';
 
 interface HighlightProps {
     username: string;
@@ -65,6 +66,17 @@ const Content: React.FC<HighlightProps> = async ({
                 
             </div>
         );
+    }
+
+    const [openDetails, setOpenDetails] = useState(false);
+    const toggleDetails = () => {
+        setOpenDetails(true);
+    }
+
+    if (openDetails){
+        <Details
+        openDetails={openDetails}
+        />
     }
 
     // No Social Media
