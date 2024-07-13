@@ -5,7 +5,6 @@ interface ShareModalProps {
 }
 
 export const ShareModal: React.FC<ShareModalProps> = ({ setShareModalOpen }) => {
-    let iconSize = 18;
     let maxSize = 9999;
 
     return(
@@ -20,19 +19,16 @@ export const ShareModal: React.FC<ShareModalProps> = ({ setShareModalOpen }) => 
                         icon='/svgs/x.svg'
                         text='Add to Story'
                         bgColor='bg-gray-500'
-                        size={iconSize}
                     />
                     <ShareButton
                         icon='/svgs/x.svg'
                         text='username'
                         bgColor='bg-gray-500'
-                        size={iconSize}
                     />
                     <ShareButton
                         icon='/svgs/more.svg'
                         text='More'
                         bgColor='bg-gray-300'
-                        size={iconSize}
                     />
                     <ShareButton
                         icon='/svgs/invite.svg'
@@ -83,13 +79,11 @@ export const ShareModal: React.FC<ShareModalProps> = ({ setShareModalOpen }) => 
                         icon='/svgs/flag.svg'
                         text='Report'
                         bgColor='bg-gray-300'
-                        size={iconSize}
                     />
                     <ShareButton
                         icon='/svgs/download.svg'
                         text='Save video'
                         bgColor='bg-gray-300'
-                        size={iconSize}
                     />
                     <ShareButton
                         icon='/svgs/caption.svg'
@@ -101,7 +95,6 @@ export const ShareModal: React.FC<ShareModalProps> = ({ setShareModalOpen }) => 
                         icon='/svgs/fire.svg'
                         text='Promote'
                         bgColor='bg-gray-300'
-                        size={iconSize}
                     />
                     <ShareButton
                         icon='/svgs/duet.svg'
@@ -113,7 +106,6 @@ export const ShareModal: React.FC<ShareModalProps> = ({ setShareModalOpen }) => 
                         icon='/svgs/stitch.svg'
                         text='Stitch'
                         bgColor='bg-gray-300'
-                        size={iconSize}
                     />
                 </div>
             </div>
@@ -125,13 +117,11 @@ interface ShareButtonProps {
     icon: string;
     text: string;
     bgColor?: string;
-    size: number;
+    size?: number;
     border?: string;
 }
 
-const ShareButton: React.FC<ShareButtonProps> = ({ icon, text, bgColor, size, border }) => {
-    // let test = 'xmlns="http://www.w3.org/2000/svg" fill="currentColor" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" className="size-6"'
-
+const ShareButton: React.FC<ShareButtonProps> = ({ icon, text, bgColor, size = 18, border }) => {
     return(
         <div className='flex flex-col w-12 mr-4'>
             <button className={`flex overflow-hidden justify-center items-center rounded-full h-12 w-12 mb-1 ${ bgColor } ${ border }`}>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { VerifeyeModal } from "./VerifeyeModal";
+import { CommentsModal } from "./CommentsModal";
 import { ShareModal } from "./ShareModal";
 
 interface ActionBarProps {
@@ -66,7 +67,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ icon, altIcon, type, count,
 
     return (
         <div className="flex flex-col items-center">
-            <button className="flex items-center justify-center filter drop-shadow-lg" onClick={() => manageState()}>
+            <button className="flex items-center justify-center filter drop-shadow-lg" type='button' onClick={() => manageState()}>
                 <Image
                     src={!actionState ? icon : (altIcon ? altIcon : icon)}
                     alt="Action"
@@ -87,8 +88,9 @@ const ActionButton: React.FC<ActionButtonProps> = ({ icon, altIcon, type, count,
                 </VerifeyeModal>
             )}
             {type == 'comments' && actionState && (
-                <ShareModal
-                    setShareModalOpen={setActionState}
+                <CommentsModal
+                    count={0}
+                    setCommentsModalOpen={setActionState}
                 />
             )}
             {type == 'share' && actionState && (
