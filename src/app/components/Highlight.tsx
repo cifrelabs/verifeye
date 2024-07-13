@@ -21,17 +21,16 @@ const Content: React.FC<HighlightProps> = async ({
 }) => {
     const [hasInteracted, setHasInteracted] = useState(false);
 
-    const getMessage = (type: number, socmed?: string) => {
-        switch(type) {
-            case 1: "Another account on TikTok with a similar profile exists"; break;
-            case 2: "We found this Wikipedia article about the user"; break;
-            case 3: `We found an ${socmed} account possibly belonging to this user`; break;
-            default: "No possible matching accounts nor mentions were found";
-        }
-    }
+    // const getMessage = (type: number, socmed?: string) => {
+    //     switch(type) {
+    //         case 1: "Another account on TikTok with a similar profile exists"; break;
+    //         case 2: "We found this Wikipedia article about the user"; break;
+    //         case 3: `We found an ${socmed} account possibly belonging to this user`; break;
+    //         default: "No possible matching accounts nor mentions were found";
+    //     }
+    // }
 
     const handleSeeMore = () => {
-        
         setHasInteracted(true);
     }
 
@@ -40,44 +39,44 @@ const Content: React.FC<HighlightProps> = async ({
         onNext();
     }
 
-    if (id) {
-        const highlight: { 
-            type?: number 
-            details?: object
-        } = await getHighlight(id);
+    // if (id) {
+    //     const highlight: { 
+    //         type?: number 
+    //         details?: object
+    //     } = await getHighlight(id);
                 
-        // Lookalike
-        if (highlight.type === 1) return (
-            <div className="h-screen flex items-center justify-center relative">
+    //     // Lookalike
+    //     if (highlight.type === 1) return (
+    //         <div className="h-screen flex items-center justify-center relative">
                 
-            </div>
-        );
+    //         </div>
+    //     );
 
-        // Social Media
-        if (highlight.type === 2) return (
-            <div className="h-screen flex items-center justify-center relative">
+    //     // Social Media
+    //     if (highlight.type === 2) return (
+    //         <div className="h-screen flex items-center justify-center relative">
                 
-            </div>
-        );
+    //         </div>
+    //     );
 
-        // Article
-        if (highlight.type === 3) return (
-            <div className="h-screen flex items-center justify-center relative">
+    //     // Article
+    //     if (highlight.type === 3) return (
+    //         <div className="h-screen flex items-center justify-center relative">
                 
-            </div>
-        );
-    }
+    //         </div>
+    //     );
+    // }
 
-    const [openDetails, setOpenDetails] = useState(false);
-    const toggleDetails = () => {
-        setOpenDetails(true);
-    }
+    // const [openDetails, setOpenDetails] = useState(false);
+    // const toggleDetails = () => {
+    //     setOpenDetails(true);
+    // }
 
-    if (openDetails){
-        <Details
-        openDetails={openDetails}
-        />
-    }
+    // if (openDetails){
+    //     <Details
+    //     openDetails={openDetails}
+    //     />
+    // }
 
     // No Social Media
     return (
