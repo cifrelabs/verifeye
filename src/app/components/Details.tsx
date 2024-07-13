@@ -1,5 +1,6 @@
 import React from 'react';
 import ViewsOverTime from './ViewsOverTime';
+import HashtagCirclePack from './HashtagCirclePack';
 
 const Details: React.FC = () => {
     return (
@@ -50,21 +51,21 @@ const Details: React.FC = () => {
                     </div>
                     <div className="flex flex-col items-start w-full mt-8">
                         <p className="font-semibold text-base text-black">Hashtags used</p>
-                        <p className="font-normal text-base text-black mt-4">
-                            The user's most used hashtag is HASHTAG
-                        </p>
+                        {/* <p className="font-normal text-base text-black mt-4"> The user's most used hashtag is HASHTAG </p> */}
+                        <div className='flex flex-row items-center justify-center px-12 mt-2'>
+                            <HashtagCirclePack></HashtagCirclePack>
+                        </div>
                         <p className="font-bold text-sm text-black mt-2">See More</p>
                     </div>
                     <div className="flex flex-col items-start w-full mt-8">
                         <p className="font-semibold text-base text-black">Viewership and account activity</p>
-                        <p className="font-normal text-base text-black mt-4">
+                        {/* <p className="font-normal text-base text-black mt-4">
                             This account averages 0 viewers per video
-                        </p>
+                        </p> */}
                         <p className="font-bold text-sm text-black mt-2">See More</p>
                         <div className='mt-2'>
                             <ViewsOverTime></ViewsOverTime>
                         </div>
-                        
                     </div>
                 </div>
             </div>
