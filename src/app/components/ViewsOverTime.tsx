@@ -53,8 +53,8 @@ const ViewsOverTime: React.FC = () => {
         const svg = d3.select('#plot')
             .html('') // Clear any previous SVG
             .append('svg')
-            .attr('width', 800)
-            .attr('height', 500);
+            .attr('width', 400)
+            .attr('height', 250);
 
         const margin = { top: 20, right: 30, bottom: 30, left: 60 };
         const width = +svg.attr('width') - margin.left - margin.right;
@@ -173,13 +173,13 @@ const ViewsOverTime: React.FC = () => {
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginBottom: '10px' }}>
-                <span style={{ color: 'lightblue', marginRight: '10px' }}>● Viewer count per month</span>
-                <span style={{ color: 'red' }}>● Videos posted per month</span>
+        <div className='flex flex-col justify-center items-center'>
+            <div className='flex flex-row justify-center items-center mb-3'>
+                <span className='text-blue-500 mr-3'>● Viewer count per month</span>
+                <span className='text-red-700'>● Videos posted per month</span>
             </div>
             <h1>Views Over Time</h1>
-            <div className="info" id="info"></div>
+            <div className="info text-black" id="info"></div>
             <div id="plot"></div>
         </div>
     );

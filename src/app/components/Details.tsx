@@ -61,7 +61,10 @@ const Details: React.FC = () => {
                             This account averages 0 viewers per video
                         </p>
                         <p className="font-bold text-sm text-black mt-2">See More</p>
-                        <ViewsOverTime></ViewsOverTime>
+                        <div className='mt-2'>
+                            <ViewsOverTime></ViewsOverTime>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
