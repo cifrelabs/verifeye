@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import ViewsOverTime from './ViewsOverTime';
+import HashtagCirclePack from './HashtagCirclePack';
     
 interface DetailsProps {
     openDetails: boolean;
@@ -69,7 +70,7 @@ const Details: React.FC<DetailsProps> = ({ openDetails }) => {
                                 header={"Hashtags used"}
                                 body={`The user's most used hashtag is ${tempHashtag}...`}
                                 // replace this with the appropriate component
-                                component={<ViewsOverTime/>}
+                                component={<HashtagCirclePack/>}
                             />
                             <Accordion
                                 header={"Viewership and account activity"}

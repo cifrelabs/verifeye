@@ -134,7 +134,7 @@ const ViewsOverTime: React.FC = () => {
         const totalViewers = data.reduce((sum, post) => sum + (post.playCount || 0), 0);
         const average = Math.trunc(totalViewers / data.length);
         
-        const infoDiv = document.getElementById('info');
+        const infoDiv = document.getElementById('infoviewsovertime');
         if (infoDiv) {
             const maxMonth = dates[maxIndex] ?? undefined;
             const minMonth = dates[minIndex] ?? undefined;
@@ -190,7 +190,7 @@ const ViewsOverTime: React.FC = () => {
 
     return (
         <div className='flex flex-col justify-center items-center'>
-            <div className="info text-black" id="info"></div>
+            <div className="info text-black" id="infoviewsovertime"></div>
             <div className='flex flex-row justify-center items-center mb-3'>
                 <span className='text-blue-500 mr-3'>● Viewer count per month</span>
                 <span className='text-red-700'>● Videos posted per month</span>
