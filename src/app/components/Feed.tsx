@@ -1,6 +1,9 @@
+"use client"
+
 import React from 'react';
 import Content from './Content';
 import Highlight from './Highlight';
+import { AutoplayProvider } from '../contexts/AutoplayContext';
 
 interface FeedProps {
     contents: Array<{
@@ -8,17 +11,13 @@ interface FeedProps {
         username: string;
         display_name: string;
         pfp: string;
-
-
         media: string;
         captions: string;
         sound_used: string;
-
         likes: number;
         comments: number;
         favorites: number;
         shares: number;
-
         political: boolean;
         highlight_id: string;
     }>;
@@ -26,10 +25,10 @@ interface FeedProps {
 
 const Feed: React.FC<FeedProps> = ({ contents }) => {
     return (
-        <div className="h-screen overflow-y-auto scrollbar-hide snap-y snap-mandatory">
-            {contents.map(content => (
-                <>
-                    <div key={content.id} className="snap-start h-full">
+        <AutoplayProvider>
+            <div className="h-screen overflow-y-auto scrollbar-hide snap-y snap-mandatory">
+                {contents.flatMap((content, index) => [
+                    <div key={`content-${content.id}`} className="snap-start h-full">
                         <Content
                             soundUsed={content.sound_used}
                             displayName={content.display_name}
@@ -41,9 +40,9 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
                             media={content.media}
                             pfp={content.pfp}
                         />
-                    </div>
-                    {content.political && (
-                        <div key={content.id + "h"} className="snap-start h-full">
+                    </div>,
+                    content.political && (
+                        <div key={`highlight-${content.id}`} className="snap-start h-full">
                             <Highlight
                                 username={content.username}
                                 displayName={content.display_name}
@@ -51,10 +50,10 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
                                 pfp={content.pfp}
                             />
                         </div>
-                    )}
-                </>
-            ))}
-        </div>
+                    )
+                ].filter(Boolean))}
+            </div>
+        </AutoplayProvider>
     );
 }
 

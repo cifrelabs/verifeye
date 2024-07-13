@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import ActionBar from './ActionBar';
+import { useAutoplay } from '../contexts/AutoplayContext';
 
 interface ContentProps {
     soundUsed?: string;
@@ -27,7 +28,8 @@ const Content: React.FC<ContentProps> = ({
     pfp
 }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
-    const [isMuted, setIsMuted] = useState(true);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const { globalAutoplay, setGlobalAutoplay } = useAutoplay();
 
     useEffect(() => {
         const options = {
@@ -39,12 +41,14 @@ const Content: React.FC<ContentProps> = ({
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                    videoRef.current?.play();
-                } else {
-                    videoRef.current?.pause();
                     if (videoRef.current) {
-                        videoRef.current.currentTime = 0;
+                        videoRef.current.currentTime = 0; // Reset video to start
+                        if (globalAutoplay) {
+                            playVideo();
+                        }
                     }
+                } else {
+                    pauseVideo();
                 }
             });
         }, options);
@@ -58,12 +62,38 @@ const Content: React.FC<ContentProps> = ({
                 observer.unobserve(videoRef.current);
             }
         };
-    }, []);
+    }, [globalAutoplay]);
+
+    const playVideo = async () => {
+        if (videoRef.current) {
+            try {
+                await videoRef.current.play();
+                setIsPlaying(true);
+            } catch (error) {
+                console.error('Autoplay failed:', error);
+            }
+        }
+    };
+
+    const pauseVideo = () => {
+        if (videoRef.current) {
+            videoRef.current.pause();
+            setIsPlaying(false);
+        }
+    };
 
     const handleTap = () => {
-        if (videoRef.current) {
-            videoRef.current.muted = !isMuted;
-            setIsMuted(!isMuted);
+        if (!globalAutoplay) {
+            setGlobalAutoplay(true);
+        }
+        
+        if (isPlaying) {
+            pauseVideo();
+        } else {
+            if (videoRef.current) {
+                videoRef.current.currentTime = 0; // Reset video to start when manually playing
+            }
+            playVideo();
         }
     };
 
@@ -78,8 +108,18 @@ const Content: React.FC<ContentProps> = ({
                 className="w-full h-full object-cover" 
                 loop 
                 playsInline 
-                muted={isMuted}
             />
+            {!isPlaying && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                    <svg 
+                        className="w-20 h-20 text-white opacity-50" 
+                        fill="currentColor" 
+                        viewBox="0 0 24 24"
+                    >
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                </div>
+            )}
             <div className="absolute bottom-12 pb-3 left-4 text-white">
                 <h2 className="text-lg font-bold">{displayName}</h2>
                 <p className="text-sm mt-1">{captions}</p>

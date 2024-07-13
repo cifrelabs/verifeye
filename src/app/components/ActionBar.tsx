@@ -17,7 +17,7 @@ const ActionBar: React.FC<ActionBarProps> = ({ pfp, likes, comments, favorites, 
     const [isVerified, setIsVerified] = useState(false);
     
     return (
-        <div className="absolute right-2.5 bottom-20 flex flex-col space-y-5">
+        <div className="absolute right-1.5 bottom-20 flex flex-col space-y-5">
             <ActionButton icon="/svgs/avatar.svg" pfp={pfp} size={50} type='profile' />
             <ActionButton icon="/svgs/like.svg" altIcon="/svgs/like-red.svg" count={likes} type='like' size={28} isVerified={isVerified} setIsVerified={setIsVerified} />
             <ActionButton icon="/svgs/comment.svg" count={comments} type='comments' size={28} isVerified={isVerified} setIsVerified={setIsVerified} />
