@@ -134,7 +134,7 @@ const getAvatarIcon = (pfp: string) => {
                 x="0" 
                 y="0" 
                 preserveAspectRatio="xMidYMid slice"
-                clip-path="url(#circleClip)"
+                clipPath="url(#circleClip)"
             />
             <circle cx="60.5" cy="60.5" r="59.0915" fill="none" stroke="white" strokeWidth="2.8169"/>
             <circle cx="60.5" cy="113.438" r="30.25" fill="#FE2C55"/>
