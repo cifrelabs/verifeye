@@ -12,6 +12,7 @@ interface ContentProps {
     favorites: number;
     shares: number;
     media: string;
+    pfp: string;
 }
 
 const Content: React.FC<ContentProps> = ({ 
@@ -22,7 +23,8 @@ const Content: React.FC<ContentProps> = ({
     comments, 
     favorites, 
     shares, 
-    media 
+    media,
+    pfp
 }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -78,6 +80,7 @@ const Content: React.FC<ContentProps> = ({
                 </p>
             </div>
             <ActionBar 
+                pfp={pfp}
                 likes={likes}
                 comments={comments}
                 favorites={favorites}

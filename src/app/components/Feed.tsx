@@ -39,6 +39,7 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
                             favorites={content.favorites}
                             shares={content.shares}
                             media={content.media}
+                            pfp={content.pfp}
                         />
                     </div>
                     {content.political && (
