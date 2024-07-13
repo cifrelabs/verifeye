@@ -25,34 +25,10 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({ count, setComments
                 <div className='flex justify-center items-center rounded-full bg-slate-400 size-10'>
                     <p>C</p>
                 </div>
-                <div className='content-center rounded-full bg-gray-200 h-11 w-full px-3'>
+                <div className='flex flex-grow items-center rounded-full bg-gray-200 h-11 px-3'>
                     <p className='text-sm text-gray-500'>Add comment...</p>
                 </div>
             </div>
-        </div>
-    )
-}
-
-interface CommentsModalButtonProps {
-    icon: string;
-    text: string;
-    bgColor?: string;
-    size?: number;
-    border?: string;
-}
-
-const ShareButton: React.FC<CommentsModalButtonProps> = ({ icon, text, bgColor, size=18, border }) => {
-    return(
-        <div className='flex flex-col w-12 mr-4'>
-            <button className={`flex overflow-hidden justify-center items-center rounded-full h-12 w-12 mb-1 ${ bgColor } ${ border }`}>
-                <Image
-                    src={icon}
-                    alt="Share option"
-                    width={size}
-                    height={size}
-                />
-            </button>
-            <p className='text-wrap text-xxs'>{ text }</p>
         </div>
     )
 }
