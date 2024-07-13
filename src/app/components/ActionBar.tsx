@@ -18,12 +18,12 @@ const ActionBar: React.FC<ActionBarProps> = ({ pfp, likes, comments, favorites, 
     
     return (
         <div className="absolute right-2.5 bottom-20 flex flex-col space-y-5">
-            {/* <ActionButton icon="/svgs/avatar.svg" size={50} type='profile' /> */}
+            <ActionButton icon="/svgs/avatar.svg" size={50} type='profile' />
             <ActionButton icon="/svgs/like.svg" altIcon="/svgs/like-red.svg" count={likes} type='like' size={28} isVerified={isVerified} setIsVerified={setIsVerified} />
             <ActionButton icon="/svgs/comment.svg" count={comments} type='comments' size={28} isVerified={isVerified} setIsVerified={setIsVerified} />
             <ActionButton icon="/svgs/favorite.svg" altIcon="/svgs/favorite-yellow.svg" count={favorites} type='favorite' size={28} isVerified={isVerified} setIsVerified={setIsVerified} />
             <ActionButton icon="/svgs/share.svg" count={shares} type='share' size={28} isVerified={isVerified} setIsVerified={setIsVerified} />
-            {/* <ActionButton icon="/svgs/audio.svg" type="audio" size={35} /> */}
+            <ActionButton icon="/svgs/audio.svg" type="audio" size={35} />
         </div>
     );
 };
@@ -34,8 +34,8 @@ interface ActionButtonProps {
     altIcon?: string;
     count?: number;
     size?: number;
-    isVerified: any;
-    setIsVerified(bool: boolean): any;
+    isVerified?: any;
+    setIsVerified?(bool: boolean): any;
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({ icon, altIcon, type, count, size = 32, isVerified, setIsVerified }) => {
@@ -48,7 +48,8 @@ const ActionButton: React.FC<ActionButtonProps> = ({ icon, altIcon, type, count,
         else
             setActionState(!actionState)
         
-        setIsVerified(true);
+        if(setIsVerified != undefined)
+            setIsVerified(true);
     };
 
     interface ModalText {
@@ -79,7 +80,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ icon, altIcon, type, count,
             {count !== undefined && (
                 <span className="text-white text-xs mt-1 filter drop-shadow">{formatCount(count)}</span>
             )}
-            {verifeyeModalOpen && (
+            {type in modalText && verifeyeModalOpen && (
                 <VerifeyeModal
                     modalText={modalText[type as keyof ModalText]}
                     setVerifeyeModalOpen={setVerifeyeModalOpen}
@@ -99,7 +100,6 @@ const ActionButton: React.FC<ActionButtonProps> = ({ icon, altIcon, type, count,
                 />
             )}
         </div>
-        
     );
 };
 
