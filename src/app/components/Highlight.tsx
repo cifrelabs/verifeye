@@ -1,21 +1,25 @@
 "use client"
 
 import { getHighlight } from '@/utils/supabase';
-import React from 'react';
+import React, { useState } from 'react';
 
 interface HighlightProps {
     username: string;
     displayName: string;
     id: string;
     pfp: string;
+    onNext: () => void;
 }
 
 const Content: React.FC<HighlightProps> = async ({
     username, 
     displayName, 
     id,
-    pfp 
+    pfp,
+    onNext
 }) => {
+    const [hasInteracted, setHasInteracted] = useState(false);
+
     const getMessage = (type: number, socmed?: string) => {
         switch(type) {
             case 1: "Another account on TikTok with a similar profile exists"; break;
@@ -25,12 +29,22 @@ const Content: React.FC<HighlightProps> = async ({
         }
     }
 
+    const handleSeeMore = () => {
+        
+        setHasInteracted(true);
+    }
+
+    const handleSkip = () => {
+        setHasInteracted(true);
+        onNext();
+    }
+
     if (id) {
         const highlight: { 
             type?: number 
             details?: object
         } = await getHighlight(id);
-
+                
         // Lookalike
         if (highlight.type === 1) return (
             <div className="h-screen flex items-center justify-center relative">
@@ -68,35 +82,21 @@ const Content: React.FC<HighlightProps> = async ({
                     No possible matching accounts nor mentions were found
                 </p>
                 <div className='flex flex-col w-full gap-2 px-5'>
-                    <button className='w-full bg-tiktok-red rounded-md py-2 px-3'>
+                    <button 
+                        className='w-full bg-tiktok-red rounded-md py-2 px-3'
+                        onClick={handleSeeMore}
+                    >
                         <p className="text-kinda-sm tracking-wide">See what else we found about this user</p>
                     </button>
-                    <button className='w-full bg-tiktok-gray rounded-md py-2 px-3'>
+                    <button 
+                        className='w-full bg-tiktok-gray rounded-md py-2 px-3'
+                        onClick={handleSkip}
+                    >
                         <p className="text-kinda-sm tracking-wide">Skip to next video</p>
                     </button>
                 </div>
             </div>
         </div>
-
-        // <div className="h-screen top-24 justify-center relative px-5">
-        //     <div className="flex flex-col items-center text-center gap-5 z-10">
-        //         <div className='flex flex-col items-center'>
-        //             <img 
-        //                 src={pfp} 
-        //                 alt={`${displayName}'s profile picture`}
-        //                 className="w-24 h-24 rounded-full mb-2"
-        //             />
-        //             <h2 className="text-lg font-bold">{displayName}</h2>
-        //             <p className="text-sm">@{username}</p>
-        //         </div>
-        //         <div>
-        //             <p className="text-base font-medium text-pretty">
-        //                 No possible matching accounts nor mentions were found
-        //             </p>
-        //         </div>
-                
-        //     </div>
-        // </div>
     );
 };
 
