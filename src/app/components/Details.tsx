@@ -7,6 +7,15 @@ const Details: React.FC = () => {
     const h2Css = "font-bold text-xl text-black mb-4"
     let tempDate = "July 10, 2024"
     let tempHashtag = "#fypシ"
+interface DetailsProps {
+    openDetails: boolean;
+}
+
+const Details: React.FC<DetailsProps> = ({ openDetails }) => {
+    if (!openDetails){
+        return null;
+    }
+
     return (
         <div className='fixed z-10 bg-white w-screen'>
             {/* HEADER */}

@@ -48,6 +48,7 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
                                 displayName={content.display_name}
                                 id={content.highlight_id}
                                 pfp={content.pfp}
+                                onNext={()=>{}}
                             />
                         </div>
                     )
