@@ -1,5 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 
+// Create a single supabase client for interacting with your database
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_API_KEY);
+
 /**
  * Get all contents from the database to display on the website
  * @async
@@ -8,9 +11,6 @@ import { createClient } from "@supabase/supabase-js";
  * @throws {Error} Supabase Error
  */
 export const getContents = async () => {
-	// Create a single supabase client for interacting with your database
-	const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_API_KEY);
-
 	const { data, error } = await supabase
 		.from('contents')
 		.select()
@@ -33,14 +33,10 @@ export const getContents = async () => {
  * @throws {Error} Supabase Error
  */
 export const getHighlight = async (id) => {
-	// Create a single supabase client for interacting with your database
-	const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_API_KEY);
-
 	const { data, error } = await supabase
 		.from('highlights')
 		.select()
 		.eq('id', id)
-		.limit(1)
 		.maybeSingle();
 
 	if (error) {
