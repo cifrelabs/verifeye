@@ -19,11 +19,13 @@ const config: Config = {
         secondary: 'var(--font-text)',
       },
       fontSize: {
+        'kinda-sm': ['0.8rem', '1.1rem'],
         'xxs': ['0.6rem', '0.75rem'],
       },
       colors: {
         'tiktok': {
-          'red': '#FE2C55'
+          'red': '#FE2C55',
+          'gray': '#1E1E1E'
         },
         'repost': '#FFCC00',
         'link': '#2D75FD',
