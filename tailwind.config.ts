@@ -25,7 +25,8 @@ const config: Config = {
       colors: {
         'tiktok': {
           'red': '#FE2C55',
-          'gray': '#1E1E1E'
+          'gray': '#1E1E1E',
+          'blue': '#72CEF1'
         },
         'repost': '#FFCC00',
         'link': '#2D75FD',

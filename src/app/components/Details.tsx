@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import ViewsOverTime from './ViewsOverTime';
 import HashtagCirclePack from './HashtagCirclePack';
+import Timeline from './Timeline';
     
 interface DetailsProps {
     setOpenDetails: any;
@@ -60,7 +61,7 @@ const Details: React.FC<DetailsProps> = ({ setOpenDetails }) => {
                                 header={"Timeline"}
                                 body={`User posted their first video on ${tempDate}...`}
                                 // replace this with the appropriate component
-                                component={<ViewsOverTime/>}
+                                component={<Timeline/>}
                             />
                             <Accordion
                                 header={"Hashtags used"}

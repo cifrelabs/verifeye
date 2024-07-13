@@ -115,14 +115,14 @@ const ViewsOverTime: React.FC = () => {
         g.append('path')
             .datum(dates.map((d, i) => [d, views[i]] as [Date, number]))
             .attr('class', 'line')
-            .attr('stroke', 'blue') 
+            .attr('stroke', '#72CEF1') 
             .attr('fill', 'none')
             .attr('d', line);
     
         g.append('path')
             .datum(dates.map((d, i) => [d, counts[i]] as [Date, number]))
             .attr('class', 'line')
-            .attr('stroke', 'red') 
+            .attr('stroke', '#FE2C55') 
             .attr('fill', 'none') 
             .attr('d', line2);
     
@@ -192,8 +192,8 @@ const ViewsOverTime: React.FC = () => {
         <div className='flex flex-col justify-center items-center'>
             <div className="info text-black" id="infoviewsovertime"></div>
             <div className='flex flex-row justify-center items-center mb-3'>
-                <span className='text-blue-500 mr-3'>● Viewer count per month</span>
-                <span className='text-red-700'>● Videos posted per month</span>
+                <span className='text-tiktok-blue mr-3'>● Viewer count per month</span>
+                <span className='text-tiktok-red'>● Videos posted per month</span>
             </div>
             <div id="plot"></div>
         </div>
