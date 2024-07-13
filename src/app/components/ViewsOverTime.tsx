@@ -52,8 +52,8 @@ const ViewsOverTime: React.FC = () => {
         const svg = d3.select('#plot')
             .html('') // Clear any previous SVG
             .append('svg')
-            .attr('width', 450)
-            .attr('height', 400); // Be careful of clipping the months
+            .attr('width', 350)
+            .attr('height', 300); // Be careful of clipping the months
     
         const margin = { top: 20, right: 30, bottom: 50, left: 60 };
         const width = +svg.attr('width') - margin.left - margin.right;

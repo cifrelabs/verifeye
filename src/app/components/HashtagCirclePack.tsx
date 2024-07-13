@@ -68,7 +68,7 @@ const HashtagCirclePack: React.FC = () => {
       .data(nodes)
       .enter().append('g')
       .attr('transform', (d) => `translate(${d.x - radius},${d.y - radius})`)
-      .on('mouseover', function (event, d) {
+      .on('onclick', function (event, d) {
         d3.select(this).select('circle')
           .transition().duration(200)
           .attr('r', d.r * 1.1);
@@ -79,7 +79,7 @@ const HashtagCirclePack: React.FC = () => {
 
         setChosenHashtag(d.data.name); // Update the chosen hashtag
       })
-      .on('mouseout', function (event, d) {
+      .on('onclick', function (event, d) {
         d3.select(this).select('circle')
           .transition().duration(200)
           .attr('r', d.r);
