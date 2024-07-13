@@ -14,8 +14,8 @@ export const getContents = async () => {
 	const { data, error } = await supabase
 		.from('contents')
 		.select()
-		.neq('media', "")
-		.not('media', 'is', null);
+		.not('media', 'is', null)
+		.neq('media', '');
 
 	if (error) {
 		throw new Error(`Supabase Error`, error);
