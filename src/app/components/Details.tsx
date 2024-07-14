@@ -1,9 +1,10 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ViewsOverTime from './ViewsOverTime';
 import HashtagCirclePack from './HashtagCirclePack';
 import Timeline from './Timeline';
+import { getSimilarUsernames } from '@/utils/supabase';
     
 interface DetailsProps {
     setOpenDetails: any;
@@ -44,7 +45,7 @@ const Details: React.FC<DetailsProps> = ({ setOpenDetails }) => {
                     {/* A likely lookalike */}
                     <div className="flex flex-col">
                         <h2 className={`${h2Css}`}>A likely lookalike</h2>
-                        <Lookalike/>
+                        <Lookalike display_name='Risa Hontiveros'/>
                     </div>
 
                     {/* Social media and articles */}
@@ -84,17 +85,32 @@ const Details: React.FC<DetailsProps> = ({ setOpenDetails }) => {
 }
 
 interface LookalikeProps {
-    // user1: object;
-    // user2: object;
+    display_name: string;
 }
 
 // const Lookalike: React.FC<LookalikeProps> = ({user1, user2}) => {
-const Lookalike: React.FC<LookalikeProps> = ({}) => {
+const Lookalike: React.FC<LookalikeProps> = ({display_name}) => {
+    const [similarUsernames, setSimilarUsernames] = useState<string[]>([])
+
+    useEffect(() => {
+        const fetchSimilarUsernames = async () => {
+            try {
+                const usernames = await getSimilarUsernames(display_name);
+                setSimilarUsernames(usernames);
+            } catch (error) {
+                console.error("error fetching similar usernames: ", error);
+            }
+        };
+
+        fetchSimilarUsernames();
+    }, [display_name]);
+
     return(
         <div>
             <p className="text-sm text-black">
-                A different TikTok account with a similar name yet higher interaction count exists
+                A different TikTok account with a similar username exists
             </p>
+            {/* TODO: DISPLAY SIMILAR ACCOUNTS */}
         </div>
     )
 }
