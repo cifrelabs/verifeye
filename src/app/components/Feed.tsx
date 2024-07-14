@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Content from './Content';
 import Highlight from './Highlight';
 import { AutoplayProvider } from '../contexts/AutoplayContext';
+import Details from './Details';
 
 interface FeedProps {
     contents: Array<{
@@ -24,7 +25,9 @@ interface FeedProps {
 }
 
 const Feed: React.FC<FeedProps> = ({ contents }) => {
-    const [hasInvestigated, setHasInvestigated] = useState(false)
+    const [hasInvestigated, setHasInvestigated] = useState(false);
+    const [openDetails, setOpenDetails] = useState(false);
+
     return (
         <AutoplayProvider>
             <div className="h-screen overflow-y-auto scrollbar-hide snap-y snap-mandatory">
@@ -50,12 +53,14 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
                                 displayName={content.display_name}
                                 id={content.highlight_id}
                                 pfp={content.pfp}
+                                setOpenDetails={setOpenDetails}
                                 onNext={()=>{}}
                             />
                         </div>
                     )
                 ].filter(Boolean))}
             </div>
+            {openDetails && <Details setOpenDetails={setOpenDetails}/>}
         </AutoplayProvider>
     );
 }

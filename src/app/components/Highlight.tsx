@@ -9,6 +9,7 @@ interface HighlightProps {
     displayName: string;
     id: string;
     pfp: string;
+    setOpenDetails(bool: boolean): any;
     onNext: () => void;
 }
 
@@ -17,6 +18,7 @@ const Content: React.FC<HighlightProps> = async ({
     displayName, 
     id,
     pfp,
+    setOpenDetails,
     onNext
 }) => {
     const [hasInteracted, setHasInteracted] = useState(false);
@@ -95,7 +97,10 @@ const Content: React.FC<HighlightProps> = async ({
                 <div className='flex flex-col w-full gap-2 px-5'>
                     <button 
                         className='w-full bg-tiktok-red rounded-md py-2 px-3'
-                        onClick={handleSeeMore}
+                        onClick={()=>{
+                            handleSeeMore;
+                            setOpenDetails(true);
+                        }}
                     >
                         <p className="text-kinda-sm tracking-wide">See what else we found about this user</p>
                     </button>
