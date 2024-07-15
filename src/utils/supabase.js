@@ -51,20 +51,20 @@ export const getHighlight = async (id) => {
  * Get two similar usernames from the database
  * @async
  * @method
- * @param {string} display_name - The username to find similar usernames for
+ * @param {string} username - The username to find similar usernames for
  * @returns {Promise<Array>} Array of two similar usernames
  * @throws {Error} Supabase Error
  */
-export const getSimilarUsernames = async (display_name) => {
+export const getSimilarUsernames = async (username) => {
 	const { data, error } = await supabase
 		.from('contents')
-		.select('display_name')
-		.ilike('display_name', `%${display_name}%`)
+		.select('username')
+		.ilike('username', `%${username}%`)
 		.limit(2);
 
 	if (error) {
 		throw new Error(`Supabase Error`, error);
 	}
 
-	return data.map(user => user.display_name);
+	return data;
 }
