@@ -45,6 +45,7 @@ const Details: React.FC<DetailsProps> = ({ setOpenDetails }) => {
                     {/* A likely lookalike */}
                     <div className="flex flex-col justify-center">
                         <h2 className={`${h2Css}`}>A possible lookalike</h2>
+                        <p className='text-black'>A different TikTok account with a similar name yet higher interaction count exists</p>
                         {/* TODO: Dynamic username */}
                         <Lookalike/>
                     </div>

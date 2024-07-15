@@ -35,7 +35,7 @@ import { getSimilarUsernames } from "@/utils/supabase";
 
 const Lookalike: React.FC = () => {
     return (
-        <div className="text-black flex flex-row justify-center">
+        <div className="text-black flex flex-row justify-center mt-4">
             <div className="flex flex-col mx-4 items-center">
                 <img src="" alt="image" className="w-24 h-24 rounded-full mb-4"/>
                 <p className="font-semibold">Display name 1</p>
