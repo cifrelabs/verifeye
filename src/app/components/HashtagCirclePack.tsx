@@ -62,34 +62,40 @@ const HashtagCirclePack: React.FC = () => {
       .attr("width", width)
       .attr("height", height)
       .append("g")
-      .attr("transform", `translate(${radius},${radius + 50})`);  // Adjusted vertical padding
+      .attr("transform", `translate(${radius},${radius + 30})`);  // Adjusted vertical padding
+
+    const handleInteraction = (event, d) => {
+      event.stopPropagation(); // Stop the event from propagating to parent elements
+      d3.select(event.currentTarget).select('circle')
+        .transition().duration(200)
+        .attr('r', d.r * 1.1);
+
+      d3.select(event.currentTarget).select('text')
+        .transition().duration(200)
+        .style('font-size', `${Math.min(d.r * 0.6, 12)}px`);
+
+      setChosenHashtag(d.data.name); // Update the chosen hashtag
+    };
+
+    const handleMouseOut = (event, d) => {
+      d3.select(event.currentTarget).select('circle')
+        .transition().duration(200)
+        .attr('r', d.r);
+
+      d3.select(event.currentTarget).select('text')
+        .transition().duration(200)
+        .style('font-size', `${Math.min(d.r * 0.4, 10)}px`);
+
+      setChosenHashtag(''); // Clear the chosen hashtag on mouse out
+    };
 
     const node = g.selectAll('g')
       .data(nodes)
       .enter().append('g')
       .attr('transform', (d) => `translate(${d.x - radius},${d.y - radius})`)
-      .on('onclick', function (event, d) {
-        d3.select(this).select('circle')
-          .transition().duration(200)
-          .attr('r', d.r * 1.1);
-
-        d3.select(this).select('text')
-          .transition().duration(200)
-          .style('font-size', `${Math.min(d.r * 0.6, 12)}px`);
-
-        setChosenHashtag(d.data.name); // Update the chosen hashtag
-      })
-      .on('onclick', function (event, d) {
-        d3.select(this).select('circle')
-          .transition().duration(200)
-          .attr('r', d.r);
-
-        d3.select(this).select('text')
-          .transition().duration(200)
-          .style('font-size', `${Math.min(d.r * 0.4, 10)}px`);
-
-        setChosenHashtag(''); // Clear the chosen hashtag on mouse out
-      });
+      .on('click', handleInteraction)
+      .on('touchstart', handleInteraction)
+      .on('mouseout', handleMouseOut);
 
     node.append('circle')
       .attr('r', (d) => d.r)
@@ -164,9 +170,9 @@ const HashtagCirclePack: React.FC = () => {
         The user's most used hashtag is {topHashtag}
       </span>
       <div style={{ width: '100%', height: '100%' }}>
-        <div style={{ height: '5vh' }}></div> 
-        <h1 className="text-black" style={{ textAlign: 'center', height: '5vh', lineHeight: '5vh' }}>{chosenHashtag}</h1>
-        <svg ref={svgRef} style={{ width: '100%', height: '85vh' }}></svg>
+        <div style={{ height: '2vh' }}></div> 
+        <h1 className="text-black" style={{ textAlign: 'center', height: '5vh', lineHeight: '5vh', marginBottom: '10px' }}>{chosenHashtag}</h1>
+        <svg ref={svgRef} style={{ width: '100%', height: '80vh' }}></svg>
       </div>
     </div>
   );

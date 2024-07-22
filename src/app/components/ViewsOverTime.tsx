@@ -86,7 +86,7 @@ const ViewsOverTime: React.FC = () => {
             .attr('transform', 'rotate(-45)')
             .style('text-anchor', 'end')
             .attr('stroke', 'black')
-            .attr('fill', 'black');
+            //.attr('fill', 'black');
     
         g.selectAll('.axis--x path')
             .attr('stroke', 'black'); 
