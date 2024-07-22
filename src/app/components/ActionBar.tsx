@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Image from 'next/image';
 import { VerifeyeModal } from "./VerifeyeModal";
 import { CommentsModal } from "./CommentsModal";
 import { ShareModal } from "./ShareModal";
 import Details from './Details';
+import { PoliticalContext } from '../contexts/PoliticalContext';
 
 interface ActionBarProps {
     pfp?: string;
@@ -43,6 +44,7 @@ interface ActionButtonProps {
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, count, size = 32, isVerified, setIsVerified, setHasInvestigated }) => {
+    const isPolitical = useContext(PoliticalContext);
     const [verifeyeModalOpen, setVerifeyeModalOpen] = useState(false);
     const [actionState, setActionState] = useState(false);
     const [openDetails, setOpenDetails] = useState(false);
@@ -89,7 +91,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, c
                 <span className="text-white text-xs mt-1 filter drop-shadow">{formatCount(count)}</span>
             )}
 
-            {type in modalText && verifeyeModalOpen && (
+            {isPolitical && type in modalText && verifeyeModalOpen && (
                 <VerifeyeModal
                     modalText={modalText[type as keyof ModalText]}
                     setVerifeyeModalOpen={setVerifeyeModalOpen}

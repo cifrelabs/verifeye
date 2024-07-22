@@ -1,9 +1,10 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import Content from './Content';
 import Highlight from './Highlight';
 import { AutoplayProvider } from '../contexts/AutoplayContext';
+import { PoliticalContext } from '../contexts/PoliticalContext';
 import Details from './Details';
 
 interface FeedProps {
@@ -27,24 +28,26 @@ interface FeedProps {
 const Feed: React.FC<FeedProps> = ({ contents }) => {
     const [hasInvestigated, setHasInvestigated] = useState(false);
     const [openDetails, setOpenDetails] = useState(false);
-
+    
     return (
         <AutoplayProvider>
             <div className="h-screen overflow-y-auto scrollbar-hide snap-y snap-mandatory">
                 {contents.flatMap((content, index) => [
                     <div key={`content-${content.id}`} className="snap-start h-full">
-                        <Content
-                            soundUsed={content.sound_used}
-                            displayName={content.display_name}
-                            captions={content.captions}
-                            likes={content.likes}
-                            comments={content.comments}
-                            favorites={content.favorites}
-                            shares={content.shares}
-                            media={content.media}
-                            pfp={content.pfp}
-                            setHasInvestigated={content.political ? setHasInvestigated : undefined}
-                        />
+                        <PoliticalContext.Provider value = {content.political}>
+                            <Content
+                                soundUsed={content.sound_used}
+                                displayName={content.display_name}
+                                captions={content.captions}
+                                likes={content.likes}
+                                comments={content.comments}
+                                favorites={content.favorites}
+                                shares={content.shares}
+                                media={content.media}
+                                pfp={content.pfp}
+                                setHasInvestigated={content.political ? setHasInvestigated : undefined}
+                            />
+                        </PoliticalContext.Provider>
                     </div>,
                     !hasInvestigated && content.political && (
                         <div key={`highlight-${content.id}`} className="snap-start h-full">
