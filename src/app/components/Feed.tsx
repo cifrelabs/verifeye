@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import Content from './Content';
 import Highlight from './Highlight';
 import { AutoplayProvider } from '../contexts/AutoplayContext';
-import { PoliticalContext } from '../contexts/PoliticalContext';
+import { PoliticalContext, UsernameContext } from '../contexts/Contexts';
 import Details from './Details';
 
 interface FeedProps {
@@ -36,18 +36,20 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
                 {contents.flatMap((content, index) => [
                     <div key={`content-${content.id}`} className="snap-start h-full">
                         <PoliticalContext.Provider value = {content.political}>
-                            <Content
-                                soundUsed={content.sound_used}
-                                displayName={content.display_name}
-                                captions={content.captions}
-                                likes={content.likes}
-                                comments={content.comments}
-                                favorites={content.favorites}
-                                shares={content.shares}
-                                media={content.media}
-                                pfp={content.pfp}
-                                setHasInvestigated={content.political ? setHasInvestigated : undefined}
-                            />
+                            <UsernameContext.Provider value={content.username}>
+                                <Content
+                                    soundUsed={content.sound_used}
+                                    displayName={content.display_name}
+                                    captions={content.captions}
+                                    likes={content.likes}
+                                    comments={content.comments}
+                                    favorites={content.favorites}
+                                    shares={content.shares}
+                                    media={content.media}
+                                    pfp={content.pfp}
+                                    setHasInvestigated={content.political ? setHasInvestigated : undefined}
+                                />
+                            </UsernameContext.Provider>
                         </PoliticalContext.Provider>
                     </div>,
                     !hasInvestigated && content.political && (

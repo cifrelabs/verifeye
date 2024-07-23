@@ -4,7 +4,7 @@ import { VerifeyeModal } from "./VerifeyeModal";
 import { CommentsModal } from "./CommentsModal";
 import { ShareModal } from "./ShareModal";
 import Details from './Details';
-import { PoliticalContext } from '../contexts/PoliticalContext';
+import { PoliticalContext, UsernameContext } from '../contexts/Contexts';
 
 interface ActionBarProps {
     pfp?: string;
@@ -45,6 +45,7 @@ interface ActionButtonProps {
 
 const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, count, size = 32, isVerified, setIsVerified, setHasInvestigated }) => {
     const isPolitical = useContext(PoliticalContext);
+    const username = useContext(UsernameContext);
     const [verifeyeModalOpen, setVerifeyeModalOpen] = useState(false);
     const [actionState, setActionState] = useState(false);
     const [openDetails, setOpenDetails] = useState(false);
@@ -115,7 +116,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, c
                 />
             )}
             {openDetails &&
-                <Details setOpenDetails={setOpenDetails}/>
+                <Details setOpenDetails={setOpenDetails} username={username}/>
             }
         </div>
     );
