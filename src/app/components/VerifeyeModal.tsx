@@ -16,7 +16,8 @@ export const VerifeyeModal: React.FC<VerifeyeModalProps> = ({ modalText, setVeri
     }
 
     return(
-        <div className="fixed -translate-x-1/2 left-1/2 -translate-y-1/2 top-1/2 z-10 p-3 flex flex-col w-80 bg-white rounded-lg">
+        <div
+            className="fixed -translate-x-1/2 left-1/2 -translate-y-1/2 top-1/2 z-10 p-3 flex flex-col w-80 bg-white rounded-lg">
             <Header
                 setVerifeyeModalOpen={setVerifeyeModalOpen}
             />
@@ -29,7 +30,7 @@ export const VerifeyeModal: React.FC<VerifeyeModalProps> = ({ modalText, setVeri
                     <p className="font-medium text-sm tracking-wide py-2">Check details</p>
                 </button>
 
-                <button className='w-60 rounded-lg' onClick={() => {setVerifeyeModalOpen(false); setActionState(true)}}>
+                <button className='w-60 rounded-lg' onClick={(e: React.MouseEvent<HTMLElement>) => {setVerifeyeModalOpen(false); setActionState(true); e.stopPropagation();}}>
                     <p className="font-medium text-sm tracking-wide text-red-600 py-2">{modalText[1]}</p>
                 </button>
             </div>
@@ -43,10 +44,12 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ setVerifeyeModalOpen }) => {
     let iconSize = 18;
+    
 
     return(
         <div className="flex justify-end items-center">
-            <button onClick={() => {setVerifeyeModalOpen(false)}}>
+            <button onClick={(e: React.MouseEvent<HTMLElement>) => {setVerifeyeModalOpen(false); e.stopPropagation();}}>
+            {/* <button onClick={() => {setVerifeyeModalOpen(false); }}> */}
                 <Image
                     src="/svgs/x.svg"
                     alt="close"

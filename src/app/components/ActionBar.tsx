@@ -50,14 +50,16 @@ const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, c
     const [actionState, setActionState] = useState(false);
     const [openDetails, setOpenDetails] = useState(false);
 
-    const manageState = () => {
-        if(!isVerified)
-            setVerifeyeModalOpen(true)
+    const manageState = (e: React.MouseEvent<HTMLElement>) => {
+        if(isPolitical && !isVerified)
+            setVerifeyeModalOpen(true);
         else
-            setActionState(!actionState)
+            setActionState(!actionState);
         
         if(setIsVerified != undefined)
             setIsVerified(true);
+
+        e.stopPropagation();
     };
 
     interface ModalText {
