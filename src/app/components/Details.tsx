@@ -16,7 +16,7 @@ const Details: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
     let tempHashtag = "#fypシ"
 
     return (
-        <div className='fixed -translate-x-1/2 left-1/2 top-0 z-20 bg-white w-screen min-h-min'>
+        <div className='fixed -translate-x-1/2 left-1/2 top-0 z-20 bg-white w-screen min-h-min' onClick={(e: React.MouseEvent<HTMLElement>) => {e.stopPropagation()}}>
             {/* HEADER */}
             <div className="py-7 grid grid-cols-7">
                 <div className='flex content-center col-start-1 col-end-2'>
