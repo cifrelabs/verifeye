@@ -13,7 +13,11 @@ interface UserData {
   };
 }
 
-const Timeline: React.FC = () => {
+interface TimelineProps {
+  username: string | null;
+}
+
+const Timeline: React.FC<TimelineProps> = ({username}) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [firstVideo, setFirstVideo] = useState<Video | null>(null);
   const [lastVideo, setLastVideo] = useState<Video | null>(null);
@@ -21,7 +25,7 @@ const Timeline: React.FC = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('/samueluyyt.json');
+        const response = await fetch('analysisdata/' + username + '.json');
         const jsonData: UserData = await response.json();
         console.log('Fetched JSON data:', jsonData);
 

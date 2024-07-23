@@ -16,13 +16,17 @@ interface JsonData {
     };
 }
 
-const ViewsOverTime: React.FC = () => {
+interface ViewsOverTimeProps {
+    username: string | null;
+}
+
+const ViewsOverTime: React.FC<ViewsOverTimeProps> = ({ username }) => {
     const [allData, setAllData] = useState<Post[]>([]);
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch('samueluyyt.json');
+                const response = await fetch('/analysisdata/' + username + '.json');
                 const jsonData: JsonData = await response.json();
 
                 if (jsonData && jsonData.result && Array.isArray(jsonData.result.posts)) {
@@ -44,40 +48,40 @@ const ViewsOverTime: React.FC = () => {
         }
 
         fetchData();
-    }, []); 
+    }, []);
 
     const plotData = (data: Post[]) => {
         const { dates, views, counts } = processData(data);
-    
+
         const svg = d3.select('#plot')
             .html('') // Clear any previous SVG
             .append('svg')
             .attr('width', 350)
             .attr('height', 300); // Be careful of clipping the months
-    
+
         const margin = { top: 20, right: 30, bottom: 50, left: 60 };
         const width = +svg.attr('width') - margin.left - margin.right;
         const height = +svg.attr('height') - margin.top - margin.bottom;
         const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-    
+
         const x = d3.scaleTime().range([0, width]);
         const y = d3.scaleLinear().range([height, 0]);
         const y2 = d3.scaleLinear().range([height, 0]);
-    
+
         x.domain(d3.extent(dates) as [Date, Date]);
         y.domain([0, d3.max(views) || 0]);
         y2.domain([0, d3.max(counts) || 0]);
-    
+
         const line = d3.line<[Date, number]>()
             .defined(d => d[0] !== undefined && d[1] !== undefined)
             .x(d => x(d[0]))
             .y(d => y(d[1]));
-    
+
         const line2 = d3.line<[Date, number]>()
             .defined(d => d[0] !== undefined && d[1] !== undefined)
             .x(d => x(d[0]))
             .y(d => y2(d[1]));
-    
+
         g.append('g')
             .attr('class', 'axis axis--x')
             .attr('transform', `translate(0,${height})`)
@@ -87,20 +91,20 @@ const ViewsOverTime: React.FC = () => {
             .style('text-anchor', 'end')
             .attr('stroke', 'black')
             //.attr('fill', 'black');
-    
+
         g.selectAll('.axis--x path')
-            .attr('stroke', 'black'); 
-    
+            .attr('stroke', 'black');
+
         g.append('g')
             .attr('class', 'axis axis--y')
             .call(d3.axisLeft(y).tickFormat(d3.format(".2s")))
             .selectAll('path, line, text')
             .attr('stroke', 'black')
             //.attr('fill', 'black');
-    
+
         g.selectAll('.axis--y path')
-            .attr('stroke', 'black'); 
-    
+            .attr('stroke', 'black');
+
         g.append('g')
             .attr('class', 'axis axis--y2')
             .attr('transform', `translate(${width},0)`)
@@ -108,39 +112,39 @@ const ViewsOverTime: React.FC = () => {
             .selectAll('path, line, text')
             .attr('stroke', 'black')
             //.attr('fill', 'black');
-    
+
         g.selectAll('.axis--y2 path')
-            .attr('stroke', 'black'); 
+            .attr('stroke', 'black');
 
         g.append('path')
             .datum(dates.map((d, i) => [d, views[i]] as [Date, number]))
             .attr('class', 'line')
-            .attr('stroke', '#72CEF1') 
+            .attr('stroke', '#72CEF1')
             .attr('fill', 'none')
             .attr('d', line);
-    
+
         g.append('path')
             .datum(dates.map((d, i) => [d, counts[i]] as [Date, number]))
             .attr('class', 'line')
-            .attr('stroke', '#FE2C55') 
-            .attr('fill', 'none') 
+            .attr('stroke', '#FE2C55')
+            .attr('fill', 'none')
             .attr('d', line2);
-    
+
         const maxViews = d3.max(views) ?? 0;
         const minViews = d3.min(views) ?? 0;
         const maxIndex = views.indexOf(maxViews);
         const minIndex = views.indexOf(minViews);
-    
+
         const totalViewers = data.reduce((sum, post) => sum + (post.playCount || 0), 0);
         const average = Math.trunc(totalViewers / data.length);
-        
+
         const infoDiv = document.getElementById('infoviewsovertime');
         if (infoDiv) {
             const maxMonth = dates[maxIndex] ?? undefined;
             const minMonth = dates[minIndex] ?? undefined;
             const decreasePercent = ((maxViews - minViews) / maxViews) * 100;
-            infoDiv.innerHTML = 
-                `<span style="color: black;">This account averages ${abbreviateNumber(average)} viewers per video.</span>
+            infoDiv.innerHTML =
+                `<span style="color: black;">This account (${username}) averages ${abbreviateNumber(average)} viewers per video.</span>
                 <span style="color: black;">They peaked at ${abbreviateNumber(maxViews)} views on ${formatMonthYear(maxMonth)} but reached an all-time low on ${formatMonthYear(minMonth)} with ${abbreviateNumber(minViews)} viewers.</span>
                 <span style="color: black;">Viewer count has decreased by ${decreasePercent.toFixed(2)}% since last peak.</span>`;
         }
@@ -172,11 +176,11 @@ const ViewsOverTime: React.FC = () => {
         if (value < 1000) {
             return value.toString();
         }
-    
+
         const suffixes = ["", "K", "M", "B", "T"];
         const suffixNum = Math.floor(Math.log10(value) / 3);
         const shortValue = (value / Math.pow(1000, suffixNum)).toFixed(1);
-    
+
         return shortValue + suffixes[suffixNum];
     };
 
@@ -201,4 +205,3 @@ const ViewsOverTime: React.FC = () => {
 };
 
 export default ViewsOverTime;
-

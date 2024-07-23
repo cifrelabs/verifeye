@@ -28,7 +28,8 @@ interface FeedProps {
 const Feed: React.FC<FeedProps> = ({ contents }) => {
     const [hasInvestigated, setHasInvestigated] = useState(false);
     const [openDetails, setOpenDetails] = useState(false);
-    
+    const [currentUsername, setCurrentUsername] = useState<string | null>(null);
+
     return (
         <AutoplayProvider>
             <div className="h-screen overflow-y-auto scrollbar-hide snap-y snap-mandatory">
@@ -56,14 +57,17 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
                                 displayName={content.display_name}
                                 id={content.highlight_id}
                                 pfp={content.pfp}
-                                setOpenDetails={setOpenDetails}
-                                onNext={()=>{}}
+                                setOpenDetails={() => {
+                                    setCurrentUsername(content.username);
+                                    setOpenDetails(true);
+                                }}
+                                onNext={() => { }}
                             />
                         </div>
                     )
                 ].filter(Boolean))}
             </div>
-            {openDetails && <Details setOpenDetails={setOpenDetails}/>}
+            {openDetails && <Details setOpenDetails={setOpenDetails} username={currentUsername} />}
         </AutoplayProvider>
     );
 }

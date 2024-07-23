@@ -4,12 +4,13 @@ import React, { useState } from 'react';
 import ViewsOverTime from './ViewsOverTime';
 import HashtagCirclePack from './HashtagCirclePack';
 import Timeline from './Timeline';
-    
+
 interface DetailsProps {
     setOpenDetails: any;
+    username: string | null;
 }
 
-const Details: React.FC<DetailsProps> = ({ setOpenDetails }) => {
+const Details: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
     const h2Css = "font-bold text-xl text-black mb-4"
     let tempDate = "July 10, 2024"
     let tempHashtag = "#fypシ"
@@ -20,7 +21,7 @@ const Details: React.FC<DetailsProps> = ({ setOpenDetails }) => {
             <div className="py-7 grid grid-cols-7">
                 <div className='flex content-center col-start-1 col-end-2'>
                     <button className="bg-white text-black font-bold px-4">
-                        <img src="/icons/back.png" alt="Back" height={15} width={15} onClick={() => {setOpenDetails(false)}}/>
+                        <img src="/icons/back.png" alt="Back" height={15} width={15} onClick={() => {setOpenDetails(false)}} />
                     </button>
                 </div>
                 <div className='flex place-content-center col-start-2 col-end-7'>
@@ -60,20 +61,17 @@ const Details: React.FC<DetailsProps> = ({ setOpenDetails }) => {
                             <Accordion
                                 header={"Timeline"}
                                 body={`User posted their first video on ${tempDate}...`}
-                                // replace this with the appropriate component
-                                component={<Timeline/>}
+                                component={<Timeline username={username} />}
                             />
                             <Accordion
                                 header={"Hashtags used"}
                                 body={`The user's most used hashtag is ${tempHashtag}...`}
-                                // replace this with the appropriate component
-                                component={<HashtagCirclePack/>}
+                                component={<HashtagCirclePack username={username} />}
                             />
                             <Accordion
                                 header={"Viewership and account activity"}
                                 body={"This account averages 174.1K viewers per video..."}
-                                // if want to change sizing, pass props here
-                                component={<ViewsOverTime/>}
+                                component={<ViewsOverTime username={username} />}
                             />
                         </div>
                     </div>
@@ -84,13 +82,10 @@ const Details: React.FC<DetailsProps> = ({ setOpenDetails }) => {
 }
 
 interface LookalikeProps {
-    // user1: object;
-    // user2: object;
 }
 
-// const Lookalike: React.FC<LookalikeProps> = ({user1, user2}) => {
 const Lookalike: React.FC<LookalikeProps> = ({}) => {
-    return(
+    return (
         <div>
             <p className="text-sm text-black">
                 A different TikTok account with a similar name yet higher interaction count exists
@@ -99,13 +94,11 @@ const Lookalike: React.FC<LookalikeProps> = ({}) => {
     )
 }
 
-// place props here as necessary
 interface SocialMediaProps {
-
 }
 
 const SocialMedia: React.FC<SocialMediaProps> = ({}) => {
-    return(
+    return (
         <div className="flex flex-col gap-4">
             <div>
                 <p className="text-sm text-black">
@@ -127,13 +120,13 @@ interface AccordionProps {
     component: object;
 }
 
-const Accordion: React.FC<AccordionProps> = ({header, body, component}) => {
+const Accordion: React.FC<AccordionProps> = ({ header, body, component }) => {
     const [expand, setExpand] = useState(false);
 
-    return(
+    return (
         <div className='flex flex-col'>
             <h3 className='text-black font-semibold'>{header}</h3>
-            {!expand ? 
+            {!expand ?
                 <div onClick={() => setExpand(true)}>
                     <p className='text-black text-sm'>{body} <span className='text-black font-semibold'>See more</span></p>
                 </div>

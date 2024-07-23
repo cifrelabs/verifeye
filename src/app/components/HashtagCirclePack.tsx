@@ -9,9 +9,13 @@ interface HashtagData {
   value?: number;
 }
 
+interface HashtagCirclePackProps {
+  username: string | null;
+}
+
 const colors = ['#F17D8E', '#B397CD', '#3EB1C5', '#52B77E', '#AEA942', '#F28C5D'];
 
-const HashtagCirclePack: React.FC = () => {
+const HashtagCirclePack: React.FC<HashtagCirclePackProps> = ({ username }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [data, setData] = useState<HashtagData | null>(null);
   const [chosenHashtag, setChosenHashtag] = useState<string>('');
@@ -20,7 +24,7 @@ const HashtagCirclePack: React.FC = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('/samueluyyt.json');
+        const response = await fetch('analysisdata/' + username + '.json');
         const jsonData = await response.json();
         if (jsonData && jsonData.result && Array.isArray(jsonData.result.posts)) {
           const processedData = processData(jsonData.result.posts);
