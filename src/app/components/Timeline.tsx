@@ -65,7 +65,7 @@ const Timeline: React.FC<TimelineProps> = ({ username }) => {
 
     const timelineData = [
       { date: new Date(firstVideo.createTime * 1000), label: 'First Video', yOffset: 25, textAnchor: 'end' },
-      { date: new Date(currentVideo.createTime * 1000), label: 'Current Video', yOffset: -30, textAnchor: 'middle' },
+      { date: new Date(currentVideo.createTime * 1000), label: 'Current Video', yOffset: 25, textAnchor: 'middle' },
       { date: new Date(lastVideo.createTime * 1000), label: 'Last Video', yOffset: 25, textAnchor: 'start' },
     ];
 
@@ -73,7 +73,7 @@ const Timeline: React.FC<TimelineProps> = ({ username }) => {
       .domain(d3.extent(timelineData, d => d.date) as [Date, Date])
       .range([0, innerWidth]);
 
-    const yPosition = innerHeight / 2;
+    const yPosition = 0;
 
     svg.selectAll("*").remove(); // Clear previous contents
 
@@ -138,12 +138,13 @@ const Timeline: React.FC<TimelineProps> = ({ username }) => {
     <div className='flex flex-col justify-center items-center p-4 w-full'>
       <div className="info text-black mb-3" id="infotimeline">
         <p>
-            User posted their first video on {firstVidDate}, their current video on {currentVidDate}, and their last video <span className='text-tiktok-red font-bold'>{lastPostedDaysAgo} days ago.</span> 
+            User posted their first video on <span className='text-tiktok-red font-bold'>{firstVidDate}</span>, their current video on {currentVidDate}, and their last video {lastPostedDaysAgo} days ago. 
         </p>
       </div>
       <div id="plottimeline" className='w-full flex justify-center'>
         <div className='w-full' style={{ maxWidth: '80%' }}>
-          <svg ref={svgRef} className='w-full h-auto' style={{ overflow: 'visible', height: '300px' }}></svg>
+          {/* <svg ref={svgRef} className='w-full h-auto' style={{ overflow: 'visible', height: '300px' }}></svg> */}
+          <svg ref={svgRef} className='w-full h-20' style={{ overflow: 'visible' }}></svg>
         </div>
       </div>
     </div>

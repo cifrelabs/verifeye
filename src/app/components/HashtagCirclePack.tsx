@@ -66,9 +66,9 @@ const HashtagCirclePack: React.FC<HashtagCirclePackProps> = ({ username }) => {
       .attr("width", width)
       .attr("height", height)
       .append("g")
-      .attr("transform", `translate(${radius},${radius + 30})`);  // Adjusted vertical padding
+      .attr("transform", `translate(${radius},${radius})`);  // Adjusted vertical padding
 
-    const handleInteraction = (event, d) => {
+    const handleInteraction = (event: React.MouseEvent<HTMLElement>, d: any) => {
       event.stopPropagation(); // Stop the event from propagating to parent elements
       d3.select(event.currentTarget).select('circle')
         .transition().duration(200)
@@ -81,7 +81,7 @@ const HashtagCirclePack: React.FC<HashtagCirclePackProps> = ({ username }) => {
       setChosenHashtag(d.data.name); // Update the chosen hashtag
     };
 
-    const handleMouseOut = (event, d) => {
+    const handleMouseOut = (event: React.MouseEvent<HTMLElement>, d: any) => {
       d3.select(event.currentTarget).select('circle')
         .transition().duration(200)
         .attr('r', d.r);
@@ -170,13 +170,18 @@ const HashtagCirclePack: React.FC<HashtagCirclePackProps> = ({ username }) => {
 
   return (
     <div className='flex flex-col justify-center items-center'>
-      <span className="info text-black" id="infohashtag">
-        The user's most used hashtag is {topHashtag}
-      </span>
-      <div style={{ width: '100%', height: '100%' }}>
-        <div style={{ height: '2vh' }}></div> 
-        <h1 className="text-black" style={{ textAlign: 'center', height: '5vh', lineHeight: '5vh', marginBottom: '10px' }}>{chosenHashtag}</h1>
-        <svg ref={svgRef} style={{ width: '100%', height: '80vh' }}></svg>
+      <p className="info text-black" id="infohashtag">
+        The user's most used hashtag is <span className='text-tiktok-red font-bold'>{topHashtag}</span>
+      </p>
+      <div style={{ width: '100%', height: '100%' }} className='relative'>
+        {/* MODAL */}
+        {chosenHashtag !== '' && (
+          <div className='fixed inset-x-0 bottom-[4.39rem] z-10 px-3 w-screen h-fit bg-slate-400 rounded-t-lg' onClick={(e: React.MouseEvent<HTMLElement>) => {e.stopPropagation()}}>
+              <p className='text-white py-5'>{chosenHashtag}</p>
+          </div>
+        )}
+        {/* CIRCLE PACKING */}
+        <svg ref={svgRef} className='w-full h-[55vh]'></svg>
       </div>
     </div>
   );
