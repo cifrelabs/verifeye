@@ -26,7 +26,7 @@ const Timeline: React.FC<TimelineProps> = ({ username }) => {
   const currentVideos: { [key: string]: Video } = {
     'therealboyabunda': { id: 'vid123', desc: 'Current Video for User1', createTime: 1688554800 },
     'benjaminmadronasondong87': { id: 'vid456', desc: 'Current Video for User2', createTime: 1649853385 },
-    'bbm.ph.json': { id: 'vid456', desc: 'Current Video for User2', createTime: 1644006308 },
+    'bbm.ph': { id: 'vid456', desc: 'Current Video for User2', createTime: 1644006308 },
     'senrisahontiveros_': { id: 'vid456', desc: 'Current Video for User2', createTime: 1661952000 }
   };
 
