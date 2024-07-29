@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
 
 interface Post {
+    playCount: number;
     stats?: {
         playCount?: number;
     };
@@ -85,7 +86,7 @@ const ViewsOverTime: React.FC<ViewsOverTimeProps> = ({ username }) => {
         g.append('g')
             .attr('class', 'axis axis--x')
             .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x).tickFormat(d3.timeFormat('%b %Y') as unknown as (domainValue: Date | NumberValue, index: number) => string))
+            .call(d3.axisBottom(x).tickFormat(d3.timeFormat('%b %Y') as unknown as (domainValue: Date | d3.NumberValue, index: number) => string))
             .selectAll('text')
             .attr('transform', 'rotate(-45)')
             .style('text-anchor', 'end')
