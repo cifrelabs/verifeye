@@ -5,7 +5,7 @@ import Content from './Content';
 import Highlight from './Highlight';
 import { AutoplayProvider } from '../contexts/AutoplayContext';
 import { PoliticalContext, UsernameContext } from '../contexts/Contexts';
-import Details from './Details';
+import Details from './Verifeye';
 
 interface FeedProps {
     contents: Array<{

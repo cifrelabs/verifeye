@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
 import Image from 'next/image';
-import { VerifeyeModal } from "./VerifeyeModal";
+import { VerifeyeModal } from "./InteractionModal";
 import { CommentsModal } from "./CommentsModal";
 import { ShareModal } from "./ShareModal";
-import Details from './Details';
+import Details from './Verifeye';
 import { PoliticalContext, UsernameContext } from '../contexts/Contexts';
 
 interface ActionBarProps {

@@ -2,7 +2,7 @@
 
 import { getHighlight } from '@/utils/supabase';
 import React, { useState } from 'react';
-import Details from './Details';
+import Details from './Verifeye';
 
 interface HighlightProps {
     username: string;
