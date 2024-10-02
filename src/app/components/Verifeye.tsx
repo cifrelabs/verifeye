@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import ViewsOverTime from './ViewsOverTime';
 import HashtagCirclePack from './HashtagCirclePack';
 import Timeline from './Timeline';
+import WhyAmISeeingThis from './WhyAmISeeingThis';
 
 interface DetailsProps {
     setOpenDetails: any;
@@ -11,6 +12,7 @@ interface DetailsProps {
 }
 
 const Details: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const h2Css = "font-bold text-xl text-black mb-4"
     let tempDate = "July 10, 2024"
     let tempHashtag = "#fypシ"
@@ -30,13 +32,13 @@ const Details: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
             </div>
 
             {/* BODY */}
-            <div className="flex flex-col h-screen items-center scrollbar-hide overflow-scroll px-10 pb-12">
+            <div className="flex flex-col h-screen items-center overflow-scroll px-10 pb-12">
                 <div className='gap-10 mb-10'>
                     <h2 className="font-bold text-3xl text-black text-center text-pretty mb-3">Review account details</h2>
                     <p className="text-sm text-black text-center text-pretty">
                         To help keep our community informed, we provide detailed information about accounts on TikTok.&nbsp;
-                        <span className='font-bold'>
-                            Read to gain deeper insight on the account through publicly available analytics.
+                        <span className='font-bold' onClick={() => {setIsModalOpen(true)}}>
+                            Why am I seeing this?
                         </span>
                     </p>
                 </div>
@@ -77,6 +79,9 @@ const Details: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
                     </div>
                 </div>
             </div>
+            {isModalOpen && (
+                <WhyAmISeeingThis setState={setIsModalOpen}></WhyAmISeeingThis>
+            )}
         </div>
     );
 }
