@@ -5,6 +5,7 @@ import ViewsOverTime from './ViewsOverTime';
 import HashtagCirclePack from './HashtagCirclePack';
 import Timeline from './Timeline';
 import WhyAmISeeingThis from './WhyAmISeeingThis';
+import MiniProfile from './MiniProfile';
 
 interface DetailsProps {
     setOpenDetails: any;
@@ -104,14 +105,19 @@ interface SocialMediaProps {
 
 const SocialMedia: React.FC<SocialMediaProps> = ({}) => {
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 text-sm text-black">
             <div>
-                <p className="text-sm text-black">
-                    We found 2 possible matching accounts from Twitter and Facebook
+                <p>
+                    We found <span className='font-bold text-tiktok-red'>2</span> possible matching accounts from Twitter and Facebook
                 </p>
             </div>
+            <div className='flex flex-row flex-wrap w-full justify-evenly'>
+                <MiniProfile image='/images/temp.jpg' displayName='Display Name' username='username' interaction='100k followers'/>
+                <MiniProfile image='/images/temp.jpg' displayName='Display Name' username='username' interaction='100k followers'/>
+                <MiniProfile image='/images/temp.jpg' displayName='Display Name' username='username' interaction='100k followers'/>
+            </div>
             <div>
-                <p className="text-sm text-black">
+                <p>
                     We also found a Wikipedia article mentioning the user
                 </p>
             </div>

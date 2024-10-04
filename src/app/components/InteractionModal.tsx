@@ -23,7 +23,7 @@ export const VerifeyeModal: React.FC<VerifeyeModalProps> = ({ modalText, setVeri
             />
             <div className="grow text-black text-center flex flex-col gap-3 mb-3">
                 <h1 className='text-xl font-bold leading-6 text-pretty'>{modalText[0]}</h1>
-                <p className='text-xs'>We detected that this post is about Philippine politics. Review the account before interacting to keep our community authentic.</p>
+                <p className='text-xs text-balance'>We found information about the account you may find relevant. Review the account before interacting to keep our community authentic.</p>
             </div>
             <div className='flex flex-col w-full items-center gap-1'>
                 <button className='w-60 bg-tiktok-red rounded-lg' onClick={closeVerifeyeModal}>
