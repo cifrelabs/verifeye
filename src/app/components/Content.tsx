@@ -32,6 +32,7 @@ const Content: React.FC<ContentProps> = ({
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const { globalAutoplay, setGlobalAutoplay } = useAutoplay();
+    const [isExpanded, setIsExpanded] = useState(false);
 
     useEffect(() => {
         const options = {
@@ -84,7 +85,7 @@ const Content: React.FC<ContentProps> = ({
         }
     };
 
-    const handleTap = () => {
+    const handleVideoPress = () => {
         if (!globalAutoplay) {
             setGlobalAutoplay(true);
         }
@@ -99,10 +100,15 @@ const Content: React.FC<ContentProps> = ({
         }
     };
 
+    const handleCaptionPress = (e: React.MouseEvent<HTMLElement>) => {
+        setIsExpanded(!isExpanded);
+        e.stopPropagation();
+    };
+
     return (
         <div 
             className="h-screen flex items-center justify-center relative"
-            onClick={handleTap}
+            onClick={handleVideoPress}
         >
             <video 
                 ref={videoRef}
@@ -122,15 +128,28 @@ const Content: React.FC<ContentProps> = ({
                     </svg>
                 </div>
             )}
-            <div className="absolute bottom-12 pb-3 left-4 text-white">
-                <h2 className="text-lg font-bold">{displayName}</h2>
-                <p className="text-sm mt-1 pr-11 mr-3">{captions}</p>
-                <p className="text-xs mt-2 flex items-center">
-                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                    </svg>
-                    {soundUsed} - {displayName}
-                </p>
+            <div className={`absolute bottom-12 left-0 ${isExpanded && 'bg-gradient-to-t from-black'}`}>
+                <div className="pb-3 pl-4 text-white">
+                    <h2 className="text-lg font-bold">{displayName}</h2>
+                    { isExpanded ? 
+                        (<p
+                            className="text-sm mt-1 pr-11 mr-3"
+                            onClick={(e) => handleCaptionPress(e)}>
+                                {captions}
+                        </p>) :
+                        (<p
+                            className="text-sm mt-1 pr-11 mr-3 line-clamp-2"
+                            onClick={(e) => handleCaptionPress(e)}>
+                                {captions}
+                        </p>)
+                    }
+                    <p className="text-xs mt-2 flex items-center">
+                        <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                        </svg>
+                        {soundUsed} - {displayName}
+                    </p>
+                </div>
             </div>
             <ActionBar 
                 pfp={pfp}
