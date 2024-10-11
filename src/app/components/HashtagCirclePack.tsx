@@ -3,45 +3,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 
-interface HashtagData {
+export interface HashtagData {
   name: string;
   children?: HashtagData[];
   value?: number;
 }
 
 interface HashtagCirclePackProps {
-  username: string | null;
+  data: HashtagData | null;
+  topHashtag: string;
 }
 
 const colors = ['#F17D8E', '#B397CD', '#3EB1C5', '#52B77E', '#AEA942', '#F28C5D'];
 
-const HashtagCirclePack: React.FC<HashtagCirclePackProps> = ({ username }) => {
+const HashtagCirclePack: React.FC<HashtagCirclePackProps> = ({ data, topHashtag }) => {
   const svgRef = useRef<SVGSVGElement>(null);
-  const [data, setData] = useState<HashtagData | null>(null);
   const [chosenHashtag, setChosenHashtag] = useState<string>('');
-  const [topHashtag, setTopHashtag] = useState<string>('');
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('analysisdata/' + username + '.json');
-        const jsonData = await response.json();
-        if (jsonData && jsonData.result && Array.isArray(jsonData.result.posts)) {
-          const processedData = processData(jsonData.result.posts);
-          setData(processedData);
-          if (processedData.children && processedData.children.length > 0) {
-            setTopHashtag(processedData.children[0].name);
-          }
-        } else {
-          console.error('Invalid JSON structure or no posts array found.');
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-
-    fetchData();
-  }, []);
 
   useEffect(() => {
     if (!data) return;
@@ -170,7 +147,7 @@ const HashtagCirclePack: React.FC<HashtagCirclePackProps> = ({ username }) => {
 
   return (
     <div className='flex flex-col justify-center items-center'>
-      <p className="info text-black" id="infohashtag">
+      <p className="info w-full text-black text-sm" id="infohashtag">
         The user's most used hashtag is <span className='text-tiktok-red font-bold'>{topHashtag}</span>
       </p>
       <div style={{ width: '100%', height: '100%' }} className='relative'>
@@ -189,7 +166,7 @@ const HashtagCirclePack: React.FC<HashtagCirclePackProps> = ({ username }) => {
 
 export default HashtagCirclePack;
 
-function processData(posts: any[]): HashtagData {
+export function processData(posts: any[]): HashtagData {
   const hashtagCounts: { [key: string]: number } = {};
 
   posts.forEach((post: any) => {

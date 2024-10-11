@@ -1,8 +1,8 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ViewsOverTime from './ViewsOverTime';
-import HashtagCirclePack from './HashtagCirclePack';
+import HashtagCirclePack, { HashtagData, processData } from './HashtagCirclePack';
 import Timeline from './Timeline';
 import WhyAmISeeingThis from './WhyAmISeeingThis';
 import MiniProfile from './MiniProfile';
@@ -14,9 +14,33 @@ interface DetailsProps {
 
 const Details: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [hashtagData, setHashtagData] = useState<HashtagData | null>(null);
+    const [topHashtag, setTopHashtag] = useState<string>('');
+
+    useEffect(() => {
+        async function fetchData() {
+          try {
+            const response = await fetch('analysisdata/' + username + '.json');
+            const jsonData = await response.json();
+            if (jsonData && jsonData.result && Array.isArray(jsonData.result.posts)) {
+              const processedData = processData(jsonData.result.posts);
+              setHashtagData(processedData);
+              if (processedData.children && processedData.children.length > 0) {
+                setTopHashtag(processedData.children[0].name);
+              }
+            } else {
+              console.error('Invalid JSON structure or no posts array found.');
+            }
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        }
+    
+        fetchData();
+      }, []);
+
     const h2Css = "font-bold text-xl text-black mb-4"
     let tempDate = "July 10, 2024"
-    let tempHashtag = "#fypシ"
 
     return (
         <div className='fixed -translate-x-1/2 left-1/2 top-0 z-20 bg-white w-screen min-h-min' onClick={(e: React.MouseEvent<HTMLElement>) => {e.stopPropagation()}}>
@@ -44,15 +68,15 @@ const Details: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
                     </p>
                 </div>
 
-                <div className="flex flex-col gap-10">
+                <div className="space-y-10">
                     {/* A likely lookalike */}
-                    <div className="flex flex-col">
+                    <div>
                         <h2 className={`${h2Css}`}>A likely lookalike</h2>
                         <Lookalike/>
                     </div>
 
                     {/* Social media and articles */}
-                    <div className="flex flex-col">
+                    <div>
                         <h2 className={`${h2Css}`}>What we found on the Internet</h2>
                         <SocialMedia/>
                     </div>
@@ -63,17 +87,19 @@ const Details: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
                         <div className="flex flex-col flex-grow gap-10">
                             <Accordion
                                 header={"Timeline"}
-                                body={`User posted their first video on ${tempDate}...`}
+                                body="User posted their first video on"
                                 component={<Timeline username={username} />}
+                                emphasis={tempDate}
                             />
                             <Accordion
                                 header={"Hashtags used"}
-                                body={`The user's most used hashtag is ${tempHashtag}...`}
-                                component={<HashtagCirclePack username={username} />}
+                                body="The user's most used hashtag is"
+                                component={<HashtagCirclePack data={hashtagData} topHashtag={topHashtag} />}
+                                emphasis={topHashtag}
                             />
                             <Accordion
                                 header={"Viewership and account activity"}
-                                body={"This account averages 174.1K viewers per video..."}
+                                body={"This account averages 174.1K viewers per video"}
                                 component={<ViewsOverTime username={username} />}
                             />
                         </div>
@@ -129,9 +155,10 @@ interface AccordionProps {
     header: string;
     body: string;
     component: object;
+    emphasis?: string;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ header, body, component }) => {
+const Accordion: React.FC<AccordionProps> = ({ header, body, component, emphasis }) => {
     const [expand, setExpand] = useState(false);
 
     return (
@@ -139,7 +166,11 @@ const Accordion: React.FC<AccordionProps> = ({ header, body, component }) => {
             <h3 className='text-black font-semibold'>{header}</h3>
             {!expand ?
                 <div onClick={() => setExpand(true)}>
-                    <p className='text-black text-sm'>{body} <span className='text-black font-semibold'>See more</span></p>
+                    <p className='text-black text-sm'>
+                        {body}
+                        <span className='font-bold text-tiktok-red'>{emphasis && " " + emphasis}</span>...&nbsp;
+                        <span className='text-black font-semibold'>See more</span>
+                    </p>
                 </div>
                 :
                 <div onClick={() => setExpand(false)}>

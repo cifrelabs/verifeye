@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 
 interface Post {
@@ -22,7 +22,7 @@ interface ViewsOverTimeProps {
 }
 
 const ViewsOverTime: React.FC<ViewsOverTimeProps> = ({ username }) => {
-    const [allData, setAllData] = useState<Post[]>([]);
+    // const [allData, setAllData] = useState<Post[]>([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -38,7 +38,7 @@ const ViewsOverTime: React.FC<ViewsOverTimeProps> = ({ username }) => {
                         return d.playCount > 0 && d.playCount < 100000000 && d.createTime > 0;
                     }).sort((a, b) => a.createTime - b.createTime);
 
-                    setAllData(filteredData);
+                    // setAllData(filteredData);
                     plotData(filteredData);
                 } else {
                     console.error('Invalid JSON structure or no posts array found.');
