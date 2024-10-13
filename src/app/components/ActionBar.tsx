@@ -8,24 +8,27 @@ import { PoliticalContext, UsernameContext } from '../contexts/Contexts';
 
 interface ActionBarProps {
     pfp?: string;
+    interactions: IInteractions;
+    // audio?: string;
+    hasInvestigated: boolean;
+    setHasInvestigated: (bool: boolean) => void;
+}
+
+export interface IInteractions {
     likes: number;
     comments: number;
     favorites: number;
     shares: number;
-    audio?: string;
-    setHasInvestigated?(bool: boolean): any;
 }
 
-const ActionBar: React.FC<ActionBarProps> = ({ pfp, likes, comments, favorites, shares, setHasInvestigated }) => {
-    const [isVerified, setIsVerified] = useState(false);
-    
+const ActionBar: React.FC<ActionBarProps> = ({ pfp, interactions, hasInvestigated, setHasInvestigated }) => {
     return (
         <div className="absolute right-1.5 bottom-20 flex flex-col space-y-5">
             <ActionButton icon="/svgs/avatar.svg" pfp={pfp} size={50} type='profile' />
-            <ActionButton icon="/svgs/like.svg" altIcon="/svgs/like-red.svg" count={likes} type='like' size={28} isVerified={isVerified} setIsVerified={setIsVerified} setHasInvestigated={setHasInvestigated} />
-            <ActionButton icon="/svgs/comment.svg" count={comments} type='comments' size={28} isVerified={isVerified} setIsVerified={setIsVerified} />
-            <ActionButton icon="/svgs/favorite.svg" altIcon="/svgs/favorite-yellow.svg" count={favorites} type='favorite' size={28} isVerified={isVerified} setIsVerified={setIsVerified} />
-            <ActionButton icon="/svgs/share.svg" count={shares} type='share' size={28} isVerified={isVerified} setIsVerified={setIsVerified} />
+            <ActionButton icon="/svgs/like.svg" altIcon="/svgs/like-red.svg" count={interactions.likes} type='like' size={28} hasInvestigated={hasInvestigated} setHasInvestigated={setHasInvestigated} />
+            <ActionButton icon="/svgs/comment.svg" count={interactions.comments} type='comments' size={28} hasInvestigated={hasInvestigated} setHasInvestigated={setHasInvestigated} />
+            <ActionButton icon="/svgs/favorite.svg" altIcon="/svgs/favorite-yellow.svg" count={interactions.favorites} type='favorite' size={28} hasInvestigated={hasInvestigated} setHasInvestigated={setHasInvestigated} />
+            <ActionButton icon="/svgs/share.svg" count={interactions.shares} type='share' size={28} hasInvestigated={hasInvestigated} setHasInvestigated={setHasInvestigated} />
             <ActionButton icon="/svgs/audio.svg" type="audio" size={35} />
         </div>
     );
@@ -38,12 +41,11 @@ interface ActionButtonProps {
     altIcon?: string;
     count?: number;
     size?: number;
-    isVerified?: any;
-    setIsVerified?(bool: boolean): any;
-    setHasInvestigated?(bool: boolean): any;
+    hasInvestigated?: boolean;
+    setHasInvestigated?: (bool: boolean) => void;
 }
 
-const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, count, size = 32, isVerified, setIsVerified, setHasInvestigated }) => {
+const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, count, size = 32, hasInvestigated, setHasInvestigated }) => {
     const isPolitical = useContext(PoliticalContext);
     const username = useContext(UsernameContext);
     const [verifeyeModalOpen, setVerifeyeModalOpen] = useState(false);
@@ -51,13 +53,13 @@ const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, c
     const [openDetails, setOpenDetails] = useState(false);
 
     const manageState = (e: React.MouseEvent<HTMLElement>) => {
-        if(isPolitical && !isVerified)
+        if(isPolitical && !hasInvestigated) {
             setVerifeyeModalOpen(true);
-        else
+            setHasInvestigated && setHasInvestigated(true);
+        }
+        else {
             setActionState(!actionState);
-        
-        if(setIsVerified != undefined)
-            setIsVerified(true);
+        }
 
         e.stopPropagation();
     };
@@ -100,7 +102,6 @@ const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, c
                     setVerifeyeModalOpen={setVerifeyeModalOpen}
                     setOpenDetails={setOpenDetails}
                     setActionState={setActionState}
-                    setHasInvestigated={setHasInvestigated ? setHasInvestigated : undefined}
                 >
                 </VerifeyeModal>
             )}

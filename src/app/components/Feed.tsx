@@ -1,28 +1,14 @@
 "use client"
 
 import React, { useEffect, useState, useRef } from 'react';
-import Content from './Content';
+import Content, { IData } from './Content';
 import Highlight from './Highlight';
 import { AutoplayProvider } from '../contexts/AutoplayContext';
 import { PoliticalContext, UsernameContext } from '../contexts/Contexts';
 import Details from './Verifeye';
 
 interface FeedProps {
-    contents: Array<{
-        id: string;
-        username: string;
-        display_name: string;
-        pfp: string;
-        media: string;
-        captions: string;
-        sound_used: string;
-        likes: number;
-        comments: number;
-        favorites: number;
-        shares: number;
-        political: boolean;
-        highlight_id: string;
-    }>;
+    contents: Array<IData>;
 }
 
 const shuffleArray = (array: any[]) => {
@@ -54,22 +40,13 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
     return (
         <AutoplayProvider>
             <div ref={feedRef} className="h-screen overflow-y-auto scrollbar-hide snap-y snap-mandatory">
-                {shuffledContents.map((content, index) => (
+                {shuffledContents.map((content: IData, index) => (
                     <React.Fragment key={content.id}>
                         <div className="snap-start h-full">
                             <PoliticalContext.Provider value={content.political}>
                                 <UsernameContext.Provider value={content.username}>
                                     <Content
-                                        soundUsed={content.sound_used}
-                                        displayName={content.display_name}
-                                        captions={content.captions}
-                                        likes={content.likes}
-                                        comments={content.comments}
-                                        favorites={content.favorites}
-                                        shares={content.shares}
-                                        media={content.media}
-                                        pfp={content.pfp}
-                                        setHasInvestigated={content.political ? setHasInvestigated : undefined}
+                                        data={content}
                                     />
                                 </UsernameContext.Provider>
                             </PoliticalContext.Provider>
