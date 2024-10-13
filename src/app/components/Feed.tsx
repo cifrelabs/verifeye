@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import Content, { IData } from './Content';
-import Highlight from './Highlight';
 import { AutoplayProvider } from '../contexts/AutoplayContext';
 import { PoliticalContext, UsernameContext } from '../contexts/Contexts';
-import Details from './Verifeye';
+import Verifeye from './Verifeye';
+import Interstitial from './Interstitial';
 
 interface FeedProps {
     contents: Array<IData>;
@@ -53,7 +53,7 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
                         </div>
                         {!hasInvestigated && content.political && (
                             <div className="snap-start h-full">
-                                <Highlight
+                                <Interstitial
                                     username={content.username}
                                     displayName={content.display_name}
                                     id={content.highlight_id}
@@ -69,7 +69,7 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
                     </React.Fragment>
                 ))}
             </div>
-            {openDetails && <Details setOpenDetails={setOpenDetails} username={currentUsername} />}
+            {openDetails && <Verifeye setOpenDetails={setOpenDetails} username={currentUsername} />}
         </AutoplayProvider>
     );
 }

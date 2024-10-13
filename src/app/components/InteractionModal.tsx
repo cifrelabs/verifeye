@@ -8,7 +8,7 @@ interface VerifeyeModalProps {
     setHasInvestigated?(bool: boolean): any;
 }
 
-export const VerifeyeModal: React.FC<VerifeyeModalProps> = ({ modalText, setVerifeyeModalOpen, setOpenDetails, setActionState, setHasInvestigated }) => {
+const VerifeyeModal: React.FC<VerifeyeModalProps> = ({ modalText, setVerifeyeModalOpen, setOpenDetails, setActionState, setHasInvestigated }) => {
     const closeVerifeyeModal = () => {
         setHasInvestigated ? setHasInvestigated(true) : undefined;
         setVerifeyeModalOpen(false);

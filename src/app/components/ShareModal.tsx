@@ -4,7 +4,7 @@ interface ShareModalProps {
     setShareModalOpen(bool: boolean): any
 }
 
-export const ShareModal: React.FC<ShareModalProps> = ({ setShareModalOpen }) => {
+const ShareModal: React.FC<ShareModalProps> = ({ setShareModalOpen }) => {
     let maxSize = 9999;
 
     return(

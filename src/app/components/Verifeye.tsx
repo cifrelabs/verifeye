@@ -12,7 +12,7 @@ interface DetailsProps {
     username: string | null;
 }
 
-const Details: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
+const Verifeye: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [hashtagData, setHashtagData] = useState<HashtagData | null>(null);
     const [topHashtag, setTopHashtag] = useState<string>('');
@@ -181,4 +181,4 @@ const Accordion: React.FC<AccordionProps> = ({ header, body, component, emphasis
     )
 }
 
-export default Details;
+export default Verifeye;

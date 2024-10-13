@@ -2,9 +2,9 @@
 
 import { getHighlight } from '@/utils/supabase';
 import React, { useState } from 'react';
-import Details from './Verifeye';
+import Verifeye from './Verifeye';
 
-interface HighlightProps {
+interface InterstitialProps {
     username: string;
     displayName: string;
     id: string;
@@ -13,7 +13,7 @@ interface HighlightProps {
     onNext: () => void;
 }
 
-const Content: React.FC<HighlightProps> = async ({
+const Interstitial: React.FC<InterstitialProps> = async ({
     username, 
     displayName, 
     id,
@@ -116,4 +116,4 @@ const Content: React.FC<HighlightProps> = async ({
     );
 };
 
-export default Content;
+export default Interstitial;

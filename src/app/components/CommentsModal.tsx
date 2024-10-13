@@ -2,10 +2,10 @@ import Image from 'next/image';
 
 interface CommentsModalProps {
     count: number;
-    setCommentsModalOpen(bool: boolean): any
+    setCommentsModalOpen: (bool: boolean) => void
 }
 
-export const CommentsModal: React.FC<CommentsModalProps> = ({ count, setCommentsModalOpen }) => {
+const CommentsModal: React.FC<CommentsModalProps> = ({ count, setCommentsModalOpen }) => {
     return(
         <div className="fixed bottom-0 inset-x-0 z-10 px-3 flex flex-col h-3/5 w-screen bg-white rounded-t-lg">
             <Header
