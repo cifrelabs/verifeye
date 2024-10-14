@@ -3,6 +3,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import ActionBar, { IInteractions } from './ActionBar';
 import { useAutoplay } from '../contexts/AutoplayContext';
+import Interstitial from './Interstitial';
+import Verifeye from './Verifeye';
 
 interface ContentProps {
     data: IData;
@@ -28,6 +30,7 @@ const Content: React.FC<ContentProps> = ({ data }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const { globalAutoplay, setGlobalAutoplay } = useAutoplay();
+    const [isOpenVerifeye, setIsOpenVerifeye] = useState(false);
     const [hasInvestigated, setHasInvestigated] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -109,58 +112,82 @@ const Content: React.FC<ContentProps> = ({ data }) => {
         e.stopPropagation();
     };
 
+    // const divRef = useRef<HTMLDivElement>(null);
+
+    // useEffect(() => {
+    //     if (divRef.current) {
+    //         divRef.current.scrollTop = 0;
+    //     }
+    // }, []);
+
     return (
-        <div 
-            className="h-screen flex items-center justify-center relative"
-            onClick={handleVideoPress}
-        >
-            <video 
-                ref={videoRef}
-                src={data.media} 
-                className="w-full h-full object-cover" 
-                loop 
-                playsInline 
-            />
-            {!isPlaying && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <svg 
-                        className="w-20 h-20 text-white opacity-50" 
-                        fill="currentColor" 
-                        viewBox="0 0 24 24"
-                    >
-                        <path d="M8 5v14l11-7z" />
-                    </svg>
+        <div className='flex flex-col h-screen content-center items-center overflow-y-auto scrollbar-hide snap-y snap-mandatory'>
+            <div 
+                className="snap-start h-screen flex items-center justify-center relative"
+                onClick={handleVideoPress}
+            >
+                <video 
+                    ref={videoRef}
+                    src={data.media} 
+                    className="w-full h-full object-cover" 
+                    loop 
+                    playsInline 
+                />
+                {!isPlaying && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <svg 
+                            className="w-20 h-20 text-white opacity-50" 
+                            fill="currentColor" 
+                            viewBox="0 0 24 24"
+                        >
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                    </div>
+                )}
+                <div className={`absolute bottom-12 left-0 ${isExpanded && 'bg-gradient-to-t from-black'}`}>
+                    <div className="pb-3 pl-4 text-white">
+                        <h2 className="text-lg font-bold">{data.display_name}</h2>
+                        { isExpanded ? 
+                            (<p
+                                className="text-sm mt-1 pr-11 mr-3"
+                                onClick={(e) => handleCaptionPress(e)}>
+                                    {data.captions}
+                            </p>) :
+                            (<p
+                                className="text-sm mt-1 pr-11 mr-3 line-clamp-2"
+                                onClick={(e) => handleCaptionPress(e)}>
+                                    {data.captions}
+                            </p>)
+                        }
+                        <p className="text-xs mt-2 flex items-center">
+                            <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                            </svg>
+                            {data.sound_used} - {data.display_name}
+                        </p>
+                    </div>
+                </div>
+                <ActionBar 
+                    pfp={data.pfp}
+                    interactions={interactions}
+                    hasInvestigated={hasInvestigated}
+                    setHasInvestigated={setHasInvestigated}
+                />
+            </div>
+            {!hasInvestigated && data.political && (
+                <div className="snap-start h-full">
+                    <Interstitial
+                        username={data.username}
+                        displayName={data.display_name}
+                        id={data.highlight_id}
+                        pfp={data.pfp}
+                        setIsOpenVerifeye={setIsOpenVerifeye}
+                        setHasInvestigated={setHasInvestigated}
+                        // onNext={() => {}}
+                    />
                 </div>
             )}
-            <div className={`absolute bottom-12 left-0 ${isExpanded && 'bg-gradient-to-t from-black'}`}>
-                <div className="pb-3 pl-4 text-white">
-                    <h2 className="text-lg font-bold">{data.display_name}</h2>
-                    { isExpanded ? 
-                        (<p
-                            className="text-sm mt-1 pr-11 mr-3"
-                            onClick={(e) => handleCaptionPress(e)}>
-                                {data.captions}
-                        </p>) :
-                        (<p
-                            className="text-sm mt-1 pr-11 mr-3 line-clamp-2"
-                            onClick={(e) => handleCaptionPress(e)}>
-                                {data.captions}
-                        </p>)
-                    }
-                    <p className="text-xs mt-2 flex items-center">
-                        <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                        </svg>
-                        {data.sound_used} - {data.display_name}
-                    </p>
-                </div>
-            </div>
-            <ActionBar 
-                pfp={data.pfp}
-                interactions={interactions}
-                hasInvestigated={hasInvestigated}
-                setHasInvestigated={setHasInvestigated}
-            />
+            {isOpenVerifeye && <Verifeye setOpenDetails={setIsOpenVerifeye} username={data.username} />}
         </div>
     );
 };

@@ -4,8 +4,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import Content, { IData } from './Content';
 import { AutoplayProvider } from '../contexts/AutoplayContext';
 import { PoliticalContext, UsernameContext } from '../contexts/Contexts';
-import Verifeye from './Verifeye';
-import Interstitial from './Interstitial';
 
 interface FeedProps {
     contents: Array<IData>;
@@ -20,9 +18,6 @@ const shuffleArray = (array: any[]) => {
 }
 
 const Feed: React.FC<FeedProps> = ({ contents }) => {
-    const [hasInvestigated, setHasInvestigated] = useState(false);
-    const [openDetails, setOpenDetails] = useState(false);
-    const [currentUsername, setCurrentUsername] = useState<string | null>(null);
     const [shuffledContents, setShuffledContents] = useState(contents);
     const feedRef = useRef<HTMLDivElement>(null);
 
@@ -51,25 +46,9 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
                                 </UsernameContext.Provider>
                             </PoliticalContext.Provider>
                         </div>
-                        {!hasInvestigated && content.political && (
-                            <div className="snap-start h-full">
-                                <Interstitial
-                                    username={content.username}
-                                    displayName={content.display_name}
-                                    id={content.highlight_id}
-                                    pfp={content.pfp}
-                                    setOpenDetails={() => {
-                                        setCurrentUsername(content.username);
-                                        setOpenDetails(true);
-                                    }}
-                                    onNext={() => { }}
-                                />
-                            </div>
-                        )}
                     </React.Fragment>
                 ))}
             </div>
-            {openDetails && <Verifeye setOpenDetails={setOpenDetails} username={currentUsername} />}
         </AutoplayProvider>
     );
 }

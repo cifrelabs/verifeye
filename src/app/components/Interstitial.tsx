@@ -9,8 +9,9 @@ interface InterstitialProps {
     displayName: string;
     id: string;
     pfp: string;
-    setOpenDetails(bool: boolean): any;
-    onNext: () => void;
+    setIsOpenVerifeye: (bool: boolean) => void
+    setHasInvestigated: (bool: boolean) => void
+    // onNext: () => void;
 }
 
 const Interstitial: React.FC<InterstitialProps> = async ({
@@ -18,10 +19,11 @@ const Interstitial: React.FC<InterstitialProps> = async ({
     displayName, 
     id,
     pfp,
-    setOpenDetails,
-    onNext
+    setIsOpenVerifeye,
+    setHasInvestigated,
+    // onNext
 }) => {
-    const [hasInteracted, setHasInteracted] = useState(false);
+    // const [hasInteracted, setHasInteracted] = useState(false);
 
     // const getMessage = (type: number, socmed?: string) => {
     //     switch(type) {
@@ -33,12 +35,14 @@ const Interstitial: React.FC<InterstitialProps> = async ({
     // }
 
     const handleSeeMore = () => {
-        setHasInteracted(true);
+        // setHasInvestigated(true);
+        setIsOpenVerifeye(true);
     }
 
     const handleSkip = () => {
-        setHasInteracted(true);
-        onNext();
+        setHasInvestigated(true);
+        setIsOpenVerifeye(false)
+        // onNext();
     }
 
     // if (id) {
@@ -97,10 +101,7 @@ const Interstitial: React.FC<InterstitialProps> = async ({
                 <div className='flex flex-col w-full gap-2 px-5'>
                     <button 
                         className='w-full bg-tiktok-red rounded-md py-2 px-3'
-                        onClick={()=>{
-                            handleSeeMore;
-                            setOpenDetails(true);
-                        }}
+                        onClick={handleSeeMore}
                     >
                         <p className="text-kinda-sm tracking-wide">See what else we found about this user</p>
                     </button>
