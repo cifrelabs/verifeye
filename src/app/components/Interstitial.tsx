@@ -1,8 +1,6 @@
 "use client"
 
-import { getHighlight } from '@/utils/supabase';
-import React, { useState } from 'react';
-import Verifeye from './Verifeye';
+import React from 'react';
 
 interface InterstitialProps {
     username: string;
@@ -14,7 +12,7 @@ interface InterstitialProps {
     // onNext: () => void;
 }
 
-const Interstitial: React.FC<InterstitialProps> = async ({
+const Interstitial: React.FC<InterstitialProps> = ({
     username, 
     displayName, 
     id,
@@ -23,8 +21,6 @@ const Interstitial: React.FC<InterstitialProps> = async ({
     setHasInvestigated,
     // onNext
 }) => {
-    // const [hasInteracted, setHasInteracted] = useState(false);
-
     // const getMessage = (type: number, socmed?: string) => {
     //     switch(type) {
     //         case 1: "Another account on TikTok with a similar profile exists"; break;
@@ -35,7 +31,6 @@ const Interstitial: React.FC<InterstitialProps> = async ({
     // }
 
     const handleSeeMore = () => {
-        // setHasInvestigated(true);
         setIsOpenVerifeye(true);
     }
 
@@ -73,18 +68,6 @@ const Interstitial: React.FC<InterstitialProps> = async ({
     //     );
     // }
 
-    // const [openDetails, setOpenDetails] = useState(false);
-    // const toggleDetails = () => {
-    //     setOpenDetails(true);
-    // }
-
-    // if (openDetails){
-    //     <Details
-    //     openDetails={openDetails}
-    //     />
-    // }
-
-    // No Social Media
     return (
         <div className="h-screen flex items-center justify-center relative">
             <div className="flex flex-col items-center text-center z-10">

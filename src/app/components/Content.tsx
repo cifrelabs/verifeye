@@ -121,7 +121,7 @@ const Content: React.FC<ContentProps> = ({ data }) => {
     // }, []);
 
     return (
-        <div className='flex flex-col h-screen content-center items-center overflow-y-auto scrollbar-hide snap-y snap-mandatory'>
+        <div className='h-screen overflow-y-auto scrollbar-hide snap-y snap-mandatory'>
             <div 
                 className="snap-start h-screen flex items-center justify-center relative"
                 onClick={handleVideoPress}
@@ -145,7 +145,7 @@ const Content: React.FC<ContentProps> = ({ data }) => {
                     </div>
                 )}
                 <div className={`absolute bottom-12 left-0 ${isExpanded && 'bg-gradient-to-t from-black'}`}>
-                    <div className="pb-3 pl-4 text-white">
+                    <div className="pb-3 pl-2 text-white">
                         <h2 className="text-lg font-bold">{data.display_name}</h2>
                         { isExpanded ? 
                             (<p
@@ -175,7 +175,7 @@ const Content: React.FC<ContentProps> = ({ data }) => {
                 />
             </div>
             {!hasInvestigated && data.political && (
-                <div className="snap-start h-full">
+                <div className="snap-start h-screen">
                     <Interstitial
                         username={data.username}
                         displayName={data.display_name}
