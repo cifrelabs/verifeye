@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import ViewsOverTime from './ViewsOverTime';
+import ViewsOverTime, { abbreviateNumber, JsonViewsData, Post, getAverageViewers } from './ViewsOverTime';
 import HashtagCirclePack, { HashtagData, processData } from './HashtagCirclePack';
 import Timeline from './Timeline';
 import WhyAmISeeingThis from './WhyAmISeeingThis';
@@ -9,16 +9,22 @@ import MiniProfile from './MiniProfile';
 
 interface DetailsProps {
     setOpenDetails: any;
-    username: string | null;
+    username?: string;
 }
 
 const Verifeye: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // data fetching
     const [hashtagData, setHashtagData] = useState<HashtagData | null>(null);
+    const [viewsData, setViewsData] = useState<any>();
+
+    // accordion data
     const [topHashtag, setTopHashtag] = useState<string>('');
+    const [averageViewers, setAverageViewers] = useState<number>();
 
     useEffect(() => {
-        async function fetchData() {
+        async function fetchHashtagData() {
           try {
             const response = await fetch('analysisdata/' + username + '.json');
             const jsonData = await response.json();
@@ -35,13 +41,36 @@ const Verifeye: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
             console.error('Error fetching data:', error);
           }
         }
-    
-        fetchData();
+
+        async function fetchViewsData() {
+            try {
+                const response = await fetch('/analysisdata/' + username + '.json');
+                const jsonData: JsonViewsData = await response.json();
+
+                if (jsonData && jsonData.result && Array.isArray(jsonData.result.posts)) {
+                    const filteredData = jsonData.result.posts.map((post: Post) => ({
+                        playCount: post.stats?.playCount || 0,
+                        createTime: post.createTime
+                    })).filter(d => {
+                        return d.playCount > 0 && d.playCount < 100000000 && d.createTime > 0;
+                    }).sort((a, b) => a.createTime - b.createTime);
+
+                    setViewsData(filteredData);
+                    getAverageViewers(filteredData, setAverageViewers)
+                } else {
+                    console.error('Invalid JSON structure or no posts array found.');
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        fetchHashtagData();
+        fetchViewsData();
       }, []);
 
     const h2Css = "font-bold text-xl text-black mb-4"
     let tempDate = "July 10, 2024"
-
+    
     return (
         <div className='fixed -translate-x-1/2 left-1/2 top-0 z-20 bg-white w-screen min-h-min' onClick={(e: React.MouseEvent<HTMLElement>) => {e.stopPropagation()}}>
             {/* HEADER */}
@@ -99,8 +128,9 @@ const Verifeye: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
                             />
                             <Accordion
                                 header={"Viewership and account activity"}
-                                body={"This account averages 174.1K viewers per video"}
-                                component={<ViewsOverTime username={username} />}
+                                body={"This account averages"}
+                                component={<ViewsOverTime data={viewsData} username={username} />}
+                                emphasis={abbreviateNumber(averageViewers ?? 0) + " viewers"}
                             />
                         </div>
                     </div>

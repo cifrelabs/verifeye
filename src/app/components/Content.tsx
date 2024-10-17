@@ -100,9 +100,6 @@ const Content: React.FC<ContentProps> = ({ data }) => {
         if (isPlaying) {
             pauseVideo();
         } else {
-            if (videoRef.current) {
-                videoRef.current.currentTime = 0; // Reset video to start when manually playing
-            }
             playVideo();
         }
     };
@@ -111,14 +108,6 @@ const Content: React.FC<ContentProps> = ({ data }) => {
         setIsExpanded(!isExpanded);
         e.stopPropagation();
     };
-
-    // const divRef = useRef<HTMLDivElement>(null);
-
-    // useEffect(() => {
-    //     if (divRef.current) {
-    //         divRef.current.scrollTop = 0;
-    //     }
-    // }, []);
 
     return (
         <div className='h-screen overflow-y-auto scrollbar-hide snap-y snap-mandatory'>

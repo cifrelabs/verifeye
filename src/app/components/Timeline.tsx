@@ -14,7 +14,7 @@ interface UserData {
 }
 
 interface TimelineProps {
-  username: string | null;
+  username?: string;
 }
 
 const Timeline: React.FC<TimelineProps> = ({ username }) => {
