@@ -1,18 +1,9 @@
 import React, { useContext, useState } from 'react';
 import Image from 'next/image';
-import VerifeyeModal from "./InteractionModal";
 import CommentsModal from './CommentsModal';
 import ShareModal from "./ShareModal";
-import Details from './Verifeye';
-import { PoliticalContext, UsernameContext } from '../contexts/Contexts';
-
-interface ActionBarProps {
-    pfp?: string;
-    interactions: IInteractions;
-    // audio?: string;
-    hasInvestigated: boolean;
-    setHasInvestigated: (bool: boolean) => void;
-}
+import { PoliticalContext } from '../contexts/Contexts';
+import InteractionModal from './InteractionModal';
 
 export interface IInteractions {
     likes: number;
@@ -21,14 +12,23 @@ export interface IInteractions {
     shares: number;
 }
 
-const ActionBar: React.FC<ActionBarProps> = ({ pfp, interactions, hasInvestigated, setHasInvestigated }) => {
+interface ActionBarProps {
+    pfp?: string;
+    interactions: IInteractions;
+    // audio?: string;
+    hasInvestigated: boolean;
+    setHasInvestigated: (bool: boolean) => void;
+    setIsVerifeyeOpen: (bool: boolean) => void;
+}
+
+const ActionBar: React.FC<ActionBarProps> = ({ pfp, interactions, hasInvestigated, setHasInvestigated, setIsVerifeyeOpen }) => {
     return (
         <div className="absolute right-1.5 bottom-20 flex flex-col space-y-5">
             <ActionButton icon="/svgs/avatar.svg" pfp={pfp} size={50} type='profile' />
-            <ActionButton icon="/svgs/like.svg" altIcon="/svgs/like-red.svg" count={interactions.likes} type='like' size={28} hasInvestigated={hasInvestigated} setHasInvestigated={setHasInvestigated} />
-            <ActionButton icon="/svgs/comment.svg" count={interactions.comments} type='comments' size={28} hasInvestigated={hasInvestigated} setHasInvestigated={setHasInvestigated} />
-            <ActionButton icon="/svgs/favorite.svg" altIcon="/svgs/favorite-yellow.svg" count={interactions.favorites} type='favorite' size={28} hasInvestigated={hasInvestigated} setHasInvestigated={setHasInvestigated} />
-            <ActionButton icon="/svgs/share.svg" count={interactions.shares} type='share' size={28} hasInvestigated={hasInvestigated} setHasInvestigated={setHasInvestigated} />
+            <ActionButton icon="/svgs/like.svg" altIcon="/svgs/like-red.svg" count={interactions.likes} type='like' size={28} hasInvestigated={hasInvestigated} setHasInvestigated={setHasInvestigated} setIsVerifeyeOpen={setIsVerifeyeOpen} />
+            <ActionButton icon="/svgs/comment.svg" count={interactions.comments} type='comments' size={28} hasInvestigated={hasInvestigated} setHasInvestigated={setHasInvestigated} setIsVerifeyeOpen={setIsVerifeyeOpen} />
+            <ActionButton icon="/svgs/favorite.svg" altIcon="/svgs/favorite-yellow.svg" count={interactions.favorites} type='favorite' size={28} hasInvestigated={hasInvestigated} setHasInvestigated={setHasInvestigated} setIsVerifeyeOpen={setIsVerifeyeOpen} />
+            <ActionButton icon="/svgs/share.svg" count={interactions.shares} type='share' size={28} hasInvestigated={hasInvestigated} setHasInvestigated={setHasInvestigated} setIsVerifeyeOpen={setIsVerifeyeOpen} />
             <ActionButton icon="/svgs/audio.svg" type="audio" size={35} />
         </div>
     );
@@ -43,18 +43,17 @@ interface ActionButtonProps {
     size?: number;
     hasInvestigated?: boolean;
     setHasInvestigated?: (bool: boolean) => void;
+    setIsVerifeyeOpen?: (bool: boolean) => void;
 }
 
-const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, count, size = 32, hasInvestigated, setHasInvestigated }) => {
+const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, count, size = 32, hasInvestigated, setHasInvestigated, setIsVerifeyeOpen }) => {
     const isPolitical = useContext(PoliticalContext);
-    const username = useContext(UsernameContext);
-    const [verifeyeModalOpen, setVerifeyeModalOpen] = useState(false);
+    const [isInteractionModalOpen, setIsInteractionModalOpen] = useState(false);
     const [actionState, setActionState] = useState(false);
-    const [openDetails, setOpenDetails] = useState(false);
 
     const manageState = (e: React.MouseEvent<HTMLElement>) => {
         if(isPolitical && !hasInvestigated) {
-            setVerifeyeModalOpen(true);
+            setIsInteractionModalOpen(true);
             setHasInvestigated && setHasInvestigated(true);
         }
         else {
@@ -80,47 +79,45 @@ const ActionButton: React.FC<ActionButtonProps> = ({ pfp, icon, altIcon, type, c
 
     return (
         <div className="flex flex-col items-center">
-            <button className="flex items-center justify-center filter drop-shadow-lg" type='button' onClick={manageState}>
-                {!pfp ? <Image
-                    src={!actionState ? icon : (altIcon ? altIcon : icon)}
-                    alt="Action"
-                    width={size}
-                    height={size}
-                    style={{ width: 'auto', height: `${size}px` }}
-                /> :
-                    getAvatarIcon(pfp)
-                }
+            <button
+                className="flex items-center justify-center filter drop-shadow-lg" 
+                type='button' 
+                onClick={manageState}>
+                    {!pfp ? <Image
+                        src={!actionState ? icon : (altIcon ? altIcon : icon)}
+                        alt="Action"
+                        width={size}
+                        height={size}
+                        style={{ width: 'auto', height: `${size}px` }}
+                    /> :
+                        getAvatarIcon(pfp)
+                    }
             </button>
 
             {count !== undefined && (
                 <span className="text-white text-xs mt-1 filter drop-shadow">{formatCount(count)}</span>
             )}
-
-            {isPolitical && type in modalText && verifeyeModalOpen && (
-                <VerifeyeModal
+            
+            {type in modalText && isInteractionModalOpen && (
+                <InteractionModal
                     modalText={modalText[type as keyof ModalText]}
-                    setVerifeyeModalOpen={setVerifeyeModalOpen}
-                    setOpenDetails={setOpenDetails}
+                    setIsVerifeyeOpen={setIsVerifeyeOpen ?? null}
+                    setIsInteractionModalOpen={setIsInteractionModalOpen}
                     setActionState={setActionState}
-                >
-                </VerifeyeModal>
+                    setHasInvestigated={setHasInvestigated ?? null}
+                />
             )}
-
             {type == 'comments' && actionState && (
                 <CommentsModal
                     count={0}
                     setCommentsModalOpen={setActionState}
                 />
             )}
-            
             {type == 'share' && actionState && (
                 <ShareModal
                     setShareModalOpen={setActionState}
                 />
             )}
-            {openDetails &&
-                <Details setOpenDetails={setOpenDetails} username={username}/>
-            }
         </div>
     );
 };

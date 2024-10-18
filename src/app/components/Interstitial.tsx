@@ -7,7 +7,7 @@ interface InterstitialProps {
     displayName: string;
     id: string;
     pfp: string;
-    setIsOpenVerifeye: (bool: boolean) => void
+    setIsVerifeyeOpen: (bool: boolean) => void
     setHasInvestigated: (bool: boolean) => void
     // onNext: () => void;
 }
@@ -17,7 +17,7 @@ const Interstitial: React.FC<InterstitialProps> = ({
     displayName, 
     id,
     pfp,
-    setIsOpenVerifeye,
+    setIsVerifeyeOpen,
     setHasInvestigated,
     // onNext
 }) => {
@@ -31,12 +31,12 @@ const Interstitial: React.FC<InterstitialProps> = ({
     // }
 
     const handleSeeMore = () => {
-        setIsOpenVerifeye(true);
+        setIsVerifeyeOpen(true);
     }
 
     const handleSkip = () => {
         setHasInvestigated(true);
-        setIsOpenVerifeye(false)
+        setIsVerifeyeOpen(false)
         // onNext();
     }
 

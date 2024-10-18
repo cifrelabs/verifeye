@@ -17,10 +17,10 @@ export interface JsonViewsData {
     };
 }
 
-export const getAverageViewers = (data: Post[], setAverageViewers?: (n: number) => void) => {
+export const getAverageViewers = (data: Post[]) => {
     const totalViewers = data.reduce((sum, post) => sum + (post.playCount || 0), 0);
     const average = Math.trunc(totalViewers / data.length);
-    setAverageViewers && setAverageViewers(average);
+    return average;
 }
 
 const plotData = (data: Post[], average: number, username?: string) => {
@@ -172,7 +172,7 @@ const ViewsOverTime: React.FC<ViewsOverTimeProps> = ({ data, username }) => {
 
     useEffect(() => {
         if(data) {
-            getAverageViewers(data, setAverageViewers);
+            setAverageViewers(getAverageViewers(data));
             plotData(data, averageViewers ?? 0, username);
         }
     })

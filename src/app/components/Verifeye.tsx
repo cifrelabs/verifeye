@@ -1,75 +1,40 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import ViewsOverTime, { abbreviateNumber, JsonViewsData, Post, getAverageViewers } from './ViewsOverTime';
-import HashtagCirclePack, { HashtagData, processData } from './HashtagCirclePack';
-import Timeline from './Timeline';
+import ViewsOverTime, { abbreviateNumber } from './ViewsOverTime';
+import HashtagCirclePack, { HashtagData } from './HashtagCirclePack';
+import Timeline, { Video } from './Timeline';
 import WhyAmISeeingThis from './WhyAmISeeingThis';
 import MiniProfile from './MiniProfile';
 
-interface DetailsProps {
-    setOpenDetails: any;
+export interface IData {
+    timelineData: Video[];
+    hashtagData: HashtagData | null;
+    viewsData: any;
+}
+
+interface VerifeyeProps {
+    setIsVerifeyeOpen: any;
+    data: IData | null;
+    accordionData: IAccordionData | null;
     username?: string;
 }
 
-const Verifeye: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // data fetching
-    const [hashtagData, setHashtagData] = useState<HashtagData | null>(null);
-    const [viewsData, setViewsData] = useState<any>();
-
-    // accordion data
-    const [topHashtag, setTopHashtag] = useState<string>('');
-    const [averageViewers, setAverageViewers] = useState<number>();
-
-    useEffect(() => {
-        async function fetchHashtagData() {
-          try {
-            const response = await fetch('analysisdata/' + username + '.json');
-            const jsonData = await response.json();
-            if (jsonData && jsonData.result && Array.isArray(jsonData.result.posts)) {
-              const processedData = processData(jsonData.result.posts);
-              setHashtagData(processedData);
-              if (processedData.children && processedData.children.length > 0) {
-                setTopHashtag(processedData.children[0].name);
-              }
-            } else {
-              console.error('Invalid JSON structure or no posts array found.');
-            }
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          }
-        }
-
-        async function fetchViewsData() {
-            try {
-                const response = await fetch('/analysisdata/' + username + '.json');
-                const jsonData: JsonViewsData = await response.json();
-
-                if (jsonData && jsonData.result && Array.isArray(jsonData.result.posts)) {
-                    const filteredData = jsonData.result.posts.map((post: Post) => ({
-                        playCount: post.stats?.playCount || 0,
-                        createTime: post.createTime
-                    })).filter(d => {
-                        return d.playCount > 0 && d.playCount < 100000000 && d.createTime > 0;
-                    }).sort((a, b) => a.createTime - b.createTime);
-
-                    setViewsData(filteredData);
-                    getAverageViewers(filteredData, setAverageViewers)
-                } else {
-                    console.error('Invalid JSON structure or no posts array found.');
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-        fetchHashtagData();
-        fetchViewsData();
-      }, []);
+const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionData, username }) => {
+    const [isWhyPageOpen, setIsWhyPageOpen] = useState(false);
 
     const h2Css = "font-bold text-xl text-black mb-4"
     let tempDate = "July 10, 2024"
+
+    console.log('outside data: ', data); // logs undefined
+    console.log('cash me ousside data: ', accordionData)
+    useEffect(() => {
+        console.log('useEffect data: ', {data}); // logs undefined
+    }, [data])
+
+    useEffect(() => {
+        console.log('accordion data, ', {accordionData});
+    }, [accordionData])
     
     return (
         <div className='fixed -translate-x-1/2 left-1/2 top-0 z-20 bg-white w-screen min-h-min' onClick={(e: React.MouseEvent<HTMLElement>) => {e.stopPropagation()}}>
@@ -77,7 +42,7 @@ const Verifeye: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
             <div className="py-7 grid grid-cols-7">
                 <div className='flex content-center col-start-1 col-end-2'>
                     <button className="bg-white text-black font-bold px-4">
-                        <img src="/icons/back.png" alt="Back" height={15} width={15} onClick={() => {setOpenDetails(false)}} />
+                        <img src="/icons/back.png" alt="Back" height={15} width={15} onClick={() => {setIsVerifeyeOpen(false)}} />
                     </button>
                 </div>
                 <div className='flex place-content-center col-start-2 col-end-7'>
@@ -91,7 +56,7 @@ const Verifeye: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
                     <h2 className="font-bold text-3xl text-black text-center text-pretty mb-3">Review account details</h2>
                     <p className="text-sm text-black text-center text-pretty">
                         To help keep our community informed, we provide detailed information about accounts on TikTok.&nbsp;
-                        <span className='font-bold' onClick={() => {setIsModalOpen(true)}}>
+                        <span className='font-bold' onClick={() => {setIsWhyPageOpen(true)}}>
                             Why am I seeing this?
                         </span>
                     </p>
@@ -117,27 +82,27 @@ const Verifeye: React.FC<DetailsProps> = ({ setOpenDetails, username }) => {
                             <Accordion
                                 header={"Timeline"}
                                 body="User posted their first video on"
-                                component={<Timeline username={username} />}
-                                emphasis={tempDate}
+                                component={<Timeline data={data?.timelineData} username={username} />}
+                                emphasis={accordionData?.createDate.toString()}
                             />
                             <Accordion
                                 header={"Hashtags used"}
                                 body="The user's most used hashtag is"
-                                component={<HashtagCirclePack data={hashtagData} topHashtag={topHashtag} />}
-                                emphasis={topHashtag}
+                                component={<HashtagCirclePack data={data?.hashtagData ?? null} topHashtag={accordionData?.topHashtag ?? ''} />}
+                                emphasis={accordionData?.topHashtag}
                             />
                             <Accordion
                                 header={"Viewership and account activity"}
                                 body={"This account averages"}
-                                component={<ViewsOverTime data={viewsData} username={username} />}
-                                emphasis={abbreviateNumber(averageViewers ?? 0) + " viewers"}
+                                component={<ViewsOverTime data={data?.viewsData} username={username} />}
+                                emphasis={abbreviateNumber(accordionData?.averageViewers ?? 0) + " viewers"}
                             />
                         </div>
                     </div>
                 </div>
             </div>
-            {isModalOpen && (
-                <WhyAmISeeingThis setState={setIsModalOpen}></WhyAmISeeingThis>
+            {isWhyPageOpen && (
+                <WhyAmISeeingThis setState={setIsWhyPageOpen}></WhyAmISeeingThis>
             )}
         </div>
     );
@@ -181,11 +146,18 @@ const SocialMedia: React.FC<SocialMediaProps> = ({}) => {
     )
 }
 
+export interface IAccordionData {
+    createDate: number;
+    topHashtag: string;
+    averageViewers: number;
+}
+
 interface AccordionProps {
     header: string;
     body: string;
     component: object;
     emphasis?: string;
+    data?: IAccordionData;
 }
 
 const Accordion: React.FC<AccordionProps> = ({ header, body, component, emphasis }) => {

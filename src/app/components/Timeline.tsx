@@ -1,29 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 
-interface Video {
+export interface Video {
   id: string;
   desc: string;
   createTime: number;
 }
 
-interface UserData {
+export interface UserData {
   result: {
     posts: Video[];
   };
 }
 
 interface TimelineProps {
+  data?: Video[];
   username?: string;
 }
 
-const Timeline: React.FC<TimelineProps> = ({ username }) => {
+const Timeline: React.FC<TimelineProps> = ({ data, username }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [firstVideo, setFirstVideo] = useState<Video | null>(null);
   const [lastVideo, setLastVideo] = useState<Video | null>(null);
   const [currentVideo, setCurrentVideo] = useState<Video | null>(null);
 
-  const currentVideos: { [key: string]: Video } = {
+  const currentVideos: { [username: string]: Video } = {
     'therealboyabunda': { id: 'vid123', desc: 'Current Video for User1', createTime: 1688554800 },
     'benjaminmadronasondong87': { id: 'vid456', desc: 'Current Video for User2', createTime: 1649853385 },
     'bbm.ph': { id: 'vid456', desc: 'Current Video for User2', createTime: 1644006308 },
@@ -35,22 +36,10 @@ const Timeline: React.FC<TimelineProps> = ({ username }) => {
       setCurrentVideo(currentVideos[username]);
     }
 
-    async function fetchData() {
-      try {
-        const response = await fetch('analysisdata/' + username + '.json');
-        const jsonData: UserData = await response.json();
-
-        if (jsonData && jsonData.result && Array.isArray(jsonData.result.posts)) {
-          const sortedVideos = jsonData.result.posts.sort((a, b) => a.createTime - b.createTime);
-          setFirstVideo(sortedVideos[0]);
-          setLastVideo(sortedVideos[sortedVideos.length - 1]);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+    if(data) {
+      setFirstVideo(data[0]);
+      setLastVideo(data[data.length - 1]);
     }
-
-    fetchData();
   }, [username]);
 
   useEffect(() => {

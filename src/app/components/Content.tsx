@@ -4,13 +4,16 @@ import React, { useRef, useEffect, useState } from 'react';
 import ActionBar, { IInteractions } from './ActionBar';
 import { useAutoplay } from '../contexts/AutoplayContext';
 import Interstitial from './Interstitial';
-import Verifeye from './Verifeye';
+import Verifeye, { IAccordionData, IData } from './Verifeye';
+import { processData } from './HashtagCirclePack';
+import { UserData } from './Timeline';
+import { JsonViewsData, Post, getAverageViewers } from './ViewsOverTime';
 
 interface ContentProps {
-    data: IData;
+    user: IUserData;
 }
 
-export interface IData {
+export interface IUserData {
     id: string;
     username: string;
     display_name: string;
@@ -26,20 +29,128 @@ export interface IData {
     highlight_id: string;
 }
 
-const Content: React.FC<ContentProps> = ({ data }) => {
+const Content: React.FC<ContentProps> = ({ user }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const { globalAutoplay, setGlobalAutoplay } = useAutoplay();
-    const [isOpenVerifeye, setIsOpenVerifeye] = useState(false);
     const [hasInvestigated, setHasInvestigated] = useState(false);
+
+    // video actions
+    const { globalAutoplay, setGlobalAutoplay } = useAutoplay();
+    const [isPlaying, setIsPlaying] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
 
+    // verifeye props
+    const [isVerifeyeOpen, setIsVerifeyeOpen] = useState(false);
+
     let interactions: IInteractions = {
-        likes: data.likes,
-        comments: data.comments,
-        favorites: data.favorites,
-        shares: data.shares,
+        likes: user.likes,
+        comments: user.comments,
+        favorites: user.favorites,
+        shares: user.shares,
     }
+
+    const [data, setData] = useState<IData | null>(null);
+    const [accordionData, setAccordionData] = useState<IAccordionData | null>(null);
+
+    const fetchTimelineData = async() => {
+        try {
+          const response = await fetch('analysisdata/' + user.username + '.json');
+          const jsonData: UserData = await response.json();
+  
+          if (jsonData && jsonData.result && Array.isArray(jsonData.result.posts)) {
+            const sortedVideos = jsonData.result.posts.sort((a, b) => a.createTime - b.createTime);
+            return {data: sortedVideos, highlight: 0};
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+
+        return null;
+    }
+
+    const fetchHashtagData = async() => {
+      try {
+        const response = await fetch('analysisdata/' + user.username + '.json');
+        const jsonData = await response.json();
+        let topHashtag = "";
+        if (jsonData && jsonData.result && Array.isArray(jsonData.result.posts)) {
+          const hashtagData = processData(jsonData.result.posts);
+          if (hashtagData.children && hashtagData.children.length > 0) {
+            topHashtag = hashtagData.children[0].name;
+          }
+
+          return {data: hashtagData, highlight: topHashtag};
+        } else {
+          console.error('Invalid JSON structure or no posts array found.');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+
+      return null;
+    }
+
+    const fetchViewsData = async() => {
+        try {
+            const response = await fetch('/analysisdata/' + user.username + '.json');
+            const jsonData: JsonViewsData = await response.json();
+
+            if (jsonData && jsonData.result && Array.isArray(jsonData.result.posts)) {
+                const filteredData = jsonData.result.posts.map((post: Post) => ({
+                    playCount: post.stats?.playCount || 0,
+                    createTime: post.createTime
+                })).filter(d => {
+                    return d.playCount > 0 && d.playCount < 100000000 && d.createTime > 0;
+                }).sort((a, b) => a.createTime - b.createTime);
+
+                return {data: filteredData, highlight: getAverageViewers(filteredData)};
+            } else {
+                console.error('Invalid JSON structure or no posts array found.');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+
+        return null;
+    }
+
+    useEffect(() => {
+        if (user.political) {
+            const fetchData = async () => {
+                const results = await Promise.all([
+                    fetchTimelineData(),
+                    fetchHashtagData(),
+                    fetchViewsData(),
+                ]);
+    
+                const [
+                    timeline,
+                    hashtag,
+                    views
+                ] = results;
+    
+                if (timeline && hashtag && views) {
+                    const { data: dTimeline, highlight: hTimeline } = timeline;
+                    const { data: dHashtags, highlight: hHashtags } = hashtag;
+                    const { data: dViews, highlight: hViews } = views;
+    
+                    setData({ timelineData: timeline.data, hashtagData: hashtag.data, viewsData: views.data });
+                    setAccordionData({ createDate: timeline.highlight, topHashtag: hashtag.highlight, averageViewers: views.highlight ?? 0 });
+                }
+            };
+
+            fetchData();
+        }
+    }, [user]);
+
+    // these two useEffects are for the purpose of rendering the data a second time,
+    // updating them and preventing an undefined
+    useEffect(() => {
+        console.log('data updated: ', data);
+    }, [data]);
+
+    useEffect(() => {
+        console.log('accordion data updated: ', accordionData);
+    }, [accordionData])
 
     useEffect(() => {
         const options = {
@@ -117,7 +228,7 @@ const Content: React.FC<ContentProps> = ({ data }) => {
             >
                 <video 
                     ref={videoRef}
-                    src={data.media} 
+                    src={user.media} 
                     className="w-full h-full object-cover" 
                     loop 
                     playsInline 
@@ -135,48 +246,58 @@ const Content: React.FC<ContentProps> = ({ data }) => {
                 )}
                 <div className={`absolute bottom-12 left-0 ${isExpanded && 'bg-gradient-to-t from-black'}`}>
                     <div className="pb-3 pl-2 text-white">
-                        <h2 className="text-lg font-bold">{data.display_name}</h2>
+                        <h2 className="text-lg font-bold">{user.display_name}</h2>
                         { isExpanded ? 
                             (<p
                                 className="text-sm mt-1 pr-11 mr-3"
                                 onClick={(e) => handleCaptionPress(e)}>
-                                    {data.captions}
+                                    {user.captions}
                             </p>) :
                             (<p
                                 className="text-sm mt-1 pr-11 mr-3 line-clamp-2"
                                 onClick={(e) => handleCaptionPress(e)}>
-                                    {data.captions}
+                                    {user.captions}
                             </p>)
                         }
                         <p className="text-xs mt-2 flex items-center">
                             <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
                             </svg>
-                            {data.sound_used} - {data.display_name}
+                            {user.sound_used} - {user.display_name}
                         </p>
                     </div>
                 </div>
                 <ActionBar 
-                    pfp={data.pfp}
+                    pfp={user.pfp}
                     interactions={interactions}
                     hasInvestigated={hasInvestigated}
                     setHasInvestigated={setHasInvestigated}
+                    setIsVerifeyeOpen={setIsVerifeyeOpen}
                 />
             </div>
-            {!hasInvestigated && data.political && (
+
+            {!hasInvestigated && user.political && (
                 <div className="snap-start h-screen">
                     <Interstitial
-                        username={data.username}
-                        displayName={data.display_name}
-                        id={data.highlight_id}
-                        pfp={data.pfp}
-                        setIsOpenVerifeye={setIsOpenVerifeye}
+                        username={user.username}
+                        displayName={user.display_name}
+                        id={user.highlight_id}
+                        pfp={user.pfp}
+                        setIsVerifeyeOpen={setIsVerifeyeOpen}
                         setHasInvestigated={setHasInvestigated}
                         // onNext={() => {}}
                     />
                 </div>
             )}
-            {isOpenVerifeye && <Verifeye setOpenDetails={setIsOpenVerifeye} username={data.username} />}
+            
+            {isVerifeyeOpen && data && data.timelineData && (
+                <Verifeye
+                    setIsVerifeyeOpen={setIsVerifeyeOpen}
+                    data={data}
+                    accordionData={accordionData}
+                    username={user.username}
+                />
+            )}
         </div>
     );
 };

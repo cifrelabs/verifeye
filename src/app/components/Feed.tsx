@@ -1,12 +1,12 @@
 "use client"
 
 import React, { useEffect, useState, useRef } from 'react';
-import Content, { IData } from './Content';
+import Content, { IUserData } from './Content';
 import { AutoplayProvider } from '../contexts/AutoplayContext';
 import { PoliticalContext, UsernameContext } from '../contexts/Contexts';
 
 interface FeedProps {
-    contents: Array<IData>;
+    contents: Array<IUserData>;
 }
 
 const shuffleArray = (array: any[]) => {
@@ -35,13 +35,13 @@ const Feed: React.FC<FeedProps> = ({ contents }) => {
     return (
         <AutoplayProvider>
             <div ref={feedRef} className="h-screen overflow-y-auto scrollbar-hide snap-y snap-mandatory">
-                {shuffledContents.map((content: IData, index) => (
+                {shuffledContents.map((content: IUserData, index) => (
                     <React.Fragment key={content.id}>
                         <div className="snap-start h-full">
                             <PoliticalContext.Provider value={content.political}>
                                 <UsernameContext.Provider value={content.username}>
                                     <Content
-                                        data={content}
+                                        user={content}
                                     />
                                 </UsernameContext.Provider>
                             </PoliticalContext.Provider>
