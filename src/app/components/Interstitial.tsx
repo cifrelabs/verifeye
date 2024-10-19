@@ -1,12 +1,14 @@
 "use client"
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { IAccordionData } from './Verifeye';
 
 interface InterstitialProps {
     username: string;
     displayName: string;
     id: string;
     pfp: string;
+    data: IAccordionData | null
     setIsVerifeyeOpen: (bool: boolean) => void
     setHasInvestigated: (bool: boolean) => void
     // onNext: () => void;
@@ -17,19 +19,11 @@ const Interstitial: React.FC<InterstitialProps> = ({
     displayName, 
     id,
     pfp,
+    data,
     setIsVerifeyeOpen,
     setHasInvestigated,
     // onNext
 }) => {
-    // const getMessage = (type: number, socmed?: string) => {
-    //     switch(type) {
-    //         case 1: "Another account on TikTok with a similar profile exists"; break;
-    //         case 2: "We found this Wikipedia article about the user"; break;
-    //         case 3: `We found an ${socmed} account possibly belonging to this user`; break;
-    //         default: "No possible matching accounts nor mentions were found";
-    //     }
-    // }
-
     const handleSeeMore = () => {
         setIsVerifeyeOpen(true);
     }
@@ -40,33 +34,17 @@ const Interstitial: React.FC<InterstitialProps> = ({
         // onNext();
     }
 
-    // if (id) {
-    //     const highlight: { 
-    //         type?: number 
-    //         details?: object
-    //     } = await getHighlight(id);
-                
-    //     // Lookalike
-    //     if (highlight.type === 1) return (
-    //         <div className="h-screen flex items-center justify-center relative">
-                
-    //         </div>
-    //     );
-
-    //     // Social Media
-    //     if (highlight.type === 2) return (
-    //         <div className="h-screen flex items-center justify-center relative">
-                
-    //         </div>
-    //     );
-
-    //     // Article
-    //     if (highlight.type === 3) return (
-    //         <div className="h-screen flex items-center justify-center relative">
-                
-    //         </div>
-    //     );
-    // }
+    let text;
+    let highlight;
+    if(data?.topHashtag !== null) {
+        text = "This user's most used hashtag is ";
+        highlight = data?.topHashtag;
+    }
+    else {
+        text = "The video you just watched was posted on ";
+        highlight = new Date(data?.createDate * 1000)
+        highlight = highlight.toISOString();
+    }
 
     return (
         <div className="h-screen flex items-center justify-center relative">
@@ -77,9 +55,12 @@ const Interstitial: React.FC<InterstitialProps> = ({
                     className="w-24 h-24 rounded-full mb-4"
                 />
                 <h2 className="text-xl font-bold">{displayName}</h2>
-                <p className="text-sm text-gray-600 mb-6">@{username}</p>
-                <p className="text-lg pl-10 pr-10 mb-6">
-                    No possible matching accounts nor mentions were found
+                <p className="text-sm text-gray-600 mb-2">@{username}</p>
+                <p id='text' className="text-md pl-10 pr-10 mb-8 text-pretty">
+                    {text}
+                    <span className='font-bold text-tiktok-red'>
+                        {highlight}
+                    </span>
                 </p>
                 <div className='flex flex-col w-full gap-2 px-5'>
                     <button 

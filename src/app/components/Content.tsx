@@ -40,6 +40,8 @@ const Content: React.FC<ContentProps> = ({ user }) => {
 
     // verifeye props
     const [isVerifeyeOpen, setIsVerifeyeOpen] = useState(false);
+    const [data, setData] = useState<IData | null>(null);
+    const [accordionData, setAccordionData] = useState<IAccordionData | null>(null);
 
     let interactions: IInteractions = {
         likes: user.likes,
@@ -47,9 +49,6 @@ const Content: React.FC<ContentProps> = ({ user }) => {
         favorites: user.favorites,
         shares: user.shares,
     }
-
-    const [data, setData] = useState<IData | null>(null);
-    const [accordionData, setAccordionData] = useState<IAccordionData | null>(null);
 
     const fetchTimelineData = async() => {
         try {
@@ -285,6 +284,7 @@ const Content: React.FC<ContentProps> = ({ user }) => {
                         pfp={user.pfp}
                         setIsVerifeyeOpen={setIsVerifeyeOpen}
                         setHasInvestigated={setHasInvestigated}
+                        data={accordionData}
                         // onNext={() => {}}
                     />
                 </div>
