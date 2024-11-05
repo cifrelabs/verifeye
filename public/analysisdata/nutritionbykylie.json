@@ -25,6 +25,29 @@
       "friendCount": 195,
       "postCount": 439
     },
+    "miniProfiles": [
+    {
+      "image": "/images/profilepictures/nutritionbykylie_ig.jpg",
+      "displayName": "Kylie Sakaida MS, RD",
+      "username": "nutritionbykylie",
+      "interaction": "1.6M followers",
+      "site": "Instagram"
+    },
+    {
+      "image": "/images/profilepictures/nutritionbykylie_ig.jpg",
+      "displayName": "Nutrition By Kylie",
+      "username": "",
+      "interaction": "424k followers",
+      "site": "Facebook"
+    },
+    {
+      "image": "/images/profilepictures/nutritionbykylie_ig.jpg",
+      "displayName": "Kylie Sakaida MS, RD, LDN",
+      "username": "kyliesakaida",
+      "interaction": "817 followers",
+      "site": "LinkedIn"
+    }
+  ],
     "posts": [
       {
         "id": "7407853433555815726",

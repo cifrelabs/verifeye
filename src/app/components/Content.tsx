@@ -42,6 +42,7 @@ const Content: React.FC<ContentProps> = ({ user }) => {
     const [isVerifeyeOpen, setIsVerifeyeOpen] = useState(false);
     const [data, setData] = useState<IData | null>(null);
     const [accordionData, setAccordionData] = useState<IAccordionData | null>(null);
+    const [miniProfiles, setMiniProfiles] = useState([]);
 
     let interactions: IInteractions = {
         likes: user.likes,
@@ -111,6 +112,31 @@ const Content: React.FC<ContentProps> = ({ user }) => {
 
         return null;
     }
+
+    const fetchMiniProfilesData = async () => {
+        try {
+            const response = await fetch('analysisdata/' + user.username + '.json');
+            const jsonData = await response.json();
+            
+            console.log('Fetched data: ', jsonData);
+
+            const miniProfiles = jsonData.result.miniProfiles || [];
+            console.log('miniProfiles: ', miniProfiles);
+            return miniProfiles;
+        } catch (error) {
+            console.error('Error fetching MiniProfile data:', error);
+            return [];
+        }
+    };
+
+    useEffect(() => {
+        console.log('Fetching miniProfiles data...');
+        const fetchData = async () => {
+            const profiles = await fetchMiniProfilesData();
+            setMiniProfiles(profiles);
+        };
+        fetchData();
+    }, [user.username]);
 
     useEffect(() => {
         if (user.political) {
@@ -296,6 +322,7 @@ const Content: React.FC<ContentProps> = ({ user }) => {
                     data={data}
                     accordionData={accordionData}
                     username={user.username}
+                    miniProfiles={miniProfiles}
                 />
             )}
         </div>

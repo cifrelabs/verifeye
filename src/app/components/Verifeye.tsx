@@ -18,9 +18,10 @@ interface VerifeyeProps {
     data: IData | null;
     accordionData: IAccordionData | null;
     username?: string;
+    miniProfiles: Array<{ image: string; displayName: string; username: string; interaction: string; site: string; }>;
 }
 
-const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionData, username }) => {
+const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionData, username, miniProfiles }) => {
     const [isWhyPageOpen, setIsWhyPageOpen] = useState(false);
 
     const h2Css = "font-bold text-xl text-black mb-4"
@@ -72,7 +73,7 @@ const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionD
                     {/* Social media and articles */}
                     <div>
                         <h2 className={`${h2Css}`}>What we found on the Internet</h2>
-                        <SocialMedia/>
+                        <SocialMedia miniProfiles={miniProfiles} />
                     </div>
 
                     {/* Account Analysis */}
@@ -122,20 +123,39 @@ const Lookalike: React.FC<LookalikeProps> = ({}) => {
 }
 
 interface SocialMediaProps {
+    miniProfiles: Array<{ image: string; displayName: string; username: string; interaction: string; site: string;}>;
 }
 
-const SocialMedia: React.FC<SocialMediaProps> = ({}) => {
+const SocialMedia: React.FC<SocialMediaProps> = ({ miniProfiles }) => {
+    // Get the unique sites from miniProfiles
+    const uniqueSites = Array.from(new Set(miniProfiles.map(profile => profile.site)));
+
+    // Function to format the sites with Oxford comma
+    const formatSites = (sites: string[]) => {
+        if (sites.length === 0) return '';
+        if (sites.length === 1) return sites[0];
+        if (sites.length === 2) return sites.join(' and ');
+        return `${sites.slice(0, -1).join(', ')}, and ${sites[sites.length - 1]}`;
+    };
+
     return (
         <div className="flex flex-col gap-4 text-sm text-black">
             <div>
                 <p>
-                    We found <span className='font-bold text-tiktok-red'>2</span> possible matching accounts from Twitter and Facebook
+                    We found <span className='font-bold text-tiktok-red'>{miniProfiles.length}</span> possible matching accounts from {formatSites(uniqueSites)}
                 </p>
             </div>
             <div className='flex flex-row flex-wrap w-full justify-evenly'>
-                <MiniProfile image='/images/temp.jpg' displayName='Display Name' username='username' interaction='100k followers'/>
-                <MiniProfile image='/images/temp.jpg' displayName='Display Name' username='username' interaction='100k followers'/>
-                <MiniProfile image='/images/temp.jpg' displayName='Display Name' username='username' interaction='100k followers'/>
+                {miniProfiles.map((profile, index) => (
+                    <MiniProfile 
+                        key={index}
+                        image={profile.image}
+                        displayName={profile.displayName}
+                        username={profile.username}
+                        interaction={profile.interaction}
+                        site={profile.site}
+                    />
+                ))}
             </div>
             <div>
                 <p>

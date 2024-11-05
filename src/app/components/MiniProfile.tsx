@@ -3,6 +3,7 @@ interface MiniProfileProps {
     displayName: string;
     username: string;
     interaction: string;
+    site: string;
 }
 
 const MiniProfile: React.FC<MiniProfileProps> = ({ image, displayName, username, interaction }) => {
