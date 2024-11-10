@@ -33,14 +33,15 @@ class Graph {
     private y: d3.ScaleLinear<number, number>;
     private y2: d3.ScaleLinear<number, number>;
 
-    constructor(container: d3.Selection<HTMLDivElement, unknown, null, undefined>) {
+    constructor(container: d3.Selection<Element | d3.BaseType, unknown, null, undefined>) {
         // Setup base SVG
         this.svg = container
             .append('svg')
             .attr('width', '100%')
             .attr('height', '100%')
             .attr('viewBox', '0 0 350 300')
-            .attr('preserveAspectRatio', 'xMidYMid meet');
+            .attr('preserveAspectRatio', 'xMidYMid meet')
+            .style('max-width', '100%');
 
         // Calculate dimensions
         this.width = 350 - this.margin.left - this.margin.right;
@@ -51,7 +52,7 @@ class Graph {
         this.y = d3.scaleLinear().range([this.height, 0]);
         this.y2 = d3.scaleLinear().range([this.height, 0]);
 
-        // Create container group
+        // Create container group with adjusted transform
         this.g = this.svg
             .append('g')
             .attr('transform', `translate(${this.margin.left},${this.margin.top})`);
@@ -90,21 +91,29 @@ class Graph {
             .selectAll('text')
             .attr('transform', 'rotate(-45)')
             .style('text-anchor', 'end')
-            .style('stroke', 'black');
+            .style('stroke', 'none')
+            .style('fill', 'black');
 
         this.g.select('.axis--y')
             .transition()
             .duration(750)
             .call(d3.axisLeft(this.y).tickFormat(d3.format(".2s")) as any)
-            .selectAll('path, line, text')
-            .style('stroke', 'black');
+            .selectAll('text')
+            .style('stroke', 'none')
+            .style('fill', 'black');
 
         this.g.select('.axis--y2')
             .transition()
             .duration(750)
             .call(d3.axisRight(this.y2) as any)
-            .selectAll('path, line, text')
-            .style('stroke', 'black');
+            .selectAll('text')
+            .style('stroke', 'none')
+            .style('fill', 'black');
+
+        // Make axis lines thinner
+        this.g.selectAll('.axis path, .axis line')
+            .style('stroke', 'black')
+            .style('stroke-width', '1px');
 
         // Create line generators
         const line = d3.line<[Date, number]>()
@@ -162,20 +171,39 @@ const updateInfoDiv = (dates: Date[], views: number[], average: number, username
     const infoDiv = document.getElementById('infoviewsovertime');
     if (!infoDiv) return;
     
-    const totalViews = views.reduce((a, b) => a + b, 0);
-    infoDiv.innerHTML = `${username ? username + ' has' : 'You have'} ${abbreviateNumber(totalViews)} total views`;
+    // Find max and min values and their indices
+    const maxViews = Math.max(...views);
+    const minViews = Math.min(...views);
+    const maxIndex = views.indexOf(maxViews);
+    const minIndex = views.indexOf(minViews);
+    
+    const maxMonth = dates[maxIndex] ?? undefined;
+    const minMonth = dates[minIndex] ?? undefined;
+    const decreasePercent = ((maxViews - minViews) / maxViews) * 100;
+
+    infoDiv.innerHTML = `
+        <div class="flex flex-col gap-2">
+            <span>This account averages <span class="font-bold">${abbreviateNumber(average)}</span> viewers per video.</span>
+            <span>They peaked at <span class="font-bold">${abbreviateNumber(maxViews)}</span> views on <span class="font-bold">${formatMonthYear(maxMonth)}</span> but reached an all-time low on <span class="font-bold">${formatMonthYear(minMonth)}</span> with <span class="font-bold">${abbreviateNumber(minViews)}</span> viewers.</span>
+            <span>Viewer count has decreased by <span class="font-bold">${decreasePercent.toFixed(2)}%</span> since last peak.</span>
+        </div>
+    `;
 };
 
 const plotData = (data: Post[], average: number, username?: string) => {
     const { dates, views, counts } = processData(data);
+    
+    // Update info div with the new statistics
+    updateInfoDiv(dates, views, average, username);
+    
     // Clear and initialize container
     const container = d3.select('#plot')
-        .html('') // Clear previous content
+        .html('')
         .append('div')
-        .style('width', '350px')
-        .style('height', '300px') as unknown as d3.Selection<HTMLDivElement, unknown, null, undefined>;
+        .style('width', '100%')
+        .style('height', '300px');
     
-    const graph = new Graph(container);
+    const graph = new Graph(container as any);
     graph.update(dates, views, counts);
 };
 
@@ -237,13 +265,13 @@ const ViewsOverTime: React.FC<ViewsOverTimeProps> = ({ data, username }) => {
     }, [data, username, averageViewers]);
 
     return (
-        <div className='relative w-[350px]'>
-            <div className="info text-black text-sm" id="infoviewsovertime"></div>
-            <div className='flex flex-row justify-center items-center mb-3'>
-                <span className='text-tiktok-blue mr-3'>● Viewer count per month</span>
+        <div className='w-full max-w-[600px] mx-auto'>
+            <div className="info text-black text-sm pl-4" id="infoviewsovertime"></div>
+            <div id="plot" className="w-full"></div>
+            <div className='flex flex-row justify-center items-center gap-4 mt-3 flex-wrap text-sm'>
+                <span className='text-tiktok-blue'>● Viewer count per month</span>
                 <span className='text-tiktok-red'>● Videos posted per month</span>
             </div>
-            <div id="plot" className="relative"></div>
         </div>
     );
 };
