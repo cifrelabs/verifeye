@@ -6,6 +6,8 @@ import HashtagCirclePack, { HashtagData } from './HashtagCirclePack';
 import Timeline, { Video } from './Timeline';
 import WhyAmISeeingThis from './WhyAmISeeingThis';
 import MiniProfile from './MiniProfile';
+import Lookalike from './Lookalike';
+import { LookalikeData } from './Content';
 
 export interface IData {
     timelineData: Video[];
@@ -19,9 +21,10 @@ interface VerifeyeProps {
     accordionData: IAccordionData | null;
     username?: string;
     miniProfiles: Array<{ image: string; displayName: string; username: string; interaction: string; site: string; }>;
+    lookalike?: LookalikeData;
 }
 
-const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionData, username, miniProfiles }) => {
+const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionData, username, miniProfiles, lookalike }) => {
     const [isWhyPageOpen, setIsWhyPageOpen] = useState(false);
 
     const h2Css = "font-bold text-xl text-black mb-4"
@@ -67,7 +70,7 @@ const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionD
                     {/* A likely lookalike */}
                     <div>
                         <h2 className={`${h2Css}`}>A likely lookalike</h2>
-                        <Lookalike/>
+                        <LookalikeAccount lookalike={lookalike}/>
                     </div>
 
                     {/* Social media and articles */}
@@ -109,16 +112,23 @@ const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionD
     );
 }
 
-interface LookalikeProps {
+interface LookalikeAccountProps {
+    lookalike: { current_image: string; current_displayName: string;  current_username: string; current_followerCount: string; current_videoCount: string; image: string; displayName: string;  username: string; followerCount: string; videoCount: string};
 }
 
-const Lookalike: React.FC<LookalikeProps> = ({}) => {
+const LookalikeAccount: React.FC<LookalikeAccountProps> = ({ lookalike }) => {
     return (
-        <div>
-            <p className="text-sm text-black">
-                A different TikTok account with a similar name yet higher interaction count exists
-            </p>
-        </div>
+        <Lookalike 
+        currentPfp={lookalike.current_image} 
+        currentDisplayName={lookalike.current_displayName} 
+        currentUsername={lookalike.current_username}
+        currentFollowers={lookalike.current_followerCount}
+        currentVideos={lookalike.current_videoCount}
+        lookalikePfp={lookalike.image}
+        lookalikeDisplayName={lookalike.displayName}
+        lookalikeUsername={lookalike.username}
+        lookalikeFollowers={lookalike.followerCount}
+        lookalikeVideos={lookalike.videoCount}/>
     )
 }
 

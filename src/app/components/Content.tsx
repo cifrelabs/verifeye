@@ -8,6 +8,7 @@ import Verifeye, { IAccordionData, IData } from './Verifeye';
 import { processData } from './HashtagCirclePack';
 import { UserData } from './Timeline';
 import { JsonViewsData, Post, getAverageViewers } from './ViewsOverTime';
+import { display } from '@/fonts/TikTok Display';
 
 interface ContentProps {
     user: IUserData;
@@ -29,6 +30,19 @@ export interface IUserData {
     highlight_id: string;
 }
 
+export interface LookalikeData {
+    current_image: string;
+    current_displayName: string;
+    current_username: string;
+    current_followerCount: string;
+    current_videoCount: string;
+    image: string;
+    displayName: string;
+    username: string;
+    followerCount: string;
+    videoCount: string;
+}
+
 const Content: React.FC<ContentProps> = ({ user }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [hasInvestigated, setHasInvestigated] = useState(false);
@@ -43,6 +57,7 @@ const Content: React.FC<ContentProps> = ({ user }) => {
     const [data, setData] = useState<IData | null>(null);
     const [accordionData, setAccordionData] = useState<IAccordionData | null>(null);
     const [miniProfiles, setMiniProfiles] = useState([]);
+    const [lookalikeData, setLookalike] = useState<LookalikeData>();
 
     let interactions: IInteractions = {
         likes: user.likes,
@@ -129,11 +144,59 @@ const Content: React.FC<ContentProps> = ({ user }) => {
         }
     };
 
+    const fetchLookalike = async() => {
+        try {
+            const response = await fetch('analysisdata/' + user.username + '.json');
+            const jsonData = await response.json();
+
+            const lookalikeData : LookalikeData = {
+                current_image: user.pfp,
+                current_displayName: user.display_name,
+                current_username: user.username,
+                current_followerCount: jsonData.result.stats.followerCount,
+                current_videoCount: jsonData.result.stats.videoCount,
+                image: jsonData.result.lookalike.image,
+                displayName: jsonData.result.lookalike.displayName,
+                username: jsonData.result.lookalike.username,
+                followerCount: jsonData.result.lookalike.followerCount,
+                videoCount: jsonData.result.lookalike.videoCount,
+            };
+
+            console.log('Fetched: ', lookalikeData);
+
+            return lookalikeData;
+        }
+        catch (error) {
+            console.error('Error fetching lookalike data:', error);
+            return {
+                current_image: '',
+                current_displayName: '',
+                current_username: '',
+                current_followerCount: '0',
+                current_videoCount: '0',
+                image: '',
+                displayName: '',
+                username: '',
+                followerCount: '0',
+                videoCount: '0',
+            };
+        }
+    }
+
     useEffect(() => {
         console.log('Fetching miniProfiles data...');
         const fetchData = async () => {
             const profiles = await fetchMiniProfilesData();
             setMiniProfiles(profiles);
+        };
+        fetchData();
+    }, [user.username]);
+
+    // fetch lookalike data
+    useEffect(() => {
+        const fetchData = async () => {
+            const lookalikeData = await fetchLookalike();
+            setLookalike(lookalikeData);
         };
         fetchData();
     }, [user.username]);
@@ -323,6 +386,7 @@ const Content: React.FC<ContentProps> = ({ user }) => {
                     accordionData={accordionData}
                     username={user.username}
                     miniProfiles={miniProfiles}
+                    lookalike={lookalikeData}
                 />
             )}
         </div>
