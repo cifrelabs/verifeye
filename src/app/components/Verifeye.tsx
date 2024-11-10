@@ -21,7 +21,7 @@ interface VerifeyeProps {
     accordionData: IAccordionData | null;
     username?: string;
     miniProfiles: Array<{ image: string; displayName: string; username: string; interaction: string; site: string; }>;
-    lookalike?: LookalikeData;
+    lookalike: LookalikeData;
 }
 
 const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionData, username, miniProfiles, lookalike }) => {
@@ -113,7 +113,7 @@ const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionD
 }
 
 interface LookalikeAccountProps {
-    lookalike: { current_image: string; current_displayName: string;  current_username: string; current_followerCount: string; current_videoCount: string; image: string; displayName: string;  username: string; followerCount: string; videoCount: string};
+    lookalike: LookalikeData;
 }
 
 const LookalikeAccount: React.FC<LookalikeAccountProps> = ({ lookalike }) => {
