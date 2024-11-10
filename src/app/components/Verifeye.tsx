@@ -38,7 +38,7 @@ const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionD
     }, [accordionData])
     
     return (
-        <div className='fixed -translate-x-1/2 left-1/2 top-0 z-20 bg-white w-screen min-h-min' onClick={(e: React.MouseEvent<HTMLElement>) => {e.stopPropagation()}}>
+        <div className='fixed -translate-x-1/2 left-1/2 top-0 z-20 bg-white w-screen min-h-min max-w-screen' onClick={(e: React.MouseEvent<HTMLElement>) => {e.stopPropagation()}}>
             {/* HEADER */}
             <div className="py-7 grid grid-cols-7">
                 <div className='flex content-center col-start-1 col-end-2'>
@@ -52,8 +52,8 @@ const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionD
             </div>
 
             {/* BODY */}
-            <div className="flex flex-col h-screen items-center overflow-scroll px-10 pb-12">
-                <div className='gap-10 mb-10'>
+            <div className="flex flex-col h-screen items-center overflow-scroll px-10 pb-12 max-w-[600px] mx-auto">
+                <div className='gap-10 mb-10 w-full'>
                     <h2 className="font-bold text-3xl text-black text-center text-pretty mb-3">Review account details</h2>
                     <p className="text-sm text-black text-center text-pretty">
                         To help keep our community informed, we provide detailed information about accounts on TikTok.&nbsp;
@@ -63,7 +63,7 @@ const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionD
                     </p>
                 </div>
 
-                <div className="space-y-10">
+                <div className="space-y-10 w-full">
                     {/* A likely lookalike */}
                     <div>
                         <h2 className={`${h2Css}`}>A likely lookalike</h2>
@@ -77,7 +77,7 @@ const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionD
                     </div>
 
                     {/* Account Analysis */}
-                    <div className="flex flex-col pb-96">
+                    <div className="flex flex-col pb-96 w-full max-w-[350px]">
                         <h2 className={`${h2Css}`}>Account Analysis</h2>
                         <div className="flex flex-col flex-grow gap-10">
                             <Accordion
@@ -184,7 +184,7 @@ const Accordion: React.FC<AccordionProps> = ({ header, body, component, emphasis
     const [expand, setExpand] = useState(false);
 
     return (
-        <div className='flex flex-col'>
+        <div className='flex flex-col w-full'>
             <h3 className='text-black font-semibold'>{header}</h3>
             {!expand ?
                 <div onClick={() => setExpand(true)}>
@@ -195,7 +195,7 @@ const Accordion: React.FC<AccordionProps> = ({ header, body, component, emphasis
                     </p>
                 </div>
                 :
-                <div onClick={() => setExpand(false)}>
+                <div onClick={() => setExpand(false)} className="w-full">
                     <>{component}</>
                 </div>
             }
