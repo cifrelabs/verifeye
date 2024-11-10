@@ -91,25 +91,29 @@ const HashtagCirclePack: React.FC<HashtagCirclePackProps> = ({ data, topHashtag 
       .text((d) => d.children ? '' : d.data.name)
       .each(function (d) {
         let text = d3.select(this);
-        let words = text.text().split(/\s+/).reverse();
-        let word;
-        let line: string[] = [];
-        let lineNumber = 0;
-        let lineHeight = 1.1; // ems
-        let y = text.attr("y");
-        let dy = parseFloat(text.attr("dy"));
-        let tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+        let words = d.data.name.split(/(?=#)|(?=\s)/g).filter(word => word.trim()).reverse();
+        let tspan = text.text(null).append("tspan")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("dy", 0);
 
-        while (word = words.pop()) {
-          line.push(word);
-          tspan.text(line.join(" "));
-          if (tspan.node() && tspan.node()!.getComputedTextLength() > d.r * 2) {
-            line.pop();
-            tspan.text(line.join(" "));
-            line = [word];
-            tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+        const maxWidth = d.r * 1.8;
+
+        if (words.length > 0) {
+          let fullText = words.reverse().join("");
+          tspan.text(fullText);
+          
+          if (tspan.node() && tspan.node()!.getComputedTextLength() > maxWidth) {
+            let textLength = fullText.length;
+            while (textLength > 0 && tspan.node()!.getComputedTextLength() > maxWidth) {
+              textLength--;
+              tspan.text(fullText.substring(0, textLength) + "...");
+            }
           }
         }
+
+        text.selectAll('tspan')
+          .attr('dy', '0.3em');
       });
 
     // Make SVG responsive
