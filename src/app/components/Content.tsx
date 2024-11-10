@@ -57,7 +57,18 @@ const Content: React.FC<ContentProps> = ({ user }) => {
     const [data, setData] = useState<IData | null>(null);
     const [accordionData, setAccordionData] = useState<IAccordionData | null>(null);
     const [miniProfiles, setMiniProfiles] = useState([]);
-    const [lookalikeData, setLookalike] = useState<LookalikeData>();
+    const [lookalikeData, setLookalike] = useState<LookalikeData>({
+        current_image: 'default',
+        current_displayName: 'default',
+        current_username: 'default',
+        current_followerCount: '0',
+        current_videoCount: '0',
+        image: 'default',
+        displayName: 'default',
+        username: 'default',
+        followerCount: '0',
+        videoCount: '0',
+    });
 
     let interactions: IInteractions = {
         likes: user.likes,
