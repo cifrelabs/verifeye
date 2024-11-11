@@ -39,7 +39,7 @@ const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionD
     useEffect(() => {
         console.log('accordion data, ', {accordionData});
     }, [accordionData])
-    
+
     return (
         <div className='fixed -translate-x-1/2 left-1/2 top-0 z-20 bg-white w-screen min-h-min' onClick={(e: React.MouseEvent<HTMLElement>) => {e.stopPropagation()}}>
             {/* HEADER */}
@@ -117,19 +117,38 @@ interface LookalikeAccountProps {
 }
 
 const LookalikeAccount: React.FC<LookalikeAccountProps> = ({ lookalike }) => {
-    return (
-        <Lookalike 
-        currentPfp={lookalike.current_image} 
-        currentDisplayName={lookalike.current_displayName} 
-        currentUsername={lookalike.current_username}
-        currentFollowers={lookalike.current_followerCount}
-        currentVideos={lookalike.current_videoCount}
-        lookalikePfp={lookalike.image}
-        lookalikeDisplayName={lookalike.displayName}
-        lookalikeUsername={lookalike.username}
-        lookalikeFollowers={lookalike.followerCount}
-        lookalikeVideos={lookalike.videoCount}/>
-    )
+    const deflookalike: LookalikeData = {
+        current_image: 'default',
+        current_displayName: 'default',
+        current_username: 'default',
+        current_followerCount: '0',
+        current_videoCount: '0',
+        image: 'default',
+        displayName: 'default',
+        username: 'default',
+        followerCount: '0',
+        videoCount: '0',
+    }
+    if (lookalike != deflookalike){
+        return (
+            <Lookalike 
+            currentPfp={lookalike.current_image} 
+            currentDisplayName={lookalike.current_displayName} 
+            currentUsername={lookalike.current_username}
+            currentFollowers={lookalike.current_followerCount}
+            currentVideos={lookalike.current_videoCount}
+            lookalikePfp={lookalike.image}
+            lookalikeDisplayName={lookalike.displayName}
+            lookalikeUsername={lookalike.username}
+            lookalikeFollowers={lookalike.followerCount}
+            lookalikeVideos={lookalike.videoCount}/>
+        )
+    }
+    else{
+        return (
+            <p>No Lookalike Account Found</p>
+        )
+    }
 }
 
 interface SocialMediaProps {
