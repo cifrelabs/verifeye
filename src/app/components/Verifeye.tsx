@@ -1,13 +1,13 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ViewsOverTime, { abbreviateNumber } from './ViewsOverTime';
 import HashtagCirclePack, { HashtagData } from './HashtagCirclePack';
 import Timeline, { Video } from './Timeline';
 import WhyAmISeeingThis from './WhyAmISeeingThis';
 import MiniProfile from './MiniProfile';
 import Lookalike from './Lookalike';
-import { LookalikeData } from './Content';
+import { LookalikeData } from './Lookalike';
 
 export interface IData {
     timelineData: Video[];
@@ -26,19 +26,6 @@ interface VerifeyeProps {
 
 const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionData, username, miniProfiles, lookalike }) => {
     const [isWhyPageOpen, setIsWhyPageOpen] = useState(false);
-
-    const h2Css = "font-bold text-xl text-black mb-4"
-    let tempDate = "July 10, 2024"
-
-    console.log('outside data: ', data); // logs undefined
-    console.log('cash me ousside data: ', accordionData)
-    useEffect(() => {
-        console.log('useEffect data: ', {data}); // logs undefined
-    }, [data])
-
-    useEffect(() => {
-        console.log('accordion data, ', {accordionData});
-    }, [accordionData])
 
     return (
         <div className='fixed -translate-x-1/2 left-1/2 top-0 z-20 bg-white w-screen min-h-min max-w-screen' onClick={(e: React.MouseEvent<HTMLElement>) => {e.stopPropagation()}}>
@@ -68,19 +55,22 @@ const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionD
 
                 <div className="space-y-10 w-full">
                     {/* A likely lookalike */}
-                    <div>
-                        <LookalikeAccount lookalike={lookalike}/>
-                    </div>
+                    {lookalike &&
+                        <div>
+                            <h2 className="font-bold text-xl text-black mb-4">A likely lookalike</h2>
+                            <LookalikeAccount lookalike={lookalike}/>
+                        </div>
+                    }
 
                     {/* Social media and articles */}
                     <div>
-                        <h2 className={`${h2Css}`}>What we found on the Internet</h2>
+                        <h2 className="font-bold text-xl text-black mb-4">What we found on the Internet</h2>
                         <SocialMedia miniProfiles={miniProfiles} />
                     </div>
 
                     {/* Account Analysis */}
                     <div className="flex flex-col pb-96 w-full max-w-[350px]">
-                        <h2 className={`${h2Css}`}>Account Analysis</h2>
+                        <h2 className="font-bold text-xl text-black mb-4">Account Analysis</h2>
                         <div className="flex flex-col flex-grow gap-10">
                             <Accordion
                                 header={"Timeline"}
@@ -112,33 +102,34 @@ const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionD
 }
 
 interface LookalikeAccountProps {
-    lookalike: LookalikeData | null;
+    lookalike: LookalikeData;
 }
 
 const LookalikeAccount: React.FC<LookalikeAccountProps> = ({ lookalike }) => {
-    const h2Css = "font-bold text-xl text-black mb-4";
-    if (lookalike != null){
-        return (
-            <div>
-                <h2 className={`${h2Css}`}>A likely lookalike</h2>
-                <Lookalike 
-                currentPfp={lookalike.current_image} 
-                currentDisplayName={lookalike.current_displayName} 
-                currentUsername={lookalike.current_username}
-                currentFollowers={lookalike.current_followerCount}
-                currentVideos={lookalike.current_videoCount}
-                lookalikePfp={lookalike.image}
-                lookalikeDisplayName={lookalike.displayName}
-                lookalikeUsername={lookalike.username}
-                lookalikeFollowers={lookalike.followerCount}
-                lookalikeVideos={lookalike.videoCount}/>
-            </div>
-        )
-    }
+    return (
+        <Lookalike 
+            currentPfp={lookalike.current_image} 
+            currentDisplayName={lookalike.current_displayName} 
+            currentUsername={lookalike.current_username}
+            currentFollowers={lookalike.current_followerCount}
+            currentVideos={lookalike.current_videoCount}
+            lookalikePfp={lookalike.image}
+            lookalikeDisplayName={lookalike.displayName}
+            lookalikeUsername={lookalike.username}
+            lookalikeFollowers={lookalike.followerCount}
+            lookalikeVideos={lookalike.videoCount}
+        />
+    )
 }
 
 interface SocialMediaProps {
-    miniProfiles: Array<{ image: string; displayName: string; username: string; interaction: string; site: string;}>;
+    miniProfiles: Array<{ 
+        image: string;
+        displayName:string;
+        username: string;
+        interaction: string;
+        site: string;
+    }>;
 }
 
 const SocialMedia: React.FC<SocialMediaProps> = ({ miniProfiles }) => {
@@ -155,12 +146,8 @@ const SocialMedia: React.FC<SocialMediaProps> = ({ miniProfiles }) => {
 
     return (
         <div className="flex flex-col gap-4 text-sm text-black">
-            <div>
-                <p>
-                    We found <span className='font-bold text-tiktok-red'>{miniProfiles.length}</span> possible matching accounts from {formatSites(uniqueSites)}
-                </p>
-            </div>
-            <div className='flex flex-row flex-wrap w-full justify-evenly'>
+            <p>We found <span className='font-bold text-tiktok-red'>{miniProfiles.length}</span> possible matching accounts from {formatSites(uniqueSites)}</p>
+            <div className='flex flex-row flex-wrap w-full justify-evenly gap-y-2'>
                 {miniProfiles.map((profile, index) => (
                     <MiniProfile 
                         key={index}
@@ -172,11 +159,7 @@ const SocialMedia: React.FC<SocialMediaProps> = ({ miniProfiles }) => {
                     />
                 ))}
             </div>
-            <div>
-                <p>
-                    We also found a Wikipedia article mentioning the user
-                </p>
-            </div>
+            {/* <p>We also found a Wikipedia article mentioning the user</p> */}
         </div>
     )
 }

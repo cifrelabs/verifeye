@@ -1,5 +1,18 @@
 import React from "react";
 
+export interface LookalikeData {
+    current_image: string;
+    current_displayName: string;
+    current_username: string;
+    current_followerCount: string;
+    current_videoCount: string;
+    image: string;
+    displayName: string;
+    username: string;
+    followerCount: string;
+    videoCount: string;
+}
+
 interface LookalikeProps {
     currentPfp?: string;
     currentDisplayName: string;
@@ -26,27 +39,56 @@ const Lookalike: React.FC<LookalikeProps> = ({
     lookalikeVideos,
 }) => {
     return (
-        <div className="text-black flex flex-row justify-center mt-4">
-            <div className="flex flex-col mx-4 items-center current">
-                <img src={currentPfp || ""} alt="Current Profile" className="w-24 h-24 rounded-full mb-4"/>
-                <p className="font-semibold">{currentDisplayName}</p>
-                <p className="font-medium text-sm mt-2">@{currentUsername}</p>
-                <div className="flex flex-row justify-center mt-2">
-                    <p className="me-2 text-xs">{currentFollowers} followers</p>
-                    <p className="text-xs">{currentVideos} videos</p>
-                </div>
-            </div>
-            <div className="flex flex-col mx-4 items-center lookalike">
-                <img src={lookalikePfp || ""} alt="Lookalike Profile" className="w-24 h-24 rounded-full mb-4"/>
-                <p className="font-semibold">{lookalikeDisplayName}</p>
-                <p className="font-medium text-sm mt-2">@{lookalikeUsername}</p>
-                <div className="flex flex-row justify-center mt-2">
-                    <p className="me-2 text-xs">{lookalikeFollowers} followers</p>
-                    <p className="text-xs">{lookalikeVideos} videos</p>
-                </div>
+        <div>
+            <p className="text-sm text-black">A different TikTok account with a similar profile yet higher interaction count exists</p>
+            <div className="text-black flex flex-row justify-evenly mt-4">
+                <MiniProfile
+                    pfp={currentPfp}
+                    displayName={currentDisplayName}
+                    username={currentUsername}
+                    followers={currentFollowers}
+                    video_count={currentVideos}
+                />
+
+                <MiniProfile
+                    pfp={lookalikePfp}
+                    displayName={lookalikeDisplayName}
+                    username={lookalikeUsername}
+                    followers={lookalikeFollowers}
+                    video_count={lookalikeVideos}
+                />
             </div>
         </div>
     );
+}
+
+interface MiniProfileProps {
+    pfp?: string;
+    displayName: string;
+    username: string;
+    followers: string;
+    video_count: string;
+}
+
+const MiniProfile: React.FC<MiniProfileProps> = ({
+    pfp,
+    displayName,
+    username,
+    followers,
+    video_count
+}) => {
+    return (
+        <div className="flex flex-col items-center text-xs">
+            <img src={pfp || ""} alt="profile picture" className="size-16 rounded-full mb-4"/>
+            <p className="font-semibold text-sm">{ displayName }</p>
+            <p className="font-medium">@{ username }</p>
+            <div className="flex flex-row mt-1 space-x-2 text-xxs">
+                {/* <p className="text-center">{followers} followers</p>
+                <p className="text-center">{video_count} videos</p> */}
+                <p>{followers} followers • { video_count } videos</p>
+            </div>
+        </div>
+    )
 }
 
 export default Lookalike;

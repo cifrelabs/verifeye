@@ -5,10 +5,10 @@ import ActionBar, { IInteractions } from './ActionBar';
 import { useAutoplay } from '../contexts/AutoplayContext';
 import Interstitial from './Interstitial';
 import Verifeye, { IAccordionData, IData } from './Verifeye';
+import { LookalikeData } from './Lookalike';
 import { processData } from './HashtagCirclePack';
 import { UserData } from './Timeline';
 import { JsonViewsData, Post, getAverageViewers } from './ViewsOverTime';
-import { display } from '@/fonts/TikTok Display';
 
 interface ContentProps {
     user: IUserData;
@@ -28,19 +28,6 @@ export interface IUserData {
     shares: number;
     political: boolean;
     highlight_id: string;
-}
-
-export interface LookalikeData {
-    current_image: string;
-    current_displayName: string;
-    current_username: string;
-    current_followerCount: string;
-    current_videoCount: string;
-    image: string;
-    displayName: string;
-    username: string;
-    followerCount: string;
-    videoCount: string;
 }
 
 const Content: React.FC<ContentProps> = ({ user }) => {
