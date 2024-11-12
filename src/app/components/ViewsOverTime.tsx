@@ -78,21 +78,53 @@ class Graph {
     }
 
     public update(dates: Date[], views: number[], counts: number[]): void {
+        const oldestDate = d3.min(dates) as Date;
+        const latestDate = d3.max(dates) as Date;
+        
+        const domainStart = new Date(oldestDate);
+        domainStart.setDate(domainStart.getDate() - 2);
+        const domainEnd = new Date(latestDate);
+        domainEnd.setDate(domainEnd.getDate() + 2);
+        
         // Update scales
-        this.x.domain(d3.extent(dates) as [Date, Date]);
+        this.x.domain([domainStart, domainEnd]);
         this.y.domain([0, d3.max(views) || 0]);
         this.y2.domain([0, d3.max(counts) || 0]);
 
-        // Update axes with transitions
+        // Calculate date range in days
+        const daysDiff = Math.ceil((latestDate.getTime() - oldestDate.getTime()) / (1000 * 60 * 60 * 24));
+        
+        // Choose appropriate time format and tick count
+        let timeFormat, tickCount;
+        if (daysDiff <= 31) { // Less than a month
+            timeFormat = d3.timeFormat('%b %d');
+            tickCount = Math.min(7, daysDiff); // Show max 7 ticks for better readability
+        } else if (daysDiff <= 365) { // Less than a year
+            timeFormat = d3.timeFormat('%b %d');
+            tickCount = Math.min(12, Math.floor(daysDiff / 7)); // About 1-2 ticks per month
+        } else {
+            timeFormat = d3.timeFormat('%b %Y');
+            tickCount = 12; // One tick per month for year+ ranges
+        }
+
         this.g.select('.axis--x')
             .transition()
             .duration(750)
-            .call(d3.axisBottom(this.x).tickFormat(d3.timeFormat('%b %Y') as any) as any)
+            .call(d3.axisBottom(this.x)
+                .ticks(tickCount)
+                .tickFormat(timeFormat as any) as any)
             .selectAll('text')
             .attr('transform', 'rotate(-45)')
             .style('text-anchor', 'end')
             .style('stroke', 'none')
             .style('fill', 'black');
+
+        this.g.select('.axis--x path')
+            .style('stroke', 'black')
+            .style('stroke-width', '1px');
+        this.g.select('.axis--x line')
+            .style('stroke', 'black')
+            .style('stroke-width', '1px');
 
         this.g.select('.axis--y')
             .transition()
@@ -100,19 +132,29 @@ class Graph {
             .call(d3.axisLeft(this.y).tickFormat(d3.format(".2s")) as any)
             .selectAll('text')
             .style('stroke', 'none')
-            .style('fill', 'black');
+            .style('fill', '#72CEF1');  // Match the blue line color
 
         this.g.select('.axis--y2')
             .transition()
             .duration(750)
-            .call(d3.axisRight(this.y2) as any)
+            .call(d3.axisRight(this.y2)
+                .ticks(Math.min(Math.max(...counts), 10))
+                .tickFormat(d3.format('d')) as any)
             .selectAll('text')
             .style('stroke', 'none')
-            .style('fill', 'black');
+            .style('fill', '#FE2C55');  // Match the red line color
 
-        // Make axis lines thinner
+        this.g.select('.axis--y path')
+            .style('stroke', '#72CEF1');
+        this.g.select('.axis--y line')
+            .style('stroke', '#72CEF1');
+        
+        this.g.select('.axis--y2 path')
+            .style('stroke', '#FE2C55');
+        this.g.select('.axis--y2 line')
+            .style('stroke', '#FE2C55');
+
         this.g.selectAll('.axis path, .axis line')
-            .style('stroke', 'black')
             .style('stroke-width', '1px');
 
         // Create line generators
@@ -208,23 +250,45 @@ const plotData = (data: Post[], average: number, username?: string) => {
 };
 
 const processData = (data: Post[]) => {
-    const monthData: Record<string, { views: number; count: number }> = {};
+    // Sort data by date first
+    const sortedData = [...data].sort((a, b) => a.createTime - b.createTime);
+    const firstDate = new Date(sortedData[0].createTime * 1000);
+    const lastDate = new Date(sortedData[sortedData.length - 1].createTime * 1000);
+    
+    // Check if all posts are from the same month
+    const sameMonth = firstDate.getMonth() === lastDate.getMonth() && 
+                     firstDate.getFullYear() === lastDate.getFullYear();
 
-    data.forEach(d => {
+    const timeData: Record<string, { views: number; count: number }> = {};
+
+    sortedData.forEach(d => {
         const date = new Date(d.createTime * 1000);
-        const yearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        // Use daily format if same month, otherwise use monthly
+        const timeKey = sameMonth 
+            ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+            : `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
 
-        if (!monthData[yearMonth]) {
-            monthData[yearMonth] = { views: 0, count: 0 };
+        if (!timeData[timeKey]) {
+            timeData[timeKey] = { views: 0, count: 0 };
         }
 
-        monthData[yearMonth].views += d.playCount || 0;
-        monthData[yearMonth].count += 1;
+        timeData[timeKey].views += d.playCount || 0;
+        timeData[timeKey].count += 1;
     });
 
-    const dates = Object.keys(monthData).sort().map(d => new Date(d));
-    const views = dates.map(date => monthData[`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`].views);
-    const counts = dates.map(date => monthData[`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`].count);
+    const dates = Object.keys(timeData).sort().map(d => new Date(d));
+    const views = dates.map(date => {
+        const key = sameMonth
+            ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+            : `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        return timeData[key].views;
+    });
+    const counts = dates.map(date => {
+        const key = sameMonth
+            ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+            : `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        return timeData[key].count;
+    });
 
     return { dates, views, counts };
 };
@@ -256,9 +320,19 @@ interface ViewsOverTimeProps {
 
 const ViewsOverTime: React.FC<ViewsOverTimeProps> = ({ data, username }) => {
     const [averageViewers, setAverageViewers] = useState<number>();
+    const [timeUnit, setTimeUnit] = useState<'month' | 'day'>('month');
 
     useEffect(() => {
         if(data) {
+            // Determine if all posts are from the same month
+            const dates = data.map((d: Post) => new Date(d.createTime * 1000));
+            const firstDate = new Date(Math.min(...dates));
+            const lastDate = new Date(Math.max(...dates));
+            
+            const sameMonth = firstDate.getMonth() === lastDate.getMonth() && 
+                            firstDate.getFullYear() === lastDate.getFullYear();
+            
+            setTimeUnit(sameMonth ? 'day' : 'month');
             setAverageViewers(getAverageViewers(data));
             plotData(data, averageViewers ?? 0, username);
         }
@@ -269,8 +343,8 @@ const ViewsOverTime: React.FC<ViewsOverTimeProps> = ({ data, username }) => {
             <div className="info text-black text-sm pl-4" id="infoviewsovertime"></div>
             <div id="plot" className="w-full"></div>
             <div className='flex flex-row justify-center items-center gap-4 mt-3 flex-wrap text-sm'>
-                <span className='text-tiktok-blue'>● Viewer count per month</span>
-                <span className='text-tiktok-red'>● Videos posted per month</span>
+                <span className='text-tiktok-blue'>● Viewer count per {timeUnit}</span>
+                <span className='text-tiktok-red'>● Videos posted per {timeUnit}</span>
             </div>
         </div>
     );
