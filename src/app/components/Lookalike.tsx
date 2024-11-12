@@ -4,13 +4,13 @@ interface LookalikeProps {
     currentPfp?: string;
     currentDisplayName: string;
     currentUsername: string;
-    currentFollowers: number;
-    currentVideos: number;
+    currentFollowers: string;
+    currentVideos: string;
     lookalikePfp?: string;
     lookalikeDisplayName: string;
     lookalikeUsername: string;
-    lookalikeFollowers: number;
-    lookalikeVideos: number;
+    lookalikeFollowers: string;
+    lookalikeVideos: string;
 }
 
 const Lookalike: React.FC<LookalikeProps> = ({
