@@ -69,7 +69,6 @@ const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionD
                 <div className="space-y-10">
                     {/* A likely lookalike */}
                     <div>
-                        <h2 className={`${h2Css}`}>A likely lookalike</h2>
                         <LookalikeAccount lookalike={lookalike}/>
                     </div>
 
@@ -117,24 +116,23 @@ interface LookalikeAccountProps {
 }
 
 const LookalikeAccount: React.FC<LookalikeAccountProps> = ({ lookalike }) => {
+    const h2Css = "font-bold text-xl text-black mb-4";
     if (lookalike != null){
         return (
-            <Lookalike 
-            currentPfp={lookalike.current_image} 
-            currentDisplayName={lookalike.current_displayName} 
-            currentUsername={lookalike.current_username}
-            currentFollowers={lookalike.current_followerCount}
-            currentVideos={lookalike.current_videoCount}
-            lookalikePfp={lookalike.image}
-            lookalikeDisplayName={lookalike.displayName}
-            lookalikeUsername={lookalike.username}
-            lookalikeFollowers={lookalike.followerCount}
-            lookalikeVideos={lookalike.videoCount}/>
-        )
-    }
-    else{
-        return (
-            <p className='text-black font-medium text-xs'>No Lookalike Account Found</p>
+            <div>
+                <h2 className={`${h2Css}`}>A likely lookalike</h2>
+                <Lookalike 
+                currentPfp={lookalike.current_image} 
+                currentDisplayName={lookalike.current_displayName} 
+                currentUsername={lookalike.current_username}
+                currentFollowers={lookalike.current_followerCount}
+                currentVideos={lookalike.current_videoCount}
+                lookalikePfp={lookalike.image}
+                lookalikeDisplayName={lookalike.displayName}
+                lookalikeUsername={lookalike.username}
+                lookalikeFollowers={lookalike.followerCount}
+                lookalikeVideos={lookalike.videoCount}/>
+            </div>
         )
     }
 }
