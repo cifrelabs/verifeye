@@ -21,7 +21,7 @@ interface VerifeyeProps {
     accordionData: IAccordionData | null;
     username?: string;
     miniProfiles: Array<{ image: string; displayName: string; username: string; interaction: string; site: string; }>;
-    lookalike: LookalikeData;
+    lookalike: LookalikeData | null;
 }
 
 const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionData, username, miniProfiles, lookalike }) => {
@@ -113,23 +113,11 @@ const Verifeye: React.FC<VerifeyeProps> = ({ setIsVerifeyeOpen, data, accordionD
 }
 
 interface LookalikeAccountProps {
-    lookalike: LookalikeData;
+    lookalike: LookalikeData | null;
 }
 
 const LookalikeAccount: React.FC<LookalikeAccountProps> = ({ lookalike }) => {
-    const deflookalike: LookalikeData = {
-        current_image: 'default',
-        current_displayName: 'default',
-        current_username: 'default',
-        current_followerCount: '0',
-        current_videoCount: '0',
-        image: 'default',
-        displayName: 'default',
-        username: 'default',
-        followerCount: '0',
-        videoCount: '0',
-    }
-    if (lookalike != deflookalike){
+    if (lookalike != null){
         return (
             <Lookalike 
             currentPfp={lookalike.current_image} 
@@ -146,7 +134,7 @@ const LookalikeAccount: React.FC<LookalikeAccountProps> = ({ lookalike }) => {
     }
     else{
         return (
-            <p>No Lookalike Account Found</p>
+            <p className='text-black font-medium text-xs'>No Lookalike Account Found</p>
         )
     }
 }
