@@ -27,25 +27,32 @@
     },
     "miniProfiles": [
     {
-      "image": "",
+      "image": "/images/profilepictures/daveasprey_fb.jpg",
       "displayName": "Dave Asprey",
       "username": "dave.asprey",
       "interaction": "1.1M followers",
       "site": "Instagram"
     },
     {
-      "image": "",
+      "image": "/images/profilepictures/daveasprey_fb.jpg",
       "displayName": "Dave Asprey",
       "username": "",
-      "interaction": "704k followers",
+      "interaction": "704K followers",
       "site": "Facebook"
     },
     {
-      "image": "",
+      "image": "/images/profilepictures/daveasprey_fb.jpg",
       "displayName": "Dave Asprey",
       "username": "asprey",
-      "interaction": "17k followers",
+      "interaction": "17K followers",
       "site": "LinkedIn"
+    },
+    {
+      "image": "/images/profilepictures/daveasprey_twt.jpg",
+      "displayName": "Dave Asprey",
+      "username": "bulletproofexec",
+      "interaction": "263.8K followers",
+      "site": "Twitter"
     }
   ],
     "posts": [

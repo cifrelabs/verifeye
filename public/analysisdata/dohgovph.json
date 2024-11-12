@@ -25,6 +25,29 @@
       "friendCount": 0,
       "postCount": 92
     },
+    "miniProfiles": [
+    {
+      "image": "/images/profilepictures/dohgovph_ig.jpg",
+      "displayName": "Department of Health (Philippines)",
+      "username": "",
+      "interaction": "8.3M followers",
+      "site": "Facebook"
+    },
+    {
+      "image": "/images/profilepictures/dohgovph_ig.jpg",
+      "displayName": "Department of Health Philippines",
+      "username": "DOHgovph",
+      "interaction": "755.5K followers",
+      "site": "Twitter"
+    },
+    {
+      "image": "/images/profilepictures/dohgovph_ig.jpg",
+      "displayName": "Department of Health",
+      "username": "doh.philippines",
+      "interaction": "21.8K followers",
+      "site": "Instagram"
+    }
+  ],
     "posts": [
       {
         "id": "7374297906658020616",

@@ -25,6 +25,29 @@
       "friendCount": 0,
       "postCount": 92
     },
+    "miniProfiles": [
+    {
+      "image": "/images/profilepictures/jeffnippard_all.jpg",
+      "displayName": "Jeff Nippard Pro Natural Bodybuilder",
+      "username": "",
+      "interaction": "363K followers",
+      "site": "Facebook"
+    },
+    {
+      "image": "/images/profilepictures/jeffnippard_all.jpg",
+      "displayName": "Jeff Nippard",
+      "username": "JeffNippard",
+      "interaction": "53.5K followers",
+      "site": "Twitter"
+    },
+    {
+      "image": "/images/profilepictures/jeffnippard_all.jpg",
+      "displayName": "Jeff Nippard",
+      "username": "jeffnippard",
+      "interaction": "2.2M followers",
+      "site": "Instagram"
+    }
+  ],
     "lookalike": {
       "image": "/images/profilepictures/jeffnippardfitness.jpeg",
       "displayName": "Jeff Nippard",

@@ -6,13 +6,16 @@ interface MiniProfileProps {
     site: string;
 }
 
-const MiniProfile: React.FC<MiniProfileProps> = ({ image, displayName, username, interaction }) => {
+const MiniProfile: React.FC<MiniProfileProps> = ({ image, displayName, username, interaction, site }) => {
     return (
         <div className='flex flex-col w-fit items-center'>
             <img src={image} alt="profile picture" className='size-16 rounded-full border-2 mb-3'/>
-            <p className='text-xs font-semibold'>{ displayName }</p>
-            <p className='text-xs font-semibold'>@{ username }</p>
-            <p className='text-xs'>{ interaction }</p>
+            <div className = "text-center"> 
+                <p className='text-xs font-semibold'>{ displayName }</p>
+                <p className='text-xs font-semibold'>@{ username }</p>
+                <p className='text-xs'>{ interaction }</p>
+                <p className='text-xs'>{ site }</p>
+            </div>
         </div>
     )
 }
