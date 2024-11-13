@@ -146,7 +146,7 @@ const SocialMedia: React.FC<SocialMediaProps> = ({ miniProfiles }) => {
 
     return (
         <div className="flex flex-col gap-4 text-sm text-black">
-            <p>We found <span className='font-bold text-tiktok-red'>{miniProfiles.length}</span> possible matching accounts from {formatSites(uniqueSites)}</p>
+            <p>We found <span className='font-bold text-tiktok-red'>{miniProfiles.length}</span> possible matching accounts from {miniProfiles.length !== 0 ? formatSites(uniqueSites) : 'any social media'}.</p>
             <div className='flex flex-row flex-wrap w-full justify-evenly gap-y-2'>
                 {miniProfiles.map((profile, index) => (
                     <MiniProfile 
@@ -159,7 +159,6 @@ const SocialMedia: React.FC<SocialMediaProps> = ({ miniProfiles }) => {
                     />
                 ))}
             </div>
-            {/* <p>We also found a Wikipedia article mentioning the user</p> */}
         </div>
     )
 }

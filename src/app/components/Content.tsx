@@ -347,7 +347,6 @@ const Content: React.FC<ContentProps> = ({ user }) => {
                         displayName={user.display_name}
                         // id={user.highlight_id}
                         pfp={user.pfp}
-                        data={accordionData}
                         lookalike={lookalikeData}
                         miniProfiles={miniProfiles}
                         setIsVerifeyeOpen={setIsVerifeyeOpen}
