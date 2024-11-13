@@ -136,7 +136,7 @@ const Content: React.FC<ContentProps> = ({ user }) => {
             const response = await fetch('analysisdata/' + user.username + '.json');
             const jsonData = await response.json();
 
-            const lookalikeData : LookalikeData = {
+            const lookalikeData: LookalikeData = {
                 current_image: user.pfp,
                 current_displayName: user.display_name,
                 current_username: user.username,
@@ -345,11 +345,13 @@ const Content: React.FC<ContentProps> = ({ user }) => {
                     <Interstitial
                         username={user.username}
                         displayName={user.display_name}
-                        id={user.highlight_id}
+                        // id={user.highlight_id}
                         pfp={user.pfp}
+                        data={accordionData}
+                        lookalike={lookalikeData}
+                        miniProfiles={miniProfiles}
                         setIsVerifeyeOpen={setIsVerifeyeOpen}
                         setHasInvestigated={setHasInvestigated}
-                        data={accordionData}
                         // onNext={() => {}}
                     />
                 </div>

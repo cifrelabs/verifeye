@@ -83,8 +83,6 @@ const MiniProfile: React.FC<MiniProfileProps> = ({
             <p className="font-semibold text-sm">{ displayName }</p>
             <p className="font-medium">@{ username }</p>
             <div className="flex flex-row mt-1 space-x-2 text-xxs">
-                {/* <p className="text-center">{followers} followers</p>
-                <p className="text-center">{video_count} videos</p> */}
                 <p>{followers} followers • { video_count } videos</p>
             </div>
         </div>
