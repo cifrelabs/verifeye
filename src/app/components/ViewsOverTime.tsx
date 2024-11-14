@@ -225,7 +225,7 @@ const updateInfoDiv = (dates: Date[], views: number[], average: number, username
 
     infoDiv.innerHTML = `
         <div class="flex flex-col gap-2">
-            <span>This account averages <span class="font-bold">${abbreviateNumber(average)}</span> viewers per video.</span>
+            <span>This account averages <span class="font-bold text-tiktok-red">${abbreviateNumber(average)}</span> viewers per video.</span>
             <span>They peaked at <span class="font-bold">${abbreviateNumber(maxViews)}</span> views on <span class="font-bold">${formatMonthYear(maxMonth)}</span> but reached an all-time low on <span class="font-bold">${formatMonthYear(minMonth)}</span> with <span class="font-bold">${abbreviateNumber(minViews)}</span> viewers.</span>
             <span>Viewer count has decreased by <span class="font-bold">${decreasePercent.toFixed(2)}%</span> since last peak.</span>
         </div>

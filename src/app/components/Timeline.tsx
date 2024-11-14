@@ -28,7 +28,32 @@ const Timeline: React.FC<TimelineProps> = ({ data, username }) => {
     'therealboyabunda': { id: 'vid123', desc: 'Current Video for User1', createTime: 1688554800 },
     'benjaminmadronasondong87': { id: 'vid456', desc: 'Current Video for User2', createTime: 1649853385 },
     'bbm.ph': { id: 'vid456', desc: 'Current Video for User2', createTime: 1644006308 },
-    'senrisahontiveros_': { id: 'vid456', desc: 'Current Video for User2', createTime: 1661952000 }
+    'senrisahontiveros_': { id: 'vid456', desc: 'Current Video for User2', createTime: 1661952000 },
+    'daveaspreyofficial' : {
+      id: 'vid456',
+      desc: 'Current Video for User2',
+      createTime: 1705939200
+    },
+    'dohgovph': {
+      id: 'vid456',
+      desc: 'Current Video for User2',
+      createTime: 1662825600
+    },
+    'jeffnippard.us' : {
+      id: 'vid456',
+      desc: 'Current Video for User2',
+      createTime: 1713801600
+    },
+    'micahmrqz' : {
+      id: 'vid456',
+      desc: 'Current Video for User2',
+      createTime: 1678204800
+    },
+    'nutritionbykylie' : {
+      id: 'vid456',
+      desc: 'Current Video for User2',
+      createTime: 1623600000
+    },
   };
 
   useEffect(() => {
@@ -125,8 +150,8 @@ const Timeline: React.FC<TimelineProps> = ({ data, username }) => {
 
   return (
     <div className='flex flex-col justify-center items-center p-4 w-full'>
-      <div className="info text-black mb-3" id="infotimeline">
-        <p>
+      <div className="info mb-3" id="infotimeline">
+        <p className='text-sm text-black'>
             User posted their first video on <span className='text-tiktok-red font-bold'>{firstVidDate}</span>, their current video on {currentVidDate}, and their last video {lastPostedDaysAgo} days ago. 
         </p>
       </div>
